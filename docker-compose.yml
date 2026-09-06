@@ -1,0 +1,46 @@
+services:
+  financial-app:
+    build: .
+    image: financial-agentic-rag:1.0
+    container_name: financial-agentic-rag-app
+    ports:
+      - "${APP_PORT:-8001}:8001"
+    environment:
+      HOST: "${HOST:-0.0.0.0}"
+      PORT: "8001"
+
+      MYSQL_HOST: "${MYSQL_HOST:-host.docker.internal}"
+      MYSQL_PORT: "${MYSQL_PORT:-3306}"
+      MYSQL_USER: "${MYSQL_USER:-}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD:-}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE:-financial_qa}"
+      MYSQL_FAQ_TABLE: "${MYSQL_FAQ_TABLE:-financial_faq}"
+      MYSQL_CONVERSATION_TABLE: "${MYSQL_CONVERSATION_TABLE:-financial_conversations}"
+
+      REDIS_HOST: "${REDIS_HOST:-host.docker.internal}"
+      REDIS_PORT: "${REDIS_PORT:-6379}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD:-}"
+      REDIS_DB: "${REDIS_DB:-1}"
+      REDIS_KEY_PREFIX: "${REDIS_KEY_PREFIX:-financial:}"
+
+      MILVUS_HOST: "${MILVUS_HOST:-host.docker.internal}"
+      MILVUS_PORT: "${MILVUS_PORT:-19530}"
+      MILVUS_DATABASE: "${MILVUS_DATABASE:-financial}"
+      MILVUS_COLLECTION: "${MILVUS_COLLECTION:-financial_rag_v1}"
+
+      DASHSCOPE_API_KEY: "${DASHSCOPE_API_KEY:-}"
+      DASHSCOPE_BASE_URL: "${DASHSCOPE_BASE_URL:-}"
+      LLM_MODEL: "${LLM_MODEL:-}"
+
+      BGE_M3_MODEL_PATH: "${BGE_M3_MODEL_PATH:-}"
+      RERANKER_MODEL_PATH: "${RERANKER_MODEL_PATH:-}"
+      BERT_ROUTER_MODEL_PATH: "${BERT_ROUTER_MODEL_PATH:-}"
+      BERT_BASE_MODEL_PATH: "${BERT_BASE_MODEL_PATH:-}"
+      DOCUMENT_SEGMENTATION_MODEL_PATH: "${DOCUMENT_SEGMENTATION_MODEL_PATH:-}"
+
+      VALID_SOURCES: '${VALID_SOURCES:-["annual_reports", "financial_knowledge"]}'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped

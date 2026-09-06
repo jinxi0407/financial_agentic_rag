@@ -1,0 +1,14 @@
+.env
+config.ini
+.git
+.gitignore
+**/__pycache__/
+*.pyc
+.DS_Store
+logs/
+rag_qa/models/
+rag_qa/core/bert_results/
+rag_qa/core/tmp_trainer/
+financial_data/
+rag_qa/data/
+mysql_qa/data/

@@ -1,0 +1,36 @@
+.env
+config.ini
+**/__pycache__/
+*.pyc
+.DS_Store
+logs/
+
+# Local model weights and training artifacts
+rag_qa/models
+rag_qa/core/bert_results/
+rag_qa/core/tmp_trainer/
+*.bin
+*.safetensors
+*.pt
+*.pth
+financial_data/annual_reports/*.pdf
+# Environment variants
+.env.*
+!.env.example
+
+# Runtime / test artifacts
+*.log
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.cache/
+
+# Old EduRAG datasets / evaluation artifacts
+mysql_qa/data/JP学科知识问答.csv
+rag_qa/data/ai_data/
+rag_qa/rag_assesment/rag_evaluate_data.json
+rag_qa/rag_assesment/rag_evaluate_data_small.json
+rag_qa/rag_assesment/ragas_evaluation_results.csv
