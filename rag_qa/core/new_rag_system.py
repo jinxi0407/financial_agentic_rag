@@ -4,6 +4,7 @@ from rag_qa.core.prompts import RAGPrompts
 #   导入 time 模块，用于计算时间
 import json
 import time
+from collections.abc import Mapping
 from base.config import config
 from base.logger import logger
 
@@ -101,7 +102,7 @@ class RAGSystem:
     """
 
     #   定义私有方法，使用假设文档进行检索（HyDE）
-    def _retrieve_with_hyde(self, query):
+    def _retrieve_with_hyde(self, query, source_filter=None, metadata_filter=None):
         logger.info(f"使用 HyDE 策略进行检索 (查询: '{query}')")
         #   获取假设问题生成的 Prompt 模板
         # TODO 1. 获取假设检索对应提示词模板
@@ -119,7 +120,10 @@ class RAGSystem:
             # TODO 4. 基于假设答案查询父块作为上下文
             return self.vector_store.hybrid_search_with_rerank(
                 # TODO 瞪大眼睛注意，这里传入的是hypo_answer而不是原始的query
-                hypo_answer, k=config.RETRIEVAL_K  # 使用 K 而非 M
+                hypo_answer,
+                k=config.RETRIEVAL_K,
+                source_filter=source_filter,
+                metadata_filter=metadata_filter,
             )
         except Exception as e:
             logger.error(f"HyDE 策略执行失败: {e}")
@@ -135,7 +139,9 @@ class RAGSystem:
     """
 
     #   定义私有方法，使用子查询进行检索
-    def _retrieve_with_subqueries(self, query):
+    def _retrieve_with_subqueries(
+            self, query, source_filter=None, metadata_filter=None, subquery_filters=None
+    ):
         logger.info(f"使用子查询策略进行检索 (查询: '{query}')")
         #   获取子查询生成的 Prompt 模板
         subquery_prompt_template = RAGPrompts.subquery_prompt()  # 使用 template 后缀区分
@@ -152,9 +158,44 @@ class RAGSystem:
                 logger.warning("未能生成有效的子查询")
                 return []
 
+            if subquery_filters is not None and (
+                    not isinstance(subquery_filters, (list, tuple))
+                    or len(subquery_filters) != len(subqueries)
+            ):
+                logger.warning(
+                    "SubQuery metadata filters 与子查询数量不匹配，拒绝执行以避免期间错配"
+                )
+                return []
+
+            if subquery_filters is None:
+                per_subquery_filters = [metadata_filter] * len(subqueries)
+            else:
+                per_subquery_filters = []
+                for subquery_filter in subquery_filters:
+                    if metadata_filter is None:
+                        per_subquery_filters.append(subquery_filter)
+                        continue
+                    if subquery_filter is None:
+                        per_subquery_filters.append(metadata_filter)
+                        continue
+                    if not isinstance(metadata_filter, Mapping) or not isinstance(subquery_filter, Mapping):
+                        raise TypeError("SubQuery metadata filters must be mappings or None")
+                    merged_filter = dict(metadata_filter)
+                    for field, value in subquery_filter.items():
+                        if field in merged_filter and merged_filter[field] != value:
+                            raise ValueError(
+                                f"SubQuery metadata filter conflicts on field: {field}"
+                            )
+                        merged_filter[field] = value
+                    per_subquery_filters.append(merged_filter)
+
             subquery_results, diagnostics = (
                 self.vector_store.hybrid_search_subqueries_with_batched_embedding(
-                    subqueries, k=config.RETRIEVAL_K, return_diagnostics=True
+                    subqueries,
+                    k=config.RETRIEVAL_K,
+                    source_filter=source_filter,
+                    metadata_filters=per_subquery_filters,
+                    return_diagnostics=True,
                 )
             )
             timing = diagnostics["timing"]
@@ -204,7 +245,7 @@ class RAGSystem:
     """
 
     #   定义私有方法，使用回溯问题进行检索
-    def _retrieve_with_backtracking(self, query):
+    def _retrieve_with_backtracking(self, query, source_filter=None, metadata_filter=None):
         logger.info(f"使用回溯问题策略进行检索 (查询: '{query}')")
         #   获取回溯问题生成的 Prompt 模板
         backtrack_prompt_template = RAGPrompts.backtracking_prompt()  # 使用 template 后缀区分
@@ -216,7 +257,10 @@ class RAGSystem:
             logger.info(f"生成的回溯问题: '{simplified_query}'")
             #   使用回溯问题进行检索，并返回检索结果
             return self.vector_store.hybrid_search_with_rerank(
-                simplified_query, k=config.RETRIEVAL_K  # 使用 K
+                simplified_query,
+                k=config.RETRIEVAL_K,
+                source_filter=source_filter,
+                metadata_filter=metadata_filter,
             )
         except Exception as e:
             logger.error(f"回溯问题策略执行失败: {e}")
@@ -232,7 +276,13 @@ class RAGSystem:
 
     # 定义方法，检索并合并相关文档
     def retrieve_and_merge(
-            self, query, source_filter=None, strategy=None, strategy_selection_seconds=None
+            self,
+            query,
+            source_filter=None,
+            strategy=None,
+            strategy_selection_seconds=None,
+            metadata_filter=None,
+            subquery_filters=None,
     ):
         retrieval_started_at = time.perf_counter()
         # 如果未指定检索策略，则使用策略选择器选择
@@ -246,15 +296,24 @@ class RAGSystem:
         # 根据检索策略选择不同的检索方式
         ranked_parent_chunks = []  # 初始化
         if strategy == "回溯问题检索":
-            ranked_parent_chunks = self._retrieve_with_backtracking(query)
+            ranked_parent_chunks = self._retrieve_with_backtracking(
+                query, source_filter, metadata_filter
+            )
         elif strategy == "子查询检索":
-            ranked_parent_chunks = self._retrieve_with_subqueries(query)
+            ranked_parent_chunks = self._retrieve_with_subqueries(
+                query, source_filter, metadata_filter, subquery_filters
+            )
         elif strategy == "假设问题检索":
-            ranked_parent_chunks = self._retrieve_with_hyde(query)
+            ranked_parent_chunks = self._retrieve_with_hyde(
+                query, source_filter, metadata_filter
+            )
         else:  # 默认或“直接检索”
             logger.info(f"使用直接检索策略 (查询: '{query}')")
             ranked_parent_chunks = self.vector_store.hybrid_search_with_rerank(
-                query, k=config.RETRIEVAL_K, source_filter=source_filter
+                query,
+                k=config.RETRIEVAL_K,
+                source_filter=source_filter,
+                metadata_filter=metadata_filter,
             )  # 注意 hybrid_search_with_rerank 返回的是 rerank 后的父文档
 
         logger.info(f"策略 '{strategy}' 检索到 {len(ranked_parent_chunks)} 个候选文档 (可能已是父文档)")
@@ -283,7 +342,9 @@ class RAGSystem:
     """
 
     # 定义方法，生成答案
-    def generate_answer(self, query, history=None, source_filter=None):
+    def generate_answer(
+            self, query, history=None, source_filter=None, metadata_filter=None, subquery_filters=None
+    ):
         # 记录查询开始时间
         start_time = time.time()
         logger.info(f"开始处理查询: '{query}', 知识库过滤: {source_filter}")
@@ -312,6 +373,8 @@ class RAGSystem:
         context_docs = self.retrieve_and_merge(
             query,
             source_filter=source_filter,
+            metadata_filter=metadata_filter,
+            subquery_filters=subquery_filters,
             strategy=strategy,
             strategy_selection_seconds=strategy_selection_seconds,
         )  # 传递 strategy

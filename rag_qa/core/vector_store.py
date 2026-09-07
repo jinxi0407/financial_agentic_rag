@@ -15,6 +15,7 @@ from base.logger import logger
 import sys
 import os
 import torch
+from collections.abc import Mapping
 
 # core/vector_store.py
 # 定义 VectorStore 类，封装向量存储和检索功能
@@ -52,6 +53,15 @@ class VectorStore:
         "report_period",
     )
     INGESTION_SCHEMA_FIELDS = IDENTITY_FIELDS | set(REPORT_METADATA_FIELDS)
+    METADATA_FILTER_FIELDS = (
+        "source",
+        "company_name",
+        "company_code",
+        "report_year",
+        "period_type",
+        "report_period",
+        "document_id",
+    )
 
     # 初始化方法，设置向量存储的基本参数
     def __init__(self,
@@ -411,9 +421,69 @@ class VectorStore:
             raise ValueError("Batch reranker score count does not match parent candidates")
         return ranked_pairs_by_subquery
 
-    def _search_parent_docs(self, dense_query_vector, sparse_query_vector, k, source_filter):
+    @classmethod
+    def build_metadata_filter_expression(cls, metadata_filter=None, source_filter=None):
+        """Build a Milvus expression only from the supported metadata contract."""
+        if metadata_filter is None:
+            normalized_filter = {}
+        elif isinstance(metadata_filter, Mapping):
+            normalized_filter = dict(metadata_filter)
+        else:
+            raise TypeError("metadata_filter must be a mapping or None")
+
+        unknown_fields = set(normalized_filter) - set(cls.METADATA_FILTER_FIELDS)
+        if unknown_fields:
+            raise ValueError(
+                f"Unsupported metadata filter fields: {', '.join(sorted(unknown_fields))}"
+            )
+
+        if source_filter:
+            if not isinstance(source_filter, str):
+                raise TypeError("source_filter must be a string or None")
+            existing_source = normalized_filter.get("source")
+            if existing_source is not None and existing_source != source_filter:
+                raise ValueError("source_filter conflicts with metadata_filter['source']")
+            normalized_filter["source"] = source_filter
+        elif source_filter is not None and not isinstance(source_filter, str):
+            raise TypeError("source_filter must be a string or None")
+
+        clauses = []
+        for field in cls.METADATA_FILTER_FIELDS:
+            value = normalized_filter.get(field)
+            if value is None:
+                continue
+            if field == "report_year":
+                if type(value) is not int:
+                    raise TypeError("report_year must be an integer")
+                clauses.append(f"{field} == {value}")
+                continue
+            if not isinstance(value, str):
+                raise TypeError(f"{field} must be a string")
+            escaped_value = (
+                value.replace("\\", "\\\\")
+                .replace('"', '\\"')
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t")
+            )
+            clauses.append(f'{field} == "{escaped_value}"')
+        return " AND ".join(clauses)
+
+    @staticmethod
+    def _validated_subquery_metadata_filters(subqueries, metadata_filters):
+        if metadata_filters is None:
+            return [None] * len(subqueries)
+        if not isinstance(metadata_filters, (list, tuple)):
+            raise TypeError("metadata_filters must be a list or tuple when provided")
+        if len(metadata_filters) != len(subqueries):
+            raise ValueError("metadata_filters must have the same length as subqueries")
+        return list(metadata_filters)
+
+    def _search_parent_docs(
+            self, dense_query_vector, sparse_query_vector, k, source_filter=None, metadata_filter=None
+    ):
         """执行原有 Hybrid Search 和 Parent dedup，不负责 embedding 或 rerank。"""
-        filter_expr = f'source == "{source_filter}"' if source_filter else ''
+        filter_expr = self.build_metadata_filter_expression(metadata_filter, source_filter)
         dense_request = AnnSearchRequest(
             data=[dense_query_vector],
             anns_field='dense_vector',
@@ -449,7 +519,12 @@ class VectorStore:
         }
 
     def hybrid_search_with_rerank(
-            self, query, k=config.RETRIEVAL_K, source_filter=None, return_diagnostics=False
+            self,
+            query,
+            k=config.RETRIEVAL_K,
+            source_filter=None,
+            return_diagnostics=False,
+            metadata_filter=None,
     ):
         """
         对输入的query进行混合检索
@@ -467,7 +542,7 @@ class VectorStore:
             query_embeddings, 0
         )
         parent_docs, search_timing = self._search_parent_docs(
-            dense_query_vector, sparse_query_vector, k, source_filter
+            dense_query_vector, sparse_query_vector, k, source_filter, metadata_filter
         )
 
         # -----------------------------------到此为止，已经完成了粗排-------------------------------------
@@ -524,6 +599,7 @@ class VectorStore:
             source_filter=None,
             reranker_batch_size=SUBQUERY_RERANK_BATCH_SIZE,
             return_diagnostics=False,
+            metadata_filters=None,
     ):
         """对多个已确定的 SubQuery 批量 embedding 和 rerank，保留每个子查询的排序语义。"""
         total_started_at = time.perf_counter()
@@ -545,6 +621,9 @@ class VectorStore:
         embedding_started_at = time.perf_counter()
         query_embeddings = self._embed_queries(subqueries)
         embedding_seconds = time.perf_counter() - embedding_started_at
+        per_subquery_metadata_filters = self._validated_subquery_metadata_filters(
+            subqueries, metadata_filters
+        )
 
         parent_docs_by_subquery = []
         per_subquery = []
@@ -555,7 +634,11 @@ class VectorStore:
                 query_embeddings, index
             )
             parent_docs, search_timing = self._search_parent_docs(
-                dense_query_vector, sparse_query_vector, k, source_filter
+                dense_query_vector,
+                sparse_query_vector,
+                k,
+                source_filter,
+                per_subquery_metadata_filters[index],
             )
             parent_docs_by_subquery.append(parent_docs)
             hybrid_search_seconds += search_timing["hybrid_search_seconds"]
@@ -607,7 +690,12 @@ class VectorStore:
         return (ranked_docs_by_subquery, diagnostics) if return_diagnostics else ranked_docs_by_subquery
 
     def hybrid_search_subqueries_with_batched_embedding(
-            self, subqueries, k=config.RETRIEVAL_K, source_filter=None, return_diagnostics=False
+            self,
+            subqueries,
+            k=config.RETRIEVAL_K,
+            source_filter=None,
+            return_diagnostics=False,
+            metadata_filters=None,
     ):
         """批量编码 SubQuery；保留既有的每个子查询独立 rerank 语义。"""
         total_started_at = time.perf_counter()
@@ -629,6 +717,9 @@ class VectorStore:
         embedding_started_at = time.perf_counter()
         query_embeddings = self._embed_queries(subqueries)
         embedding_seconds = time.perf_counter() - embedding_started_at
+        per_subquery_metadata_filters = self._validated_subquery_metadata_filters(
+            subqueries, metadata_filters
+        )
 
         ranked_pairs_by_subquery = []
         per_subquery = []
@@ -642,7 +733,11 @@ class VectorStore:
                 query_embeddings, index
             )
             parent_docs, search_timing = self._search_parent_docs(
-                dense_query_vector, sparse_query_vector, k, source_filter
+                dense_query_vector,
+                sparse_query_vector,
+                k,
+                source_filter,
+                per_subquery_metadata_filters[index],
             )
             hybrid_search_seconds += search_timing["hybrid_search_seconds"]
             parent_dedup_seconds += search_timing["parent_dedup_seconds"]
