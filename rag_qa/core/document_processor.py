@@ -1,6 +1,7 @@
 # core/document_processor.py
 import os
 import hashlib
+import re
 # 文档加载器，把整个文档按照纯文本的形式加载成Document
 from langchain_community.document_loaders import TextLoader
 # 文档加载器，把markdown格式的数据，提取文本内容，转成Document对象
@@ -76,6 +77,26 @@ def build_milvus_primary_key(document_id, parent_index, child_index, child_text)
     return hashlib.sha256(identity.encode("utf-8")).hexdigest()
 
 
+def parse_annual_report_filename(filename):
+    """Parse the required listed-company annual-report filename contract."""
+    match = re.fullmatch(
+        r"(?P<company_name>[^_]+)_(?P<company_code>\d{6})_"
+        r"(?P<report_year>\d{4})(?P<period_type>H1|FY)\.pdf",
+        filename,
+    )
+    if not match:
+        raise ValueError(
+            "annual_reports PDF filename must match "
+            "<company_name>_<6-digit company_code>_<YYYY><H1|FY>.pdf: "
+            f"{filename}"
+        )
+
+    metadata = match.groupdict()
+    metadata["report_year"] = int(metadata["report_year"])
+    metadata["report_period"] = f"{metadata['report_year']}{metadata['period_type']}"
+    return metadata
+
+
 def load_documents_from_directory(directory_path, is_document_ingested=None):
     """
     从指定文件夹加载多种类型文件并添加元数据，把处理文档返回，用于后续写入向量库
@@ -106,6 +127,9 @@ def load_documents_from_directory(directory_path, is_document_ingested=None):
             file_path = os.path.join(root, file)
             # 获得当前处理的这个文件的后缀 (.txt / .pdf)
             extension_name = os.path.splitext(file_path)[1].lower()
+            report_metadata = {}
+            if source == "annual_reports" and extension_name == ".pdf":
+                report_metadata = parse_annual_report_filename(file)
             # 判断文件类型是否够是我们支持的
             if extension_name in supported_extensions:
                 try:
@@ -147,6 +171,7 @@ def load_documents_from_directory(directory_path, is_document_ingested=None):
                         doc.metadata['file_sha256'] = file_sha256
                         doc.metadata['source_filename'] = file
                         doc.metadata['timestamp'] = datetime.now().isoformat()
+                        doc.metadata.update(report_metadata)
 
                     # extend方法：  loaded_docs: list[Document]
                     # documents.append : [ [doc1, doc2] ,[doc3, doc4]]

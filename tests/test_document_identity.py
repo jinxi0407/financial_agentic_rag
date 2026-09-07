@@ -2,18 +2,122 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from langchain_core.documents import Document
+
 from rag_qa.core.document_processor import (
     build_child_id,
     build_milvus_primary_key,
     build_parent_id,
     calculate_file_sha256,
     load_documents_from_directory,
+    parse_annual_report_filename,
     process_documents,
 )
+from rag_qa.text_splitters import ChineseRecursiveTextSplitter
 from rag_qa.core.vector_store import VectorStore
 
 
 class DocumentIdentityTests(unittest.TestCase):
+    def test_annual_report_filename_metadata_parses_h1(self):
+        metadata = parse_annual_report_filename("贵州茅台_600519_2025H1.pdf")
+
+        self.assertEqual("贵州茅台", metadata["company_name"])
+        self.assertEqual("600519", metadata["company_code"])
+        self.assertEqual(2025, metadata["report_year"])
+        self.assertEqual("H1", metadata["period_type"])
+        self.assertEqual("2025H1", metadata["report_period"])
+
+    def test_annual_report_filename_metadata_preserves_leading_zero_and_fy(self):
+        metadata = parse_annual_report_filename("平安银行_000001_2025FY.pdf")
+
+        self.assertEqual("000001", metadata["company_code"])
+        self.assertEqual("FY", metadata["period_type"])
+        self.assertEqual("2025FY", metadata["report_period"])
+
+    def test_annual_report_filename_metadata_parses_other_company(self):
+        metadata = parse_annual_report_filename("中芯国际_688981_2026H1.pdf")
+
+        self.assertEqual("中芯国际", metadata["company_name"])
+        self.assertEqual("688981", metadata["company_code"])
+        self.assertEqual(2026, metadata["report_year"])
+
+    def test_malformed_annual_report_filename_fails(self):
+        with self.assertRaisesRegex(ValueError, "annual_reports PDF filename"):
+            parse_annual_report_filename("贵州茅台_600519_2025年报.pdf")
+
+    def test_non_annual_report_document_has_no_report_metadata(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            knowledge_directory = Path(temporary_directory) / "financial_knowledge"
+            knowledge_directory.mkdir()
+            (knowledge_directory / "overview.txt").write_text("Financial knowledge", encoding="utf-8")
+
+            document = load_documents_from_directory(knowledge_directory)[0]
+
+            self.assertNotIn("company_name", document.metadata)
+            self.assertNotIn("report_period", document.metadata)
+
+    def test_report_metadata_is_inherited_by_parent_and_child_chunks(self):
+        metadata = parse_annual_report_filename("贵州茅台_600519_2025H1.pdf")
+        document = Document(page_content="甲。乙。丙。", metadata=metadata)
+        splitter = ChineseRecursiveTextSplitter(chunk_size=4, chunk_overlap=0)
+
+        parent = splitter.split_documents([document])[0]
+        parent.metadata["parent_id"] = "parent-1"
+        child = splitter.split_documents([parent])[0]
+
+        for field, value in metadata.items():
+            self.assertEqual(value, parent.metadata[field])
+            self.assertEqual(value, child.metadata[field])
+        self.assertEqual("parent-1", child.metadata["parent_id"])
+
+    def test_milvus_insert_payload_contains_report_metadata(self):
+        class DenseVector:
+            def tolist(self):
+                return [0.0]
+
+        class SparseVector:
+            col = [1]
+            data = [0.5]
+
+        class FakeMilvusClient:
+            def __init__(self):
+                self.upserted_data = None
+
+            def upsert(self, collection_name, data):
+                self.upserted_data = data
+
+            def flush(self, collection_name):
+                return None
+
+        report_metadata = parse_annual_report_filename("平安银行_000001_2025FY.pdf")
+        child_metadata = {
+            "document_id": "a" * 64,
+            "file_sha256": "a" * 64,
+            "source_filename": "平安银行_000001_2025FY.pdf",
+            "parent_id": "parent-1",
+            "parent_content": "parent content",
+            "milvus_id": "b" * 64,
+            "source": "annual_reports",
+            "timestamp": "2026-01-01T00:00:00",
+            **report_metadata,
+        }
+        store = VectorStore.__new__(VectorStore)
+        store.collection_name = "unit_test_collection"
+        store.collection_fields = set(VectorStore.INGESTION_SCHEMA_FIELDS)
+        store.identity_schema_ready = True
+        store.embedding_function = lambda texts: {
+            "dense": [DenseVector() for _ in texts],
+            "sparse": [SparseVector() for _ in texts],
+        }
+        store.client = FakeMilvusClient()
+
+        store.add_documents([Document(page_content="child content", metadata=child_metadata)])
+
+        inserted = store.client.upserted_data[0]
+        for field in VectorStore.REPORT_METADATA_FIELDS:
+            self.assertIn(field, inserted)
+            self.assertEqual(report_metadata[field], inserted[field])
+
     def test_same_file_has_stable_identity_and_source_filename(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             source_file = Path(temporary_directory) / "report.txt"

@@ -44,6 +44,14 @@ class VectorStore:
         "file_sha256",
         "source_filename",
     }
+    REPORT_METADATA_FIELDS = (
+        "company_name",
+        "company_code",
+        "report_year",
+        "period_type",
+        "report_period",
+    )
+    INGESTION_SCHEMA_FIELDS = IDENTITY_FIELDS | set(REPORT_METADATA_FIELDS)
 
     # 初始化方法，设置向量存储的基本参数
     def __init__(self,
@@ -138,6 +146,11 @@ class VectorStore:
             schema.add_field(field_name="document_id", datatype=DataType.VARCHAR, max_length=64)
             schema.add_field(field_name="file_sha256", datatype=DataType.VARCHAR, max_length=64)
             schema.add_field(field_name="source_filename", datatype=DataType.VARCHAR, max_length=512)
+            schema.add_field(field_name="company_name", datatype=DataType.VARCHAR, max_length=256, nullable=True)
+            schema.add_field(field_name="company_code", datatype=DataType.VARCHAR, max_length=32, nullable=True)
+            schema.add_field(field_name="report_year", datatype=DataType.INT64, nullable=True)
+            schema.add_field(field_name="period_type", datatype=DataType.VARCHAR, max_length=16, nullable=True)
+            schema.add_field(field_name="report_period", datatype=DataType.VARCHAR, max_length=32, nullable=True)
 
             # 创建索引参数对象
             index_params = self.client.prepare_index_params()
@@ -165,6 +178,7 @@ class VectorStore:
             self.collection_fields = {
                 "id", "text", "dense_vector", "sparse_vector", "parent_id",
                 "parent_content", "source", "timestamp", *self.IDENTITY_FIELDS,
+                *self.REPORT_METADATA_FIELDS,
             }
             # 记录创建集合的日志
             logger.info(f"已创建集合 {self.collection_name}")
@@ -177,11 +191,11 @@ class VectorStore:
                 field["name"] for field in description.get("fields", [])
             }
 
-        self.identity_schema_ready = self.IDENTITY_FIELDS.issubset(self.collection_fields)
+        self.identity_schema_ready = self.INGESTION_SCHEMA_FIELDS.issubset(self.collection_fields)
         if not self.identity_schema_ready:
-            missing = ", ".join(sorted(self.IDENTITY_FIELDS - self.collection_fields))
+            missing = ", ".join(sorted(self.INGESTION_SCHEMA_FIELDS - self.collection_fields))
             logger.warning(
-                "集合 %s 缺少文档身份字段 (%s)；查询仍可用，但为避免新旧 ID 规则混写，入库已禁用。",
+                "集合 %s 缺少入库 metadata 字段 (%s)；查询仍可用，但为避免新旧 schema 混写，入库已禁用。",
                 self.collection_name,
                 missing,
             )
@@ -193,6 +207,10 @@ class VectorStore:
             field for field in sorted(self.IDENTITY_FIELDS)
             if field in self.collection_fields
         )
+        self.retrieval_output_fields.extend(
+            field for field in self.REPORT_METADATA_FIELDS
+            if field in self.collection_fields
+        )
 
         # 将集合加载到内存，确保可立即查询
         self.client.load_collection(self.collection_name)
@@ -201,7 +219,7 @@ class VectorStore:
         """Prevent mixed legacy/new ingestion until the collection is rebuilt once."""
         if self.identity_schema_ready:
             return
-        missing = ", ".join(sorted(self.IDENTITY_FIELDS - self.collection_fields))
+        missing = ", ".join(sorted(self.INGESTION_SCHEMA_FIELDS - self.collection_fields))
         raise RuntimeError(
             f"Milvus collection '{self.collection_name}' uses the legacy schema and is "
             f"missing: {missing}. Rebuild this Financial collection before ingestion."
@@ -319,6 +337,11 @@ class VectorStore:
                         "document_id": child_chunk.metadata["document_id"],
                         "file_sha256": child_chunk.metadata["file_sha256"],
                         "source_filename": child_chunk.metadata["source_filename"],
+                        "company_name": child_chunk.metadata.get("company_name"),
+                        "company_code": child_chunk.metadata.get("company_code"),
+                        "report_year": child_chunk.metadata.get("report_year"),
+                        "period_type": child_chunk.metadata.get("period_type"),
+                        "report_period": child_chunk.metadata.get("report_period"),
                     })
 
                 # 检查是否有数据需要插入
@@ -707,6 +730,11 @@ class VectorStore:
                 'document_id': hit.get('document_id'),
                 'file_sha256': hit.get('file_sha256'),
                 'source_filename': hit.get('source_filename'),
+                'company_name': hit.get('company_name'),
+                'company_code': hit.get('company_code'),
+                'report_year': hit.get('report_year'),
+                'period_type': hit.get('period_type'),
+                'report_period': hit.get('report_period'),
             }
         )
 
