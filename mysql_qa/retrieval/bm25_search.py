@@ -11,6 +11,7 @@ from base.logger import logger
 from mysql_qa.db.mysql_client import MysqlClient
 from mysql_qa.cache.redis_client import RedisClient
 from base.config import config
+from rag_qa.core.query_metadata import extract_query_metadata, should_bypass_faq
 
 ORIGIN_QUESTION_KEY = f'{config.REDIS_KEY_PREFIX}faq:origin_questions'
 QUESTION_KEY = f'{config.REDIS_KEY_PREFIX}faq:questions'
@@ -83,6 +84,11 @@ class BM25Search:
         else:
             self.logger.info("redis中存在问题和分词后的问题缓存数据，直接加载".format(len(questions)))
 
+        # Search texts are rebuilt in memory from canonical questions plus
+        # MySQL keywords. Redis remains a cache for the canonical order only.
+        search_documents = self.mysql_client.fetch_faq_search_documents(origin_questions)
+        questions = [preprocess_text(search_document) for search_document in search_documents]
+
         # 3. 构建bm25检索器，传入（questions）
         self.original_questions = origin_questions
         self.questions = questions
@@ -108,18 +114,31 @@ class BM25Search:
 
     """
 
-    def query(self, query, threshold=0.5):
+    def query(self, query, threshold=0.5, query_metadata=None):
         # 1. 判断用户的query是否合法，非空字符串
         if not query or type(query) is not str:
             logger.info("用户输入的query非法：{}".format(query))
             # TODO 1. 问题非法，不需要进入RAG模块
             return None, False
 
+        query_metadata = query_metadata or extract_query_metadata(query)
+        if should_bypass_faq(query, query_metadata):
+            logger.info("具体公司、期间或报告查询绕过 FAQ: {}".format(query))
+            return None, True
+
         # 2. 尝试去redis中查找，一模一样的问题
         answer = self.redis_client.get_answer(query)
         if answer:
             logger.info("在redis找到了一模一样的问题: {}".format(answer))
             # TODO 2. 在redis中找到了一模一样的问题对应的答案，不需要进入RAG模块
+            return answer, False
+
+        # A database exact match is a FAQ fast path even before its answer has
+        # been populated in Redis; it must not depend on fuzzy BM25 confidence.
+        answer = self.mysql_client.fetch_answer(query)
+        if answer:
+            self.redis_client.set_answer(query, answer)
+            logger.info("在mysql找到了一模一样的问题: {}".format(query))
             return answer, False
 
         if self.bm25 is None or not self.original_questions:
@@ -139,8 +158,12 @@ class BM25Search:
         max_index = np.argmax(scores_softmax)
         max_score = scores_softmax[max_index]
         logger.info("softmax后，匹配度最高的分数为：{}".format(max_score))
+        # Definition-style FAQ paraphrases (for example, "ROE是什么？")
+        # use a conservative fallback. All other requests keep the caller's
+        # production threshold.
+        effective_threshold = min(threshold, 0.40) if self._is_definition_query(query) else threshold
         # 7. 如果大于阈值，通过argmax找到最大分数对应的索引
-        if max_score >= threshold:
+        if max_score >= effective_threshold:
             # 8. 根据索引找到对应的原始问题（python内存）
             origin_question = self.original_questions[max_index]
             # 9. 查看redis缓存中是否有该问题的答案
@@ -163,6 +186,14 @@ class BM25Search:
                 return None, True
         # TODO 6. 小于阈值，没有找到匹配度较高的高频问题。但是问题合法，需要继续执行
         return None, True
+
+    @staticmethod
+    def _is_definition_query(query):
+        compact_query = ''.join(query.lower().split())
+        return (
+            compact_query.startswith(('什么是', '什么叫', '怎么理解'))
+            or compact_query.endswith(('是什么?', '是什么？', '是什么意思?', '是什么意思？', '是干什么的?', '是干什么的？'))
+        )
 
     def _soft_max(self, scores):
         # 1. 转为负数

@@ -269,8 +269,14 @@ class IntegratedQASystem():
 
         history = self._fetch_recent_history(session_id=session_id) if session_id else []
 
-        # 2. 调用BM25Search.query，得到答案和是否需要继续查询RAG系统
-        answer, need_rag = self.faq.query(query, threshold=0.85)
+        query_metadata = extract_query_metadata(query)
+
+        # 2. Query metadata is evaluated before generic FAQ matching.
+        answer, need_rag = self.faq.query(
+            query,
+            threshold=0.85,
+            query_metadata=query_metadata,
+        )
         # 3. 如果得到答案，直接返回
         if answer:
             end_time = time.time()
@@ -284,7 +290,6 @@ class IntegratedQASystem():
 
         logger.info(f"在FAQ模块中未能找到可靠的答案，问题：{query}")
 
-        query_metadata = extract_query_metadata(query)
         if query_metadata.intent == "REPORT_LOOKUP":
             answer = build_report_lookup_response(query_metadata, self.report_catalog)
             if session_id:

@@ -14,6 +14,7 @@ from pymysql import connect, cursors
 from base.config import config
 from base.logger import logger
 import pandas as pd
+import json
 
 
 class MysqlClient:
@@ -28,6 +29,7 @@ class MysqlClient:
                 , password=config.MYSQL_PASSWORD
                 , db=config.MYSQL_DATABASE
                 , port=config.MYSQL_PORT
+                , charset='utf8mb4'
             )
             # mysql游标
             self.cursor = self.connect.cursor()
@@ -44,7 +46,10 @@ class MysqlClient:
                                  id       BIGINT AUTO_INCREMENT PRIMARY KEY,
                                  category VARCHAR(100),
                                  question VARCHAR(1000) NOT NULL,
-                                 answer   TEXT NOT NULL
+                                 answer   TEXT NOT NULL,
+                                 keywords JSON NULL,
+                                 intent_id VARCHAR(191) NULL,
+                                 UNIQUE KEY uq_financial_faq_intent_id (intent_id)
                              )
                              '''
         try:
@@ -53,6 +58,37 @@ class MysqlClient:
             logger.info("建表语句执行成功！")
         except Exception as e:
             logger.error("建表语句执行失败: {}".format(e))
+            raise
+
+    def ensure_faq_schema(self):
+        """Add the structured fields needed by the financial FAQ import."""
+        self.create_table()
+        try:
+            self.cursor.execute(f"SHOW COLUMNS FROM {config.MYSQL_FAQ_TABLE}")
+            columns = {row[0] for row in self.cursor.fetchall()}
+
+            if 'keywords' not in columns:
+                self.cursor.execute(
+                    f"ALTER TABLE {config.MYSQL_FAQ_TABLE} ADD COLUMN keywords JSON NULL"
+                )
+            if 'intent_id' not in columns:
+                self.cursor.execute(
+                    f"ALTER TABLE {config.MYSQL_FAQ_TABLE} ADD COLUMN intent_id VARCHAR(191) NULL"
+                )
+
+            self.cursor.execute(f"SHOW INDEX FROM {config.MYSQL_FAQ_TABLE}")
+            index_names = {row[2] for row in self.cursor.fetchall()}
+            if 'uq_financial_faq_intent_id' not in index_names:
+                self.cursor.execute(
+                    f"ALTER TABLE {config.MYSQL_FAQ_TABLE} "
+                    "ADD UNIQUE KEY uq_financial_faq_intent_id (intent_id)"
+                )
+
+            self.connect.commit()
+            logger.info("financial FAQ schema is ready")
+        except Exception as e:
+            self.connect.rollback()
+            logger.error("financial FAQ schema migration failed: {}".format(e))
             raise
 
     # 3. csv数据写入mysql
@@ -102,6 +138,29 @@ class MysqlClient:
         except Exception as e:
             logger.error("获取所有的问题失败: {}".format(e))
             return []
+
+    def fetch_faq_search_documents(self, questions):
+        """Return canonical questions enriched with their stored keyword aliases."""
+        try:
+            self.cursor.execute(
+                f"SELECT question, keywords FROM {config.MYSQL_FAQ_TABLE}"
+            )
+            keywords_by_question = {}
+            for question, keywords in self.cursor.fetchall():
+                if isinstance(keywords, str):
+                    keywords = json.loads(keywords)
+                if not isinstance(keywords, list):
+                    keywords = []
+                keywords_by_question[question] = [
+                    keyword for keyword in keywords if isinstance(keyword, str)
+                ]
+            return [
+                " ".join([question, *keywords_by_question.get(question, [])])
+                for question in questions
+            ]
+        except Exception as e:
+            logger.error("获取 FAQ 搜索文本失败: {}".format(e))
+            return list(questions)
 
     # 5. 根据问题获取对应的答案
     def fetch_answer(self, question):

@@ -6,6 +6,7 @@ from new_main import IntegratedQASystem
 from rag_qa.core.query_metadata import (
     build_report_lookup_response,
     extract_query_metadata,
+    should_bypass_faq,
 )
 from rag_qa.core.report_catalog import ReportCatalog
 
@@ -86,6 +87,14 @@ class QueryMetadataTests(unittest.TestCase):
             extract_query_metadata("贵州茅台报告期营业收入是多少？").intent,
         )
 
+    def test_concrete_company_or_period_queries_bypass_faq_but_generic_concepts_do_not(self):
+        self.assertTrue(should_bypass_faq("招商银行2026年上半年净息差是多少？"))
+        self.assertTrue(should_bypass_faq("招行的净息差变化如何？"))
+        self.assertTrue(should_bypass_faq("2025年营业收入是多少？"))
+        self.assertTrue(should_bypass_faq("我想看贵州茅台的财报"))
+        self.assertFalse(should_bypass_faq("年报、半年报和季报有什么区别？"))
+        self.assertFalse(should_bypass_faq("年度数据可以和半年度数据直接比较增长率吗？"))
+
 
 class ReportCatalogTests(unittest.TestCase):
     def setUp(self):
@@ -143,7 +152,7 @@ class IntegratedQueryMetadataTests(unittest.TestCase):
 
         class Faq:
             @staticmethod
-            def query(query, threshold):
+            def query(query, threshold, query_metadata):
                 return "", True
 
         class RAG:
@@ -162,31 +171,34 @@ class IntegratedQueryMetadataTests(unittest.TestCase):
         self.assertEqual(("", True), result[1])
         self.assertIn("当前可用报告", result[0][0])
 
-    def test_faq_fast_path_still_precedes_report_lookup(self):
+    def test_report_lookup_bypasses_faq_fast_path(self):
         system = self._system()
 
         class Faq:
             @staticmethod
-            def query(query, threshold):
-                return "faq answer", False
+            def query(query, threshold, query_metadata):
+                self.assertEqual("REPORT_LOOKUP", query_metadata.intent)
+                return "", True
 
         class RAG:
             no_context_response = "no context"
 
             @staticmethod
             def generate_answer(*args, **kwargs):
-                raise AssertionError("FAQ response must not enter RAG")
+                raise AssertionError("report lookup must not enter RAG")
 
         system.faq = Faq()
         system.rag = RAG()
-        self.assertEqual([("faq answer", True)], list(system.query("我想看贵州茅台的财报")))
+        result = list(system.query("我想看贵州茅台的财报"))
+        self.assertFalse(result[0][1])
+        self.assertIn("当前可用报告", result[0][0])
 
     def test_regular_rag_query_passes_derived_filter_without_changing_streaming(self):
         system = self._system()
 
         class Faq:
             @staticmethod
-            def query(query, threshold):
+            def query(query, threshold, query_metadata):
                 return "", True
 
         class RAG:
@@ -213,7 +225,7 @@ class IntegratedQueryMetadataTests(unittest.TestCase):
 
         class Faq:
             @staticmethod
-            def query(query, threshold):
+            def query(query, threshold, query_metadata):
                 return "", True
 
         class RAG:

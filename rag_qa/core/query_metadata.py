@@ -30,6 +30,7 @@ _FY_PATTERN = re.compile(
     r"(?P<year>20\d{2})\s*(?:年\s*)?(?:年度|年报|全年|FY)",
     re.IGNORECASE,
 )
+_EXPLICIT_YEAR_PATTERN = re.compile(r"(?<!\d)20\d{2}(?!\d)")
 _REPORT_ACTION_TERMS = ("想看", "查看", "看一下", "给我看", "下载", "获取")
 _REPORT_NOUN_TERMS = ("财报", "报告", "年报", "半年报", "半年度报告", "年度报告")
 _H1_LOOKUP_TERMS = ("上半年", "半年度", "半年报")
@@ -123,6 +124,18 @@ def extract_query_metadata(query):
         report_period=report_period,
         report_periods=periods,
         intent=intent,
+    )
+
+
+def should_bypass_faq(query, metadata=None):
+    """Keep company-, period-, and report-specific requests out of generic FAQ."""
+    metadata = metadata or extract_query_metadata(query)
+    return bool(
+        metadata.company_name
+        or metadata.company_code
+        or metadata.report_period
+        or metadata.intent == "REPORT_LOOKUP"
+        or _EXPLICIT_YEAR_PATTERN.search(query)
     )
 
 

@@ -48,6 +48,19 @@ class RedisClient(object):
         except Exception as e:
             logger.error(f'写入数据失败！ {key} error: {e}')
 
+    def delete_keys(self, *keys):
+        """Delete only explicitly named cache keys; never flush the Redis database."""
+        keys = [key for key in keys if key]
+        if not keys:
+            return 0
+        try:
+            deleted = self.redis.delete(*keys)
+            logger.info("删除指定缓存键成功，共{}个".format(deleted))
+            return deleted
+        except Exception as e:
+            logger.error(f'删除指定缓存键失败！ error: {e}')
+            raise
+
     def get_answer(self, question):
         try:
             key = f"{config.REDIS_KEY_PREFIX}answer:{question}"
