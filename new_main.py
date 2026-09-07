@@ -85,7 +85,8 @@ class IntegratedQASystem():
                     {"role": "user", "content": prompt},  # 用户输入的提示
                 ],
                 timeout=30,  # 设置 30 秒超时
-                stream=True  # 启用流式输出
+                stream=True,  # 启用流式输出
+                extra_body={"enable_thinking": False},
             )
             # 初始化收集流式输出的字符串
             collected_content = ""

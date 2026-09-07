@@ -72,7 +72,8 @@ class StrategySelector:
                      "content": "你是一个有用的助手，能够根据用户输入的Prompt严格执行并返回可靠的结果"},
                     {"role": "user", "content": prompt},
                 ],
-                temperature=0.1
+                temperature=0.1,
+                extra_body={"enable_thinking": False},
             )
             # 返回完成结果
             return completion.choices[0].message.content if completion.choices else "直接检索"

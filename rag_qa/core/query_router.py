@@ -68,6 +68,7 @@ class FinancialQueryRouter:
                 max_tokens=32,
                 stream=False,
                 timeout=30,
+                extra_body={"enable_thinking": False},
             )
             if not completion.choices or not completion.choices[0].message:
                 raise ValueError("Router API returned no message")
