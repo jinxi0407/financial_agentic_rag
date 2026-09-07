@@ -25,6 +25,49 @@ class FakeEmbeddingFunction:
 
 
 class RetrievalAggregationTests(unittest.TestCase):
+    def test_subquery_parser_reads_normal_json_array(self):
+        output = '{"subqueries": ["贵州茅台2025年度营业收入是多少？", "贵州茅台2026年上半年营业收入是多少？"]}'
+
+        subqueries = RAGSystem._parse_subqueries(
+            output, "比较贵州茅台2025年度和2026年上半年的营业收入情况。"
+        )
+
+        self.assertEqual(
+            ["贵州茅台2025年度营业收入是多少？", "贵州茅台2026年上半年营业收入是多少？"],
+            subqueries,
+        )
+
+    def test_subquery_parser_does_not_turn_legacy_heading_into_query(self):
+        original_query = "比较贵州茅台2025年度和2026年上半年的营业收入情况。"
+        legacy_output = "子查询:\n贵州茅台2025年度营业收入是多少？\n贵州茅台2026年上半年营业收入是多少？"
+
+        subqueries = RAGSystem._parse_subqueries(legacy_output, original_query)
+
+        self.assertEqual([original_query], subqueries)
+        self.assertNotIn("子查询:", subqueries)
+
+    def test_subquery_parser_preserves_period_order_and_content(self):
+        output = '{"subqueries": ["贵州茅台2025年度营业收入是多少？", "贵州茅台2026年上半年营业收入是多少？"]}'
+
+        subqueries = RAGSystem._parse_subqueries(output, "fallback")
+
+        self.assertEqual("贵州茅台2025年度营业收入是多少？", subqueries[0])
+        self.assertEqual("贵州茅台2026年上半年营业收入是多少？", subqueries[1])
+
+    def test_subquery_parser_falls_back_for_malformed_output(self):
+        original_query = "比较贵州茅台2025年度和2026年上半年的营业收入情况。"
+
+        subqueries = RAGSystem._parse_subqueries('{"subqueries": ["missing bracket"}', original_query)
+
+        self.assertEqual([original_query], subqueries)
+
+    def test_subquery_parser_falls_back_for_non_string_array_item(self):
+        original_query = "比较贵州茅台2025年度和2026年上半年的营业收入情况。"
+
+        subqueries = RAGSystem._parse_subqueries('{"subqueries": ["有效问题", 2026]}', original_query)
+
+        self.assertEqual([original_query], subqueries)
+
     def test_batch_embedding_preserves_query_order(self):
         store = VectorStore.__new__(VectorStore)
         store.embedding_function = FakeEmbeddingFunction()

@@ -2,6 +2,7 @@
 # RAGPrompts包含： 1. augment提示词，用于结合query和上下文生成答案；2. 假设答案、 子查询、回溯问题查询对应的提示词模板
 from rag_qa.core.prompts import RAGPrompts
 #   导入 time 模块，用于计算时间
+import json
 import time
 from base.config import config
 from base.logger import logger
@@ -38,6 +39,28 @@ class RAGSystem:
         if isinstance(result, str):
             return result
         return "".join(chunk for chunk in result if chunk)
+
+    @staticmethod
+    def _parse_subqueries(subqueries_text, fallback_query):
+        """只接受 SubQuery JSON 契约；任何其他输出安全回退到原查询。"""
+        fallback = fallback_query.strip() if isinstance(fallback_query, str) else ""
+
+        try:
+            payload = json.loads(subqueries_text)
+        except (TypeError, json.JSONDecodeError):
+            logger.warning("SubQuery 输出不是合法 JSON，回退到原始查询")
+            return [fallback] if fallback else []
+
+        subqueries = payload.get("subqueries") if isinstance(payload, dict) else None
+        if (
+            not isinstance(subqueries, list)
+            or not subqueries
+            or any(not isinstance(subquery, str) or not subquery.strip() for subquery in subqueries)
+        ):
+            logger.warning("SubQuery JSON 缺少有效字符串数组 subqueries，回退到原始查询")
+            return [fallback] if fallback else []
+
+        return [subquery.strip() for subquery in subqueries]
 
     @staticmethod
     def _merge_subquery_results_coverage_first(subquery_results, limit):
@@ -123,7 +146,7 @@ class RAGSystem:
                 subquery_prompt_template.format(query=query)
             ).strip()
             optimization_seconds = time.perf_counter() - optimization_started_at
-            subqueries = [q.strip() for q in subqueries_text.split("\n") if q.strip()]
+            subqueries = self._parse_subqueries(subqueries_text, query)
             logger.info(f"生成的子查询: {subqueries}")
             if not subqueries:
                 logger.warning("未能生成有效的子查询")
