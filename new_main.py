@@ -1,5 +1,6 @@
 import time
 import uuid
+from pathlib import Path
 
 from openai import OpenAI
 
@@ -10,6 +11,11 @@ from mysql_qa.cache.redis_client import RedisClient
 # TODO 改造rag_system
 from rag_qa.core.new_rag_system import RAGSystem
 from rag_qa.core.query_router import FinancialQueryRouter
+from rag_qa.core.query_metadata import (
+    build_report_lookup_response,
+    extract_query_metadata,
+)
+from rag_qa.core.report_catalog import ReportCatalog
 
 from rag_qa.core.vector_store import VectorStore
 
@@ -61,6 +67,9 @@ class IntegratedQASystem():
             vector_store=VectorStore()
             , llm=self.call_dashscope
             , query_router=self.query_router
+        )
+        self.report_catalog = ReportCatalog.from_directory(
+            Path(self.config.FINANCIAL_DATA_DIR) / "annual_reports"
         )
 
         self.mysql_client = MysqlClient()
@@ -275,12 +284,24 @@ class IntegratedQASystem():
 
         logger.info(f"在FAQ模块中未能找到可靠的答案，问题：{query}")
 
+        query_metadata = extract_query_metadata(query)
+        if query_metadata.intent == "REPORT_LOOKUP":
+            answer = build_report_lookup_response(query_metadata, self.report_catalog)
+            if session_id:
+                self.update_session_history(session_id=session_id, question=query, answer=answer)
+            yield answer, False
+            yield '', True
+            return
+
         # 4. 如果没有答案，并且需要继续查询RAG系统，调用RAGSystem.generate_answer得到结果
         if need_rag:
             logger.info(f"尝试查询RAG模块，问题：{query}")
             collected_answer = ''
             rag_result = self.rag.generate_answer(
-                query, source_filter=source_filter, history=history
+                query,
+                source_filter=source_filter,
+                history=history,
+                metadata_filter=query_metadata.to_metadata_filter(),
             )
             token_stream = (rag_result,) if isinstance(rag_result, str) else rag_result
             for token in token_stream:
