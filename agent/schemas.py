@@ -21,6 +21,7 @@ class PlannerDecision:
     tools: tuple[str, ...]
     reason: str
     status: PlannerStatus = "ready"
+    skill: str | None = None
 
     def to_dict(self) -> dict:
         payload = asdict(self)
@@ -79,6 +80,7 @@ class AgentResponse:
     executed_tools: tuple[str, ...] = field(default_factory=tuple)
     total_latency: float = 0.0
     error: str | None = None
+    trace: dict = field(default_factory=dict)
 
     def to_dict(self) -> dict:
         return {
@@ -90,4 +92,5 @@ class AgentResponse:
             "executed_tools": list(self.executed_tools),
             "total_latency": self.total_latency,
             "error": self.error,
+            "trace": self.trace,
         }

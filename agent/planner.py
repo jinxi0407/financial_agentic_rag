@@ -24,6 +24,9 @@ class FinancialPlanner:
     """Route only frozen-corpus financial questions in the MVP."""
 
     def plan(self, query: str) -> PlannerDecision:
+        return self._attach_skill(self._plan(query), query)
+
+    def _plan(self, query: str) -> PlannerDecision:
         normalized = query.strip()
         lowered = normalized.lower()
         if not normalized:
@@ -80,6 +83,27 @@ class FinancialPlanner:
             intent="unsupported",
             tools=(),
             reason="当前 Agent MVP 仅支持已入库财报和金融知识库问题。",
+        )
+
+    @staticmethod
+    def _attach_skill(decision: PlannerDecision, query: str) -> PlannerDecision:
+        lowered = query.lower()
+        if decision.intent == "unsupported":
+            return decision
+        if "比较" in query or "相比" in query:
+            skill = "company_comparison"
+        elif decision.intent in {"market_query", "news_query"} or any(
+            term in lowered for term in (*_MARKET_TERMS, *_NEWS_TERMS)
+        ):
+            skill = "market_intelligence"
+        else:
+            skill = "financial_report_analysis"
+        return PlannerDecision(
+            intent=decision.intent,
+            tools=decision.tools,
+            reason=decision.reason,
+            status=decision.status,
+            skill=skill,
         )
 
     @staticmethod
