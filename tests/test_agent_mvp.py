@@ -28,14 +28,17 @@ class FinancialAgentMVPTests(unittest.TestCase):
         self.assertEqual("financial_report_query", decision.intent)
         self.assertEqual(("financial_rag",), decision.tools)
 
-    def test_realtime_market_question_is_unsupported(self):
+    def test_realtime_market_question_is_planned_but_unavailable(self):
         decision = self.planner.plan("今天茅台股价是多少？")
-        self.assertEqual("unsupported", decision.intent)
-        self.assertEqual((), decision.tools)
+        self.assertEqual("market_query", decision.intent)
+        self.assertEqual(("market_data",), decision.tools)
+        self.assertEqual("planned_but_tool_unavailable", decision.status)
 
-    def test_news_question_is_unsupported(self):
+    def test_news_question_is_planned_but_unavailable(self):
         decision = self.planner.plan("帮我查今天AI新闻")
-        self.assertEqual("unsupported", decision.intent)
+        self.assertEqual("news_query", decision.intent)
+        self.assertEqual(("news_search",), decision.tools)
+        self.assertEqual("planned_but_tool_unavailable", decision.status)
 
     def test_tool_success_returns_stable_schema(self):
         result = FinancialRAGTool(qa_system=FakeQASystem()).run("营业收入是多少？")
@@ -61,14 +64,14 @@ class FinancialAgentMVPTests(unittest.TestCase):
         self.assertEqual(1, len(response.tool_results))
         self.assertIn("RuntimeError", response.error)
 
-    def test_unsupported_query_does_not_call_tool(self):
+    def test_unavailable_tool_does_not_call_rag(self):
         runner = FinancialAgentRunner(
             planner=self.planner,
             financial_rag_tool=FinancialRAGTool(qa_system=FailingQASystem()),
         )
         response = runner.run("今天茅台股价是多少？")
         self.assertFalse(response.success)
-        self.assertEqual("unsupported", response.error)
+        self.assertEqual("planned_but_tool_unavailable", response.error)
         self.assertEqual((), response.tool_results)
 
 

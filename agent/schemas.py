@@ -4,7 +4,15 @@ from dataclasses import asdict, dataclass, field
 from typing import Literal
 
 
-PlannerIntent = Literal["financial_report_query", "unsupported"]
+PlannerIntent = Literal[
+    "financial_report_query",
+    "calculation_query",
+    "market_query",
+    "news_query",
+    "composite_query",
+    "unsupported",
+]
+PlannerStatus = Literal["ready", "planned_but_tool_unavailable"]
 
 
 @dataclass(frozen=True)
@@ -12,6 +20,7 @@ class PlannerDecision:
     intent: PlannerIntent
     tools: tuple[str, ...]
     reason: str
+    status: PlannerStatus = "ready"
 
     def to_dict(self) -> dict:
         payload = asdict(self)
@@ -33,12 +42,26 @@ class FinancialRAGToolResult:
 
 
 @dataclass(frozen=True)
+class CalculatorToolResult:
+    tool_name: str
+    operation: str
+    inputs: dict
+    result: float | None
+    success: bool
+    error: str | None
+    latency: float
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
 class AgentResponse:
     query: str
     answer: str
     success: bool
     planner: PlannerDecision
-    tool_results: tuple[FinancialRAGToolResult, ...] = field(default_factory=tuple)
+    tool_results: tuple[FinancialRAGToolResult | CalculatorToolResult, ...] = field(default_factory=tuple)
     error: str | None = None
 
     def to_dict(self) -> dict:
