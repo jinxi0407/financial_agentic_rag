@@ -1,0 +1,1619 @@
+[
+  {
+    "id": "exact_001",
+    "category": "exact_value",
+    "question": "贵州茅台2026年上半年营业收入是多少？",
+    "target_company_codes": [
+      "600519"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "exact_002",
+    "category": "exact_value",
+    "question": "五粮液2025年度归属于上市公司股东的净利润是多少？",
+    "target_company_codes": [
+      "000858"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "五粮液_000858_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "exact_003",
+    "category": "exact_value",
+    "question": "比亚迪2025年上半年营业收入是多少？",
+    "target_company_codes": [
+      "002594"
+    ],
+    "target_report_periods": [
+      "2025H1"
+    ],
+    "expected_documents": [
+      "比亚迪_002594_2025H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "exact_004",
+    "category": "exact_value",
+    "question": "宁德时代2026年上半年归属于上市公司股东的净利润是多少？",
+    "target_company_codes": [
+      "300750"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "宁德时代_300750_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "exact_005",
+    "category": "exact_value",
+    "question": "招商银行2025年度营业收入是多少？",
+    "target_company_codes": [
+      "600036"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "招商银行_600036_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "exact_006",
+    "category": "exact_value",
+    "question": "平安银行2026年上半年不良贷款率是多少？",
+    "target_company_codes": [
+      "000001"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "平安银行_000001_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "exact_007",
+    "category": "exact_value",
+    "question": "中芯国际2025年度营业收入是多少？",
+    "target_company_codes": [
+      "688981"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "中芯国际_688981_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "exact_008",
+    "category": "exact_value",
+    "question": "北方华创2025年上半年归属于上市公司股东的净利润是多少？",
+    "target_company_codes": [
+      "002371"
+    ],
+    "target_report_periods": [
+      "2025H1"
+    ],
+    "expected_documents": [
+      "北方华创_002371_2025H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "exact_009",
+    "category": "exact_value",
+    "question": "比亚迪2026年上半年经营活动产生的现金流量净额是多少？",
+    "target_company_codes": [
+      "002594"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "比亚迪_002594_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "exact_010",
+    "category": "exact_value",
+    "question": "贵州茅台2025年度归属于上市公司股东的净利润是多少？",
+    "target_company_codes": [
+      "600519"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "cause_001",
+    "category": "cause_explanation",
+    "question": "贵州茅台2026年半年报中如何解释营业收入变化？",
+    "target_company_codes": [
+      "600519"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "cause_002",
+    "category": "cause_explanation",
+    "question": "五粮液2025年年报中经营活动现金流变化的主要原因是什么？",
+    "target_company_codes": [
+      "000858"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "五粮液_000858_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "cause_003",
+    "category": "cause_explanation",
+    "question": "比亚迪2025年年报中如何解释利润变化的主要原因？",
+    "target_company_codes": [
+      "002594"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "比亚迪_002594_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "cause_004",
+    "category": "cause_explanation",
+    "question": "宁德时代2026年半年报中营业收入变化的主要原因是什么？",
+    "target_company_codes": [
+      "300750"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "宁德时代_300750_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "cause_005",
+    "category": "cause_explanation",
+    "question": "招商银行2026年上半年净息差变化的主要原因是什么？",
+    "target_company_codes": [
+      "600036"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "招商银行_600036_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "cause_006",
+    "category": "cause_explanation",
+    "question": "平安银行2025年年报如何解释资产质量变化？",
+    "target_company_codes": [
+      "000001"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "平安银行_000001_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "cause_007",
+    "category": "cause_explanation",
+    "question": "中芯国际2025年年报中营业收入变化的主要原因是什么？",
+    "target_company_codes": [
+      "688981"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "中芯国际_688981_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "cause_008",
+    "category": "cause_explanation",
+    "question": "北方华创2026年半年报中净利润变化的主要原因是什么？",
+    "target_company_codes": [
+      "002371"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "北方华创_002371_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "biz_001",
+    "category": "business_risk",
+    "question": "贵州茅台2025年年报披露的主要业务和产品结构是什么？",
+    "target_company_codes": [
+      "600519"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "biz_002",
+    "category": "business_risk",
+    "question": "五粮液2026年半年报中披露了哪些主要销售渠道或营销模式？",
+    "target_company_codes": [
+      "000858"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "五粮液_000858_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "biz_003",
+    "category": "business_risk",
+    "question": "比亚迪2025年年报中研发投入情况如何？",
+    "target_company_codes": [
+      "002594"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "比亚迪_002594_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "biz_004",
+    "category": "business_risk",
+    "question": "宁德时代2025年年报披露了哪些主要经营风险？",
+    "target_company_codes": [
+      "300750"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "宁德时代_300750_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "biz_005",
+    "category": "business_risk",
+    "question": "招商银行2025年年报如何描述信用风险管理？",
+    "target_company_codes": [
+      "600036"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "招商银行_600036_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "biz_006",
+    "category": "business_risk",
+    "question": "平安银行2026年半年报如何描述资产质量和风险管理情况？",
+    "target_company_codes": [
+      "000001"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "平安银行_000001_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "biz_007",
+    "category": "business_risk",
+    "question": "中芯国际2026年半年报披露的产能利用或产能相关经营情况如何？",
+    "target_company_codes": [
+      "688981"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "中芯国际_688981_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "biz_008",
+    "category": "business_risk",
+    "question": "北方华创2025年年报中研发投入或研发人员情况如何？",
+    "target_company_codes": [
+      "002371"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "北方华创_002371_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "yoy_001",
+    "category": "yoy_h1",
+    "question": "贵州茅台2026年上半年营业收入相比2025年上半年变化多少？",
+    "target_company_codes": [
+      "600519"
+    ],
+    "target_report_periods": [
+      "2025H1",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2025H1.pdf",
+      "贵州茅台_600519_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_correctness",
+      "calculation"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "yoy_002",
+    "category": "yoy_h1",
+    "question": "五粮液2026年上半年归母净利润相比2025年上半年变化多少？",
+    "target_company_codes": [
+      "000858"
+    ],
+    "target_report_periods": [
+      "2025H1",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "五粮液_000858_2025H1.pdf",
+      "五粮液_000858_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_correctness",
+      "calculation"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "yoy_003",
+    "category": "yoy_h1",
+    "question": "比亚迪2026年上半年营业收入相比2025年上半年变化多少？",
+    "target_company_codes": [
+      "002594"
+    ],
+    "target_report_periods": [
+      "2025H1",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "比亚迪_002594_2025H1.pdf",
+      "比亚迪_002594_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_correctness",
+      "calculation"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "yoy_004",
+    "category": "yoy_h1",
+    "question": "宁德时代2026年上半年归母净利润相比2025年上半年变化多少？",
+    "target_company_codes": [
+      "300750"
+    ],
+    "target_report_periods": [
+      "2025H1",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "宁德时代_300750_2025H1.pdf",
+      "宁德时代_300750_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_correctness",
+      "calculation"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "yoy_005",
+    "category": "yoy_h1",
+    "question": "招商银行2026年上半年营业收入相比2025年上半年变化多少？",
+    "target_company_codes": [
+      "600036"
+    ],
+    "target_report_periods": [
+      "2025H1",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "招商银行_600036_2025H1.pdf",
+      "招商银行_600036_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_correctness",
+      "calculation"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "yoy_006",
+    "category": "yoy_h1",
+    "question": "平安银行2026年上半年不良贷款率相比2025年上半年有何变化？",
+    "target_company_codes": [
+      "000001"
+    ],
+    "target_report_periods": [
+      "2025H1",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "平安银行_000001_2025H1.pdf",
+      "平安银行_000001_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_correctness",
+      "calculation"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "yoy_007",
+    "category": "yoy_h1",
+    "question": "中芯国际2026年上半年营业收入相比2025年上半年变化多少？",
+    "target_company_codes": [
+      "688981"
+    ],
+    "target_report_periods": [
+      "2025H1",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "中芯国际_688981_2025H1.pdf",
+      "中芯国际_688981_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_correctness",
+      "calculation"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "yoy_008",
+    "category": "yoy_h1",
+    "question": "北方华创2026年上半年归母净利润相比2025年上半年变化多少？",
+    "target_company_codes": [
+      "002371"
+    ],
+    "target_report_periods": [
+      "2025H1",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "北方华创_002371_2025H1.pdf",
+      "北方华创_002371_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_correctness",
+      "calculation"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "period_001",
+    "category": "period_mismatch",
+    "question": "贵州茅台2025年度营业收入与2026年上半年营业收入相比变化多少？请说明两个期间是否可直接视为同比。",
+    "target_company_codes": [
+      "600519"
+    ],
+    "target_report_periods": [
+      "2025FY",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2025FY.pdf",
+      "贵州茅台_600519_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_guardrail"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "period_002",
+    "category": "period_mismatch",
+    "question": "五粮液2025年度营业收入与2026年上半年营业收入相比变化多少？这是否属于同口径同比？",
+    "target_company_codes": [
+      "000858"
+    ],
+    "target_report_periods": [
+      "2025FY",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "五粮液_000858_2025FY.pdf",
+      "五粮液_000858_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_guardrail"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "period_003",
+    "category": "period_mismatch",
+    "question": "比亚迪2025年度归母净利润与2026年上半年归母净利润可以直接比较同比增速吗？分别是多少？",
+    "target_company_codes": [
+      "002594"
+    ],
+    "target_report_periods": [
+      "2025FY",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "比亚迪_002594_2025FY.pdf",
+      "比亚迪_002594_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_guardrail"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "period_004",
+    "category": "period_mismatch",
+    "question": "宁德时代2025年度营业收入与2026年上半年营业收入分别是多少？能否直接称为同比增长？",
+    "target_company_codes": [
+      "300750"
+    ],
+    "target_report_periods": [
+      "2025FY",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "宁德时代_300750_2025FY.pdf",
+      "宁德时代_300750_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_guardrail"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "period_005",
+    "category": "period_mismatch",
+    "question": "招商银行2025年度营业收入与2026年上半年营业收入分别是多少？这种比较需要注意什么期间问题？",
+    "target_company_codes": [
+      "600036"
+    ],
+    "target_report_periods": [
+      "2025FY",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "招商银行_600036_2025FY.pdf",
+      "招商银行_600036_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_guardrail"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "period_006",
+    "category": "period_mismatch",
+    "question": "中芯国际2025年度营业收入和2026年上半年营业收入分别是多少？可以直接计算同比吗？",
+    "target_company_codes": [
+      "688981"
+    ],
+    "target_report_periods": [
+      "2025FY",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "中芯国际_688981_2025FY.pdf",
+      "中芯国际_688981_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_guardrail"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "cross_001",
+    "category": "cross_company",
+    "question": "比较贵州茅台和五粮液2026年上半年的营业收入。",
+    "target_company_codes": [
+      "600519",
+      "000858"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2026H1.pdf",
+      "五粮液_000858_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "company_correctness"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "cross_002",
+    "category": "cross_company",
+    "question": "比较贵州茅台和五粮液2025年度归母净利润。",
+    "target_company_codes": [
+      "600519",
+      "000858"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2025FY.pdf",
+      "五粮液_000858_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "company_correctness"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "cross_003",
+    "category": "cross_company",
+    "question": "比较比亚迪和宁德时代2026年上半年的营业收入。",
+    "target_company_codes": [
+      "002594",
+      "300750"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "比亚迪_002594_2026H1.pdf",
+      "宁德时代_300750_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "company_correctness"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "cross_004",
+    "category": "cross_company",
+    "question": "比较比亚迪和宁德时代2025年度的研发投入情况。",
+    "target_company_codes": [
+      "002594",
+      "300750"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "比亚迪_002594_2025FY.pdf",
+      "宁德时代_300750_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "company_correctness"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "cross_005",
+    "category": "cross_company",
+    "question": "比较招商银行和平安银行2026年上半年的净息差。",
+    "target_company_codes": [
+      "600036",
+      "000001"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "招商银行_600036_2026H1.pdf",
+      "平安银行_000001_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "company_correctness"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "cross_006",
+    "category": "cross_company",
+    "question": "比较招商银行和平安银行2025年度的不良贷款率。",
+    "target_company_codes": [
+      "600036",
+      "000001"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "招商银行_600036_2025FY.pdf",
+      "平安银行_000001_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "company_correctness"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "cross_007",
+    "category": "cross_company",
+    "question": "比较中芯国际和北方华创2026年上半年的营业收入。",
+    "target_company_codes": [
+      "688981",
+      "002371"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "中芯国际_688981_2026H1.pdf",
+      "北方华创_002371_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "company_correctness"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "cross_008",
+    "category": "cross_company",
+    "question": "比较中芯国际和北方华创2025年度的研发投入情况。",
+    "target_company_codes": [
+      "688981",
+      "002371"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "中芯国际_688981_2025FY.pdf",
+      "北方华创_002371_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "company_correctness"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "multi_001",
+    "category": "multi_evidence",
+    "question": "贵州茅台2026年上半年的营业收入、归母净利润和经营活动现金流量净额分别是多少？",
+    "target_company_codes": [
+      "600519"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "multi_evidence_recall",
+      "answer_completeness",
+      "required_doc_coverage"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "multi_002",
+    "category": "multi_evidence",
+    "question": "比亚迪2025年度的营业收入、归母净利润和研发投入情况如何？",
+    "target_company_codes": [
+      "002594"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "比亚迪_002594_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "multi_evidence_recall",
+      "answer_completeness",
+      "required_doc_coverage"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "multi_003",
+    "category": "multi_evidence",
+    "question": "招商银行2026年上半年的营业收入、净息差和不良贷款率分别是多少？",
+    "target_company_codes": [
+      "600036"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "招商银行_600036_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "multi_evidence_recall",
+      "answer_completeness",
+      "required_doc_coverage"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "multi_004",
+    "category": "multi_evidence",
+    "question": "中芯国际2025年度的营业收入、毛利率以及研发投入情况如何？",
+    "target_company_codes": [
+      "688981"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "中芯国际_688981_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "multi_evidence_recall",
+      "answer_completeness",
+      "required_doc_coverage"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "multi_005",
+    "category": "multi_evidence",
+    "question": "比较贵州茅台和五粮液2026年上半年的营业收入与归母净利润，并说明哪家公司规模更大。",
+    "target_company_codes": [
+      "600519",
+      "000858"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2026H1.pdf",
+      "五粮液_000858_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "multi_evidence_recall",
+      "answer_completeness",
+      "required_doc_coverage"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "multi_006",
+    "category": "multi_evidence",
+    "question": "比较招商银行和平安银行2025年度的不良贷款率和拨备覆盖率，并概括资产质量差异。",
+    "target_company_codes": [
+      "600036",
+      "000001"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "招商银行_600036_2025FY.pdf",
+      "平安银行_000001_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "multi_evidence_recall",
+      "answer_completeness",
+      "required_doc_coverage"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "to_verify_from_pdf",
+    "expected_behavior": null
+  },
+  {
+    "id": "negative_001",
+    "category": "wrong_company_period",
+    "question": "贵州茅台2024年度营业收入是多少？",
+    "target_company_codes": [
+      "600519"
+    ],
+    "target_report_periods": [],
+    "expected_documents": [],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "wrong_period_rate",
+      "unsupported_answer_rate"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "no_matching_report",
+    "expected_behavior": "不得用2025FY/2025H1/2026H1冒充2024FY；应明确知识库无对应报告。"
+  },
+  {
+    "id": "negative_002",
+    "category": "wrong_company_period",
+    "question": "宁德时代2026年度营业收入是多少？",
+    "target_company_codes": [
+      "300750"
+    ],
+    "target_report_periods": [],
+    "expected_documents": [],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "wrong_period_rate",
+      "unsupported_answer_rate"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "no_matching_report",
+    "expected_behavior": "不得用2026H1冒充2026FY；应明确知识库无2026年度报告。"
+  },
+  {
+    "id": "negative_003",
+    "category": "wrong_company_period",
+    "question": "工商银行2026年上半年净息差是多少？",
+    "target_company_codes": [],
+    "target_report_periods": [],
+    "expected_documents": [],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "wrong_company_rate",
+      "unsupported_answer_rate"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "company_not_in_corpus",
+    "expected_behavior": "不得引用招商银行/平安银行等其他银行回答；应说明知识库无工商银行对应报告。"
+  },
+  {
+    "id": "oos_001",
+    "category": "out_of_scope",
+    "question": "法国的首都是哪里？",
+    "target_company_codes": [],
+    "target_report_periods": [],
+    "expected_documents": [],
+    "expected_route": "OOS",
+    "allowed_strategies": [
+      "OOS"
+    ],
+    "evaluation_focus": [
+      "router_accuracy"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "oos",
+    "expected_behavior": "应识别为非金融财报问题，不进入财报检索。"
+  },
+  {
+    "id": "oos_002",
+    "category": "out_of_scope",
+    "question": "请用Python写一个快速排序。",
+    "target_company_codes": [],
+    "target_report_periods": [],
+    "expected_documents": [],
+    "expected_route": "OOS",
+    "allowed_strategies": [
+      "OOS"
+    ],
+    "evaluation_focus": [
+      "router_accuracy"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "oos",
+    "expected_behavior": "应识别为非金融财报问题，不进入财报检索。"
+  },
+  {
+    "id": "oos_003",
+    "category": "out_of_scope",
+    "question": "首尔明天天气怎么样？",
+    "target_company_codes": [],
+    "target_report_periods": [],
+    "expected_documents": [],
+    "expected_route": "OOS",
+    "allowed_strategies": [
+      "OOS"
+    ],
+    "evaluation_focus": [
+      "router_accuracy"
+    ],
+    "gold_answer": null,
+    "gold_evidence": [],
+    "gold_status": "oos",
+    "expected_behavior": "应识别为非金融财报问题，不进入财报检索。"
+  }
+]

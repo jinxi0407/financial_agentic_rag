@@ -302,11 +302,14 @@ class IntegratedQASystem():
         if need_rag:
             logger.info(f"尝试查询RAG模块，问题：{query}")
             collected_answer = ''
+            deterministic_subqueries = query_metadata.requires_deterministic_subqueries()
             rag_result = self.rag.generate_answer(
                 query,
                 source_filter=source_filter,
                 history=history,
                 metadata_filter=query_metadata.to_metadata_filter(),
+                subquery_targets=query_metadata.subquery_plan() if deterministic_subqueries else None,
+                strategy="子查询检索" if deterministic_subqueries else None,
             )
             token_stream = (rag_result,) if isinstance(rag_result, str) else rag_result
             for token in token_stream:

@@ -11,6 +11,24 @@ class CompanyDefinition:
     aliases: tuple[str, ...]
 
 
+@dataclass(frozen=True)
+class SubQueryTarget:
+    """A deterministic retrieval target with its filter bound to the query."""
+
+    query: str
+    company_name: str | None = None
+    company_code: str | None = None
+    report_period: str | None = None
+
+    def to_dict(self):
+        metadata_filter = {}
+        if self.company_code:
+            metadata_filter["company_code"] = self.company_code
+        if self.report_period:
+            metadata_filter["report_period"] = self.report_period
+        return {"query": self.query, "metadata_filter": metadata_filter or None}
+
+
 COMPANIES = (
     CompanyDefinition("贵州茅台", "600519", ("贵州茅台", "茅台", "600519")),
     CompanyDefinition("五粮液", "000858", ("五粮液", "000858")),
@@ -35,25 +53,49 @@ _REPORT_ACTION_TERMS = ("想看", "查看", "看一下", "给我看", "下载", 
 _REPORT_NOUN_TERMS = ("财报", "报告", "年报", "半年报", "半年度报告", "年度报告")
 _H1_LOOKUP_TERMS = ("上半年", "半年度", "半年报")
 _FY_LOOKUP_TERMS = ("年度报告", "年报", "年度", "全年")
+_COMPARISON_TERMS = ("比较", "相比", "分别", "同比", "变化多少")
 
 
 @dataclass(frozen=True)
 class QueryMetadata:
+    query: str = ""
     company_name: str | None = None
     company_code: str | None = None
     report_year: int | None = None
     period_type: str | None = None
     report_period: str | None = None
     report_periods: tuple[str, ...] = ()
+    company_names: tuple[str, ...] = ()
+    company_codes: tuple[str, ...] = ()
+    subquery_targets: tuple[SubQueryTarget, ...] = ()
     intent: str = "RAG"
 
     def to_metadata_filter(self):
+        # Multi-target requests must be bound separately, not compressed globally.
+        if len(self.company_codes) > 1 or len(self.report_periods) > 1:
+            return None
         if not self.company_code:
             return None
         metadata_filter = {"company_code": self.company_code}
         if self.report_period:
             metadata_filter["report_period"] = self.report_period
         return metadata_filter
+
+    def requires_deterministic_subqueries(self):
+        multiple_explicit_targets = (
+            len(self.company_codes) >= 2 or len(self.report_periods) >= 2
+        )
+        comparison_expression = any(term in self.query for term in _COMPARISON_TERMS)
+        return bool(
+            self.intent == "RAG"
+            and self.subquery_targets
+            and (multiple_explicit_targets or (
+                comparison_expression and len(self.subquery_targets) >= 2
+            ))
+        )
+
+    def subquery_plan(self):
+        return tuple(target.to_dict() for target in self.subquery_targets)
 
 
 def _contains_alias(query, alias):
@@ -62,12 +104,17 @@ def _contains_alias(query, alias):
     return alias in query
 
 
-def _extract_company(query):
-    matches = [
-        company for company in COMPANIES
-        if any(_contains_alias(query, alias) for alias in company.aliases)
-    ]
-    return matches[0] if len(matches) == 1 else None
+def _extract_companies(query):
+    matches = []
+    for company in COMPANIES:
+        positions = [
+            query.find(alias)
+            for alias in company.aliases
+            if _contains_alias(query, alias)
+        ]
+        if positions:
+            matches.append((min(position for position in positions if position >= 0), company))
+    return tuple(company for _, company in sorted(matches, key=lambda item: item[0]))
 
 
 def _extract_report_periods(query):
@@ -82,6 +129,29 @@ def _extract_report_periods(query):
         if period not in periods:
             periods.append(period)
     return tuple(periods)
+
+
+def _target_query(query, company, report_period):
+    labels = [company.company_name] if company else []
+    if report_period:
+        labels.append(report_period)
+    return f"{query}（检索目标：{'，'.join(labels)}）" if labels else query
+
+
+def _build_subquery_targets(query, companies, periods):
+    if not companies and not periods:
+        return ()
+
+    return tuple(
+        SubQueryTarget(
+            query=_target_query(query, company, report_period),
+            company_name=company.company_name if company else None,
+            company_code=company.company_code if company else None,
+            report_period=report_period,
+        )
+        for company in (companies or (None,))
+        for report_period in (periods or (None,))
+    )
 
 
 def is_report_lookup_query(query):
@@ -101,7 +171,8 @@ def _extract_lookup_period_type(query):
 
 def extract_query_metadata(query):
     """Extract only explicit metadata; bare years deliberately remain unclassified."""
-    company = _extract_company(query)
+    companies = _extract_companies(query)
+    company = companies[0] if len(companies) == 1 else None
     periods = _extract_report_periods(query)
     if len(periods) == 1:
         report_period = periods[0]
@@ -117,12 +188,16 @@ def extract_query_metadata(query):
         period_type = _extract_lookup_period_type(query)
 
     return QueryMetadata(
-        company_name=company.company_name if company else None,
-        company_code=company.company_code if company else None,
+        query=query,
+        company_name=company.company_name if company else (companies[0].company_name if companies else None),
+        company_code=company.company_code if company else (companies[0].company_code if companies else None),
         report_year=report_year,
         period_type=period_type,
         report_period=report_period,
         report_periods=periods,
+        company_names=tuple(company.company_name for company in companies),
+        company_codes=tuple(company.company_code for company in companies),
+        subquery_targets=_build_subquery_targets(query, companies, periods),
         intent=intent,
     )
 

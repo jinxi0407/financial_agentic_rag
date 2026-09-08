@@ -75,7 +75,7 @@ class QueryMetadataTests(unittest.TestCase):
         metadata = extract_query_metadata("比较贵州茅台2025H1和2026H1营业收入")
         self.assertEqual(("2025H1", "2026H1"), metadata.report_periods)
         self.assertIsNone(metadata.report_period)
-        self.assertEqual({"company_code": "600519"}, metadata.to_metadata_filter())
+        self.assertIsNone(metadata.to_metadata_filter())
 
     def test_only_report_seeking_requests_are_report_lookup(self):
         self.assertEqual(

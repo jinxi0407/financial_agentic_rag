@@ -140,19 +140,50 @@ class RAGSystem:
 
     #   定义私有方法，使用子查询进行检索
     def _retrieve_with_subqueries(
-            self, query, source_filter=None, metadata_filter=None, subquery_filters=None
+            self, query, source_filter=None, metadata_filter=None, subquery_filters=None,
+            subquery_targets=None,
     ):
         logger.info(f"使用子查询策略进行检索 (查询: '{query}')")
         #   获取子查询生成的 Prompt 模板
         subquery_prompt_template = RAGPrompts.subquery_prompt()  # 使用 template 后缀区分
         try:
-            #   调用大语言模型生成子查询列表
-            optimization_started_at = time.perf_counter()
-            subqueries_text = self._call_llm_for_text(
-                subquery_prompt_template.format(query=query)
-            ).strip()
-            optimization_seconds = time.perf_counter() - optimization_started_at
-            subqueries = self._parse_subqueries(subqueries_text, query)
+            if subquery_targets is not None:
+                if not isinstance(subquery_targets, (list, tuple)) or not subquery_targets:
+                    raise ValueError("Deterministic subquery targets must be a non-empty sequence")
+                subqueries = []
+                target_filters = []
+                for target in subquery_targets:
+                    if not isinstance(target, Mapping) or set(target) != {"query", "metadata_filter"}:
+                        raise ValueError(
+                            "Each deterministic subquery target must contain query and metadata_filter"
+                        )
+                    target_query = target["query"]
+                    target_filter = target["metadata_filter"]
+                    if not isinstance(target_query, str) or not target_query.strip():
+                        raise ValueError(
+                            "Deterministic subquery target query must be a non-empty string"
+                        )
+                    if target_filter is not None and not isinstance(target_filter, Mapping):
+                        raise TypeError(
+                            "Deterministic subquery metadata_filter must be a mapping or None"
+                        )
+                    subqueries.append(target_query.strip())
+                    target_filters.append(dict(target_filter) if target_filter is not None else None)
+                if subquery_filters is not None:
+                    raise ValueError(
+                        "Do not combine deterministic subquery targets with subquery_filters"
+                    )
+                subquery_filters = target_filters
+                optimization_seconds = 0.0
+                logger.info("使用 %d 个确定性 SubQuery target", len(subqueries))
+            else:
+                #   调用大语言模型生成子查询列表
+                optimization_started_at = time.perf_counter()
+                subqueries_text = self._call_llm_for_text(
+                    subquery_prompt_template.format(query=query)
+                ).strip()
+                optimization_seconds = time.perf_counter() - optimization_started_at
+                subqueries = self._parse_subqueries(subqueries_text, query)
             logger.info(f"生成的子查询: {subqueries}")
             if not subqueries:
                 logger.warning("未能生成有效的子查询")
@@ -283,6 +314,7 @@ class RAGSystem:
             strategy_selection_seconds=None,
             metadata_filter=None,
             subquery_filters=None,
+            subquery_targets=None,
     ):
         retrieval_started_at = time.perf_counter()
         # 如果未指定检索策略，则使用策略选择器选择
@@ -301,7 +333,7 @@ class RAGSystem:
             )
         elif strategy == "子查询检索":
             ranked_parent_chunks = self._retrieve_with_subqueries(
-                query, source_filter, metadata_filter, subquery_filters
+                query, source_filter, metadata_filter, subquery_filters, subquery_targets
             )
         elif strategy == "假设问题检索":
             ranked_parent_chunks = self._retrieve_with_hyde(
@@ -343,7 +375,8 @@ class RAGSystem:
 
     # 定义方法，生成答案
     def generate_answer(
-            self, query, history=None, source_filter=None, metadata_filter=None, subquery_filters=None
+            self, query, history=None, source_filter=None, metadata_filter=None, subquery_filters=None,
+            subquery_targets=None, strategy=None,
     ):
         # 记录查询开始时间
         start_time = time.time()
@@ -364,9 +397,12 @@ class RAGSystem:
         # RAG 路由或保守回退后，继续原有策略选择和检索流程。
         logger.info("查询进入 Financial RAG，执行检索流程")
         #   选择检索策略
-        strategy_started_at = time.perf_counter()
-        strategy = self.strategy_selector.select_strategy(query)
-        strategy_selection_seconds = time.perf_counter() - strategy_started_at
+        if strategy is None:
+            strategy_started_at = time.perf_counter()
+            strategy = self.strategy_selector.select_strategy(query)
+            strategy_selection_seconds = time.perf_counter() - strategy_started_at
+        else:
+            strategy_selection_seconds = 0.0
 
         #   检索相关文档
         # list[Document]
@@ -375,6 +411,7 @@ class RAGSystem:
             source_filter=source_filter,
             metadata_filter=metadata_filter,
             subquery_filters=subquery_filters,
+            subquery_targets=subquery_targets,
             strategy=strategy,
             strategy_selection_seconds=strategy_selection_seconds,
         )  # 传递 strategy
