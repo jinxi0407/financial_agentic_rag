@@ -11,6 +11,7 @@ _FINANCIAL_REPORT_TERMS = (
     "财报", "年报", "半年报", "半年度", "季度报告", "营业收入", "营业总收入",
     "净利润", "归母", "毛利率", "研发", "现金流", "净息差", "不良贷款率",
     "拨备覆盖率", "资产负债率", "同比", "环比", "roe", "财务指标",
+    "财务表现", "营收", "h1", "fy",
 )
 _CALCULATION_TERMS = ("增长率", "增长", "增加", "减少", "差值", "比率", "百分点")
 _SIMPLE_GROWTH_PATTERN = re.compile(
@@ -35,11 +36,15 @@ class FinancialPlanner:
         has_news = any(term in lowered for term in _NEWS_TERMS)
         has_report = any(term in lowered for term in _FINANCIAL_REPORT_TERMS)
         if (has_market or has_news) and has_report:
+            tools = ["financial_rag"]
+            if has_market:
+                tools.append("market_mcp")
+            if has_news:
+                tools.append("news_mcp")
             return PlannerDecision(
                 intent="composite_query",
-                tools=("financial_rag", "market_data" if has_market else "news_search"),
-                reason="查询同时包含财报信息和未实现的实时市场或新闻需求。",
-                status="planned_but_tool_unavailable",
+                tools=tuple(tools),
+                reason="查询同时包含历史财报与实时市场或新闻需求。",
             )
         if has_market:
             return PlannerDecision(

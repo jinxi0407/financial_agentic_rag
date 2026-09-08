@@ -51,6 +51,17 @@ def extract_security_from_query(query: str) -> dict[str, str] | None:
     return None
 
 
+def extract_securities_from_query(query: str) -> list[dict[str, str]]:
+    """Return every supported security mentioned in query, preserving mention order."""
+    matches = []
+    for code, details in _SECURITIES.items():
+        positions = [query.find(code), *(query.find(alias) for alias in details["aliases"])]
+        position = min((item for item in positions if item >= 0), default=-1)
+        if position >= 0:
+            matches.append((position, normalize_security(ticker=code)))
+    return [security for _, security in sorted(matches, key=lambda item: item[0])]
+
+
 class MarketProvider:
     """Fetch a best-effort delayed market snapshot without API credentials."""
 
