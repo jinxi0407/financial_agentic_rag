@@ -3,6 +3,7 @@
 import unittest
 
 from agent.runner import FinancialAgentRunner
+from agent.schemas import MCPToolResult
 from agent.tools.calculator_tool import CalculatorTool
 from agent.tools.financial_rag_tool import FinancialRAGTool
 
@@ -15,6 +16,11 @@ class FailingCalculator:
 class FailingRAG:
     def run(self, query):
         raise AssertionError("Market/news must not call FinancialRAGTool")
+
+
+class UnavailableMCPClient:
+    def call_tool(self, server_name, tool_name, arguments):
+        return MCPToolResult(tool_name, server_name, arguments, None, False, "provider unavailable", 0.0)
 
 
 class CalculatorToolTests(unittest.TestCase):
@@ -43,12 +49,12 @@ class CalculatorToolTests(unittest.TestCase):
         self.assertIn("ZeroDivisionError", result.error)
 
     def test_market_and_news_do_not_call_rag(self):
-        runner = FinancialAgentRunner(financial_rag_tool=FailingRAG())
+        runner = FinancialAgentRunner(financial_rag_tool=FailingRAG(), mcp_client=UnavailableMCPClient())
         for query in ("今天茅台股价是多少？", "帮我查今天AI新闻"):
             response = runner.run(query)
             self.assertFalse(response.success)
-            self.assertEqual("planned_but_tool_unavailable", response.error)
-            self.assertEqual((), response.tool_results)
+            self.assertEqual("provider unavailable", response.error)
+            self.assertEqual(1, len(response.tool_results))
 
     def test_calculator_failure_does_not_crash_runner(self):
         runner = FinancialAgentRunner(calculator_tool=FailingCalculator())

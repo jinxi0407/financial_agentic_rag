@@ -5,8 +5,8 @@ import re
 from .schemas import PlannerDecision
 
 
-_MARKET_TERMS = ("股价", "行情", "涨停", "跌停", "成交量", "市值", "实时行情")
-_NEWS_TERMS = ("新闻", "资讯", "消息", "news")
+_MARKET_TERMS = ("股价", "行情", "涨停", "跌停", "成交量", "市值", "实时行情", "最新股价", "涨跌")
+_NEWS_TERMS = ("新闻", "资讯", "消息", "news", "舆情", "公告", "事件")
 _FINANCIAL_REPORT_TERMS = (
     "财报", "年报", "半年报", "半年度", "季度报告", "营业收入", "营业总收入",
     "净利润", "归母", "毛利率", "研发", "现金流", "净息差", "不良贷款率",
@@ -44,16 +44,14 @@ class FinancialPlanner:
         if has_market:
             return PlannerDecision(
                 intent="market_query",
-                tools=("market_data",),
-                reason="当前 Agent MVP 尚未接入实时行情工具。",
-                status="planned_but_tool_unavailable",
+                tools=("market_mcp",),
+                reason="用户请求实时市场行情，将调用 Market MCP 工具。",
             )
         if has_news:
             return PlannerDecision(
                 intent="news_query",
-                tools=("news_search",),
-                reason="当前 Agent MVP 尚未接入新闻检索工具。",
-                status="planned_but_tool_unavailable",
+                tools=("news_mcp",),
+                reason="用户请求近期新闻，将调用 News MCP 工具。",
             )
         if self.simple_calculation_request(normalized) is not None:
             return PlannerDecision(
