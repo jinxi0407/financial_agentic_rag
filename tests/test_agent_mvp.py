@@ -1,0 +1,76 @@
+"""Focused tests for the first tool-based Financial Agent MVP."""
+
+import unittest
+
+from agent.planner import FinancialPlanner
+from agent.runner import FinancialAgentRunner
+from agent.tools.financial_rag_tool import FinancialRAGTool
+
+
+class FakeQASystem:
+    def query(self, query):
+        yield f"财报答案：{query}", False
+        yield "", True
+
+
+class FailingQASystem:
+    def query(self, query):
+        raise RuntimeError("service unavailable")
+        yield query, True
+
+
+class FinancialAgentMVPTests(unittest.TestCase):
+    def setUp(self):
+        self.planner = FinancialPlanner()
+
+    def test_financial_report_question_routes_to_tool(self):
+        decision = self.planner.plan("贵州茅台2026H1营业收入是多少？")
+        self.assertEqual("financial_report_query", decision.intent)
+        self.assertEqual(("financial_rag",), decision.tools)
+
+    def test_realtime_market_question_is_unsupported(self):
+        decision = self.planner.plan("今天茅台股价是多少？")
+        self.assertEqual("unsupported", decision.intent)
+        self.assertEqual((), decision.tools)
+
+    def test_news_question_is_unsupported(self):
+        decision = self.planner.plan("帮我查今天AI新闻")
+        self.assertEqual("unsupported", decision.intent)
+
+    def test_tool_success_returns_stable_schema(self):
+        result = FinancialRAGTool(qa_system=FakeQASystem()).run("营业收入是多少？")
+        self.assertTrue(result.success)
+        self.assertEqual("financial_rag", result.tool_name)
+        self.assertEqual("营业收入是多少？", result.query)
+        self.assertIn("财报答案", result.answer)
+        self.assertIsNone(result.error)
+        self.assertGreaterEqual(result.latency, 0)
+        self.assertEqual(
+            {"tool_name", "query", "answer", "success", "error", "latency"},
+            set(result.to_dict()),
+        )
+
+    def test_tool_exception_does_not_crash_agent(self):
+        runner = FinancialAgentRunner(
+            planner=self.planner,
+            financial_rag_tool=FinancialRAGTool(qa_system=FailingQASystem()),
+        )
+        response = runner.run("贵州茅台2026H1营业收入是多少？")
+        self.assertFalse(response.success)
+        self.assertEqual("financial_report_query", response.planner.intent)
+        self.assertEqual(1, len(response.tool_results))
+        self.assertIn("RuntimeError", response.error)
+
+    def test_unsupported_query_does_not_call_tool(self):
+        runner = FinancialAgentRunner(
+            planner=self.planner,
+            financial_rag_tool=FinancialRAGTool(qa_system=FailingQASystem()),
+        )
+        response = runner.run("今天茅台股价是多少？")
+        self.assertFalse(response.success)
+        self.assertEqual("unsupported", response.error)
+        self.assertEqual((), response.tool_results)
+
+
+if __name__ == "__main__":
+    unittest.main()
