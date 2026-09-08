@@ -4,6 +4,7 @@ import configparser
 import json
 import os
 import re
+import subprocess
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -138,9 +139,13 @@ class Config:
         # 块重叠大小
         self.CHUNK_OVERLAP = self.config.getint('retrieval', 'chunk_overlap', fallback=50)
         # 检索返回数量
-        self.RETRIEVAL_K = self.config.getint('retrieval', 'retrieval_k', fallback=5)
+        self.RETRIEVAL_K = self._environment_or_config_int(
+            'RETRIEVAL_K', 'retrieval', 'retrieval_k', fallback=5
+        )
         # 最终候选数量
-        self.CANDIDATE_M = self.config.getint('retrieval', 'candidate_m', fallback=2)
+        self.CANDIDATE_M = self._environment_or_config_int(
+            'CANDIDATE_M', 'retrieval', 'candidate_m', fallback=2
+        )
 
         # 应用配置
         # 有效来源列表
@@ -165,6 +170,37 @@ class Config:
         ).strip()
         path = configured_path or str(Path(self.MODELS_DIR) / default_directory)
         return self._project_path(path)
+
+    def _environment_or_config_int(self, env_name, section, option, fallback):
+        """Allow deployment configuration to override the compatible INI value."""
+        environment_value = os.getenv(env_name)
+        if environment_value is not None:
+            return int(environment_value)
+        return self.config.getint(section, option, fallback=fallback)
+
+    def runtime_config_snapshot(self):
+        """Return the non-sensitive settings needed to reproduce a retrieval run."""
+        return {
+            'retrieval_k': self.RETRIEVAL_K,
+            'candidate_m': self.CANDIDATE_M,
+            'git_commit': self._git_commit(),
+            'milvus_database': self.MILVUS_DATABASE_NAME,
+            'milvus_collection': self.MILVUS_COLLECTION_NAME,
+        }
+
+    def _git_commit(self):
+        try:
+            result = subprocess.run(
+                ['git', 'rev-parse', '--short', 'HEAD'],
+                cwd=self.PROJECT_ROOT_PATH,
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=2,
+            )
+        except (OSError, subprocess.SubprocessError):
+            return 'unknown'
+        return result.stdout.strip() or 'unknown'
 
     def _project_path(self, value):
         path = Path(value).expanduser()

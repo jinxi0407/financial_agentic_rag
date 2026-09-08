@@ -54,6 +54,28 @@ _REPORT_NOUN_TERMS = ("财报", "报告", "年报", "半年报", "半年度报�
 _H1_LOOKUP_TERMS = ("上半年", "半年度", "半年报")
 _FY_LOOKUP_TERMS = ("年度报告", "年报", "年度", "全年")
 _COMPARISON_TERMS = ("比较", "相比", "分别", "同比", "变化多少")
+_CALCULATION_TERMS = (
+    "相比", "增加", "减少", "同比", "增长率", "差值", "变化多少", "百分点变化",
+)
+
+# These keys are deliberately small and deterministic.  They describe what the
+# user asks for; they do not attempt to infer an undisclosed financial metric.
+METRIC_DEFINITIONS = {
+    "revenue": ("营业收入", "营收"),
+    "net_profit": (
+        "归属于上市公司股东的净利润",
+        "归属于母公司所有者的净利润",
+        "归母净利润",
+    ),
+    "operating_cash_flow": ("经营活动产生的现金流量净额", "经营现金流"),
+    # R&D investment and expensed R&D are separate accounting concepts.
+    "research_investment": ("研发投入",),
+    "research_expense": ("研发费用",),
+    "gross_margin": ("毛利率",),
+    "net_interest_margin": ("净息差", "净利息收益率"),
+    "npl_ratio": ("不良贷款率", "不良率"),
+    "provision_coverage": ("拨备覆盖率",),
+}
 
 
 @dataclass(frozen=True)
@@ -68,6 +90,7 @@ class QueryMetadata:
     company_names: tuple[str, ...] = ()
     company_codes: tuple[str, ...] = ()
     subquery_targets: tuple[SubQueryTarget, ...] = ()
+    requested_metrics: tuple[str, ...] = ()
     intent: str = "RAG"
 
     def to_metadata_filter(self):
@@ -96,6 +119,14 @@ class QueryMetadata:
 
     def subquery_plan(self):
         return tuple(target.to_dict() for target in self.subquery_targets)
+
+    def requires_deterministic_calculation(self):
+        """Only request arithmetic when the query explicitly asks for it."""
+        return bool(
+            self.intent == "RAG"
+            and self.requested_metrics
+            and any(term in self.query for term in _CALCULATION_TERMS)
+        )
 
 
 def _contains_alias(query, alias):
@@ -129,6 +160,15 @@ def _extract_report_periods(query):
         if period not in periods:
             periods.append(period)
     return tuple(periods)
+
+
+def _extract_requested_metrics(query):
+    metrics = []
+    for metric, aliases in METRIC_DEFINITIONS.items():
+        positions = [query.find(alias) for alias in aliases if alias in query]
+        if positions:
+            metrics.append((min(positions), metric))
+    return tuple(metric for _, metric in sorted(metrics))
 
 
 def _target_query(query, company, report_period):
@@ -198,6 +238,7 @@ def extract_query_metadata(query):
         company_names=tuple(company.company_name for company in companies),
         company_codes=tuple(company.company_code for company in companies),
         subquery_targets=_build_subquery_targets(query, companies, periods),
+        requested_metrics=_extract_requested_metrics(query),
         intent=intent,
     )
 

@@ -388,6 +388,16 @@ class VectorStore:
         """按 reranker 分数稳定降序排列，避免同分时比较 Document 对象。"""
         return sorted(zip(scores, parent_docs), key=lambda item: item[0], reverse=True)
 
+    @staticmethod
+    def _documents_from_ranked_pairs(ranked_pairs, result_limit):
+        """Keep existing ordering while exposing the already-computed rerank score."""
+        documents = []
+        for score, document in ranked_pairs[:result_limit]:
+            metadata = dict(document.metadata)
+            metadata["rerank_score"] = float(score) if score is not None else None
+            documents.append(Document(page_content=document.page_content, metadata=metadata))
+        return documents
+
     def _embed_queries(self, queries):
         """按输入顺序批量生成 BGE-M3 稠密和稀疏向量。"""
         return self.embedding_function([str(query) for query in queries])
@@ -525,6 +535,7 @@ class VectorStore:
             source_filter=None,
             return_diagnostics=False,
             metadata_filter=None,
+            result_limit=None,
     ):
         """
         对输入的query进行混合检索
@@ -571,7 +582,10 @@ class VectorStore:
                 ranked_pairs = self._sort_scored_documents(scores, parent_docs)
         reranker_seconds = time.perf_counter() - reranker_started_at
 
-        final_docs = [doc for _, doc in ranked_pairs[:config.CANDIDATE_M]]
+        result_limit = config.CANDIDATE_M if result_limit is None else result_limit
+        if type(result_limit) is not int or result_limit < 1:
+            raise ValueError("result_limit must be a positive integer")
+        final_docs = self._documents_from_ranked_pairs(ranked_pairs, result_limit)
         timing = {
             "embedding_seconds": embedding_seconds,
             "hybrid_search_seconds": search_timing["hybrid_search_seconds"],
@@ -600,6 +614,7 @@ class VectorStore:
             reranker_batch_size=SUBQUERY_RERANK_BATCH_SIZE,
             return_diagnostics=False,
             metadata_filters=None,
+            result_limit=None,
     ):
         """对多个已确定的 SubQuery 批量 embedding 和 rerank，保留每个子查询的排序语义。"""
         total_started_at = time.perf_counter()
@@ -660,8 +675,11 @@ class VectorStore:
         ranked_pairs_by_subquery = self._restore_subquery_rankings(
             parent_docs_by_subquery, scores
         )
+        result_limit = config.CANDIDATE_M if result_limit is None else result_limit
+        if type(result_limit) is not int or result_limit < 1:
+            raise ValueError("result_limit must be a positive integer")
         ranked_docs_by_subquery = [
-            [doc for _, doc in ranked_pairs[:config.CANDIDATE_M]]
+            self._documents_from_ranked_pairs(ranked_pairs, result_limit)
             for ranked_pairs in ranked_pairs_by_subquery
         ]
         timing = {
@@ -696,6 +714,7 @@ class VectorStore:
             source_filter=None,
             return_diagnostics=False,
             metadata_filters=None,
+            result_limit=None,
     ):
         """批量编码 SubQuery；保留既有的每个子查询独立 rerank 语义。"""
         total_started_at = time.perf_counter()
@@ -760,8 +779,11 @@ class VectorStore:
                 "subtotal_seconds": time.perf_counter() - subquery_started_at,
             })
 
+        result_limit = config.CANDIDATE_M if result_limit is None else result_limit
+        if type(result_limit) is not int or result_limit < 1:
+            raise ValueError("result_limit must be a positive integer")
         ranked_docs_by_subquery = [
-            [doc for _, doc in ranked_pairs[:config.CANDIDATE_M]]
+            self._documents_from_ranked_pairs(ranked_pairs, result_limit)
             for ranked_pairs in ranked_pairs_by_subquery
         ]
         timing = {

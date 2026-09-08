@@ -1,0 +1,3160 @@
+[
+  {
+    "id": "exact_001",
+    "category": "exact_value",
+    "question": "贵州茅台2026年上半年营业收入是多少？",
+    "target_company_codes": [
+      "600519"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": "贵州茅台2026年上半年营业收入为90,703,260,964.48元，约907.03亿元。",
+    "gold_evidence": [
+      {
+        "parent_id": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6_parent_3",
+        "document_id": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6",
+        "file_sha256": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6",
+        "source_filename": "贵州茅台_600519_2026H1.pdf",
+        "company_name": "贵州茅台",
+        "company_code": "600519",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "主要会计数据：营业收入 90,703,260,964.48 元。"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    },
+    "gold_contract_version": "v2_parent_audit"
+  },
+  {
+    "id": "exact_002",
+    "category": "exact_value",
+    "question": "五粮液2025年度归属于上市公司股东的净利润是多少？",
+    "target_company_codes": [
+      "000858"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "五粮液_000858_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": "8,954,257,202.51元",
+    "gold_evidence": [
+      {
+        "parent_id": "09133e1f44b3bb4b2cebe211529ad68f5b04b6be10b43870f2a78c947d5910a4_parent_3",
+        "document_id": "09133e1f44b3bb4b2cebe211529ad68f5b04b6be10b43870f2a78c947d5910a4",
+        "file_sha256": "09133e1f44b3bb4b2cebe211529ad68f5b04b6be10b43870f2a78c947d5910a4",
+        "source_filename": "五粮液_000858_2025FY.pdf",
+        "company_name": "五粮液",
+        "company_code": "000858",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "宜宾五粮液股份有限公司 2025 年度报告全文 \n7 \n公司聘请的报告期内履行持续督导职责的保荐机构 \n□适用 不适用 \n公司聘请的报告期内履行持续督导职责的财务顾问 \n□适用 不适用 \n六、主要会计数据和财务指标 \n公司是否需追溯调整或重述以前年度会计数据 \n□是 否 \n \n2025 年 \n2024 年 \n本年比上年增减 \n2023 年 \n营业收入（元） \n40,528,509,770.23 \n89,175,178,322.70 \n-54.55% \n83,272,067,317.19 \n归属于上市公司股东的\n净利润（元） \n8,954,257,202.51 \n31,853,172,533.98 \n-71.89% \n30,210,585,269.30 \n归属于上市公司股东的\n扣除非经常性损益的净\n利润（元） \n8,815,635,943.27 \n31,741,959,276.27 \n-72.23% \n30,116,468,910.79 \n经营活动产生的现金流\n量净额（元） \n29,706,259,919.13 \n33,939,755,192.78 \n-12.47% \n41,742"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "exact_003",
+    "category": "exact_value",
+    "question": "比亚迪2025年上半年营业收入是多少？",
+    "target_company_codes": [
+      "002594"
+    ],
+    "target_report_periods": [
+      "2025H1"
+    ],
+    "expected_documents": [
+      "比亚迪_002594_2025H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": "比亚迪2025年上半年营业收入为371,280,948,000.00元（约3712.81亿元）。",
+    "gold_evidence": [
+      {
+        "parent_id": "c42620b87a67995ed7c2bc78fbcc99bede6732fede6a0dbb3f49221ac1ec96ea_parent_24",
+        "document_id": "c42620b87a67995ed7c2bc78fbcc99bede6732fede6a0dbb3f49221ac1ec96ea",
+        "file_sha256": "c42620b87a67995ed7c2bc78fbcc99bede6732fede6a0dbb3f49221ac1ec96ea",
+        "source_filename": "比亚迪_002594_2025H1.pdf",
+        "company_name": "比亚迪",
+        "company_code": "002594",
+        "report_year": 2025,
+        "period_type": "H1",
+        "report_period": "2025H1",
+        "evidence_excerpt": "比亚迪股份有限公司 2025 年半年度报告全文\n20\n团AI服务器业务高速发展的主要驱动力。同时，数据中心市场正加速迈入液冷时代，液冷产品的市场需求将大幅提升，本\n集团将积极推进与国内外客户的合作，加速AI数据中心相关新产品的落地，培育新的业务增长引擎。依托世界一流的研发\n实力、全球化的布局以及垂直整合的优势，本集团将持续开拓具有高增长潜力的新产品类别和新市场，推动业务实现长期\n可持续发展。\n主要财务数据同比变动情况\n单位：元\n本报告期\n上年同期\n同比增减\n变动原因\n营业收入\n371,280,948,000.00\n301,126,713,000.00\n23.30%\n主要是新能源汽车业务增长所致\n营业成本\n304,415,089,000.00\n244,577,008,000.00\n24.47%\n主要是新能源汽车业务增长所致\n销售费用\n12,410,973,000.00\n10,599,925,000.00\n17.09%\n主要是职工薪酬和广告展览费增加所致\n管理费用\n10,386,267,000.00\n7,694,969,000.00\n34.97%\n主要是职工薪酬增加所致\n财务费用\n-3,2"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "exact_004",
+    "category": "exact_value",
+    "question": "宁德时代2026年上半年归属于上市公司股东的净利润是多少？",
+    "target_company_codes": [
+      "300750"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "宁德时代_300750_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": "宁德时代2026年上半年归属于上市公司股东的净利润为43,284,002千元（即432.84亿元）。",
+    "gold_evidence": [
+      {
+        "parent_id": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9_parent_6",
+        "document_id": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+        "file_sha256": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+        "source_filename": "宁德时代_300750_2026H1.pdf",
+        "company_name": "宁德时代",
+        "company_code": "300750",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "宁德时代新能源科技股份有限公司 2026 年半年度报告全文 \n7 \n公司注册情况在报告期无变化，具体可参见 2025 年年报。 \n4、其他有关资料 \n其他有关资料在报告期是否变更情况 \n□适用 不适用 \n四、主要会计数据和财务指标 \n公司是否需追溯调整或重述以前年度会计数据 \n□是 否 \n项目 \n本报告期 \n上年同期 \n本报告期比上年同期增减 \n营业收入（千元） \n276,916,580  \n178,886,253  \n54.80% \n归属于上市公司股东的净利润\n（千元） \n           43,284,002  \n           30,485,139  \n41.98% \n归属于上市公司股东的扣除非\n经常性损益的净利润（千元） \n           39,013,300  \n           27,197,468  \n43.44% \n经营活动产生的现金流量净额\n（千元） \n           60,216,851  \n           58,687,066  \n2.61% \n基本每股收益（元/股） \n9.51  \n6.92  \n37.43% \n稀释每股收益（"
+      },
+      {
+        "parent_id": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9_parent_13",
+        "document_id": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+        "file_sha256": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+        "source_filename": "宁德时代_300750_2026H1.pdf",
+        "company_name": "宁德时代",
+        "company_code": "300750",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "宁德时代新能源科技股份有限公司 2026 年半年度报告全文 \n13 \n第一，储能电池出货量连续五年位居全球第一。公司持续推广应用超级拉线，稳步推进济宁基地、中州\n基地、溧阳基地、宜宾基地、印尼工厂、匈牙利工厂及西班牙合资工厂等项目的建设，不断提升交付质\n量与能力。 \n在运营卓越方面，公司将电动化延伸至低空、船舶等领域，持续推进巧克力换电、骐骥换电。公司\n携手厦门市高标准推进零碳科技城规划建设，打造全国零碳产业标杆。公司参与建设的多个园区列入国\n家级零碳园区建设名单（第一批），宁德时代虚拟电厂项目入选国家能源局试点，以“零碳”理念深度重构\n产业生态，发掘并释放全产业链的绿色价值。 \n四、主营业务分析 \n1、概述 \n报告期内，公司实现归属于上市公司股东的净利润 432.84 亿元，同比增长 41.98%。主要经营情况如\n下： \n（1）动力业务 \n国内市场份额提升。根据中国汽车动力电池产业创新联盟数据，2026 年 1-6 月公司在国内市场乘用\n车装车量份额达 46.7%，同比提升 5.6 个百分点，其中公司国内三元动力电池装车量份额达 75.2%，同比\n提升 4.3 个百分点。报告期内，公"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "exact_005",
+    "category": "exact_value",
+    "question": "招商银行2025年度营业收入是多少？",
+    "target_company_codes": [
+      "600036"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "招商银行_600036_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": "招商银行2025年度（本集团）实现营业收入3,375.32亿元。",
+    "gold_evidence": [
+      {
+        "parent_id": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79_parent_5",
+        "document_id": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79",
+        "file_sha256": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79",
+        "source_filename": "招商银行_600036_2025FY.pdf",
+        "company_name": "招商银行",
+        "company_code": "600036",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "招商银行股份有限公司\n2025年度报告（A股）\n7\n行长致辞\n行长致辞\n2025年是极不平凡的一年。面对国际国内复杂经营环境，全行认真贯彻落实国家宏观经济金融政策、金融监管部门工\n作要求以及董事会确立的目标任务，纵深推进价值银行战略，加快国际化、综合化、差异化、数智化转型，着力提升软\n实力、硬实力，高质量发展呈现崭新局面。\n坚持高质量发展，整体经营稳中有进、进中向好。我们坚持 “质量第一、效益优先、规模适度、结构合理” 的经营理\n念，不断巩固堡垒式资产负债表。业务规模站上新台阶，期末总资产突破13万亿元、客户存款总额近10万亿元 ；资产\n质量保持良好，期末不良贷款率0.94%，拨备覆盖率391.79%，风险抵补能力强健 ；经营效益稳中向好，报告期实现\n营业收入3,375.32亿元，归属于本行股东的净利润1,501.81亿元，均实现同比正增长 ；业务结构均衡合理，非息收入\n占比36.13%，零售金融业务对营收和利润的贡献占比保持50%以上 ；资本实力不断增强，期末核心一级资本充足率达\n14.16%，总资本充足率18.24%。\n践行价值银行战略，与各利益相关方同生共荣。我们统筹兼顾各相关方"
+      },
+      {
+        "parent_id": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79_parent_22",
+        "document_id": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79",
+        "file_sha256": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79",
+        "source_filename": "招商银行_600036_2025FY.pdf",
+        "company_name": "招商银行",
+        "company_code": "600036",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "招商银行股份有限公司\n2025年度报告（A股）\n19\n第三章 管理层讨论与分析\n3.2.2 营业收入\n报告期内，本集团实现营业收入3,375.32亿元，同比增长0.01%，其中净利息收入占比63.87%，非利息净收入\n占比36.13%。\n下表列出本集团近三年营业收入构成的占比情况。\n(%)\n2025年\n2024年\n2023年\n \n \n \n \n净利息收入\n63.87\n62.60\n63.30\n净手续费及佣金收入\n22.30\n21.36\n24.80\n其他净收入\n13.83\n16.04\n11.90\n \n \n \n \n合计\n100.00\n100.00\n100.00\n \n \n \n \n3.2.3 利息收入\n报告期内，本集团实现利息收入3,513.51亿元，同比下降6.12%，主要是因为生息资产收益率下降。贷款和垫\n款利息收入仍然是本集团利息收入的最大组成部分。\n贷款和垫款利息收入\n报告期内，本集团贷款和垫款利息收入2,335.47亿元，同比下降10.37%，主要是受贷款收益率下降影响。\n下表列出所示期间本集团贷款和垫款各组成部分的平均余额（日均余额，下同）、利息收入及平均收益率情况。\n2025年\n20"
+      },
+      {
+        "parent_id": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79_parent_201",
+        "document_id": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79",
+        "file_sha256": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79",
+        "source_filename": "招商银行_600036_2025FY.pdf",
+        "company_name": "招商银行",
+        "company_code": "600036",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "招商银行股份有限公司\n2025年度报告（A股）\n130\n第八章 财务报告\n合并利润表\n2025年12月31日止年度\n（除特别注明外，货币单位均以人民币百万元列示）\n项目\n附注\n2025年\n2024年\n \n \n \n \n营业收入\n利息收入\n42\n351,351\n374,271\n利息支出\n43\n(135,758)\n(162,994)\n \n \n \n \n净利息收入\n215,593\n211,277\n手续费及佣金收入\n44\n84,265\n81,040\n手续费及佣金支出\n(9,007)\n(8,946)\n净手续费及佣金收入\n75,258\n72,094\n投资收益\n45\n36,837\n29,880\n其中 ：对合营企业的投资收益\n3,984\n1,713\n   对联营企业的投资收益\n1,489\n919\n   以摊余成本计量的金融资产终止确认产生的损益\n1,607\n4,045\n公允价值变动收益\n46\n(8,160)\n6,085\n汇兑净收益\n3,228\n4,026\n其他业务收入\n47\n14,776\n14,126\n \n \n \n \n其他净收入小计\n46,681\n54,117\n \n \n \n \n营业收入合计\n337,532"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "exact_006",
+    "category": "exact_value",
+    "question": "平安银行2026年上半年不良贷款率是多少？",
+    "target_company_codes": [
+      "000001"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "平安银行_000001_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": "平安银行2026年上半年（2026年6月末）不良贷款率为1.05%，与上年末持平。",
+    "gold_evidence": [
+      {
+        "parent_id": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527_parent_61",
+        "document_id": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527",
+        "file_sha256": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527",
+        "source_filename": "平安银行_000001_2026H1.pdf",
+        "company_name": "平安银行",
+        "company_code": "000001",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "第三章\n管理层讨论与分析\n46\n平安银行股份有限公司\n2026 年半年度报告\n3.4 经营中关注的重点\n3.4.1 关于净息差\n2026 年上半年，本集团净息差 1.80%，与去年同期持平，较去年全年上升 2 个基点。\n负债端，本行坚持以资产定负债的组合经营策略，负债经营聚焦调结构、降成本，付息率显著\n优化，有效支撑净息差企稳。一是积极落实市场定价自律要求，管控高成本负债，叠加存款到期重\n定价效应，存款付息成本有效优化；二是持续提升客户服务能力，增强客户粘性，推动核心高质量\n存款稳步增长；三是根据市场变化，敏捷调控存款和同业负债的吸收节奏，优化整体负债成本。2026\n年上半年，本集团计息负债平均付息率 1.42%，较去年同期下降 37 个基点，较去年全年下降 25 个基\n点；吸收存款平均付息率 1.38%，较去年同期下降 38 个基点，较去年全年下降 27 个基点。\n资产端，受市场利率下行及资产结构调整影响，资产收益率进一步下行。一是本行紧跟国家重\n大战略规划，积极支持实体经济发展，加大对重点行业、重点区域和重点客户的信贷支持力度，提\n升优质客群占比，带动客群结构和资产结构持续优化；二"
+      },
+      {
+        "parent_id": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527_parent_20",
+        "document_id": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527",
+        "file_sha256": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527",
+        "source_filename": "平安银行_000001_2026H1.pdf",
+        "company_name": "平安银行",
+        "company_code": "000001",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "第三章\n管理层讨论与分析\n17\n平安银行股份有限公司\n2026 年半年度报告\n第三章\n管理层讨论与分析\n3.1 总体经营情况\n2026年上半年，本行坚持以“中国最卓越、全球领先的智能化零售银行”为战略目标，坚持“零\n售做强、对公做精、同业做专”战略方针，持续升级零售、对公、资金同业业务经营策略，持续强\n化风险管理，持续深化数字化转型，整体业务经营保持稳健。\n业务经营保持稳健，营收利润同比增长。2026 年上半年，本集团实现营业收入 706.17 亿元，同\n比增长 1.8%，实现净利润 256.96 亿元，同比增长 3.3%。净息差 1.80%，与去年同期持平，较去年全\n年上升 2 个基点。非利息净收入占比 37.28%，同比上升 1.42 个百分点，财富管理、债券投资等业务\n的非利息净收入同比增长。本行通过数字化转型驱动降本增效，业务及管理费 191.08 亿元，同比下\n降 0.5%，成本收入比 27.06%，同比下降 0.62 个百分点。\n持续优化资产结构，促进“量、价、险”平衡。2026 年 6 月末，本集团资产总额 60,287.85 亿元，\n较上年末增长 1.7%；发放贷款和垫"
+      },
+      {
+        "parent_id": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527_parent_35",
+        "document_id": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527",
+        "file_sha256": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527",
+        "source_filename": "平安银行_000001_2026H1.pdf",
+        "company_name": "平安银行",
+        "company_code": "000001",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "第三章\n管理层讨论与分析\n31\n平安银行股份有限公司\n2026 年半年度报告\n本行持续加强金融资产风险分类管理，审慎认定资产风险分类，真实反映资产质量。2026 年 6\n月末，不良贷款率 1.05%，与上年末持平；逾期 60 天以上贷款偏离度及逾期 90 天以上贷款偏离度分\n别为 0.84 和 0.70。本行持续强化风险前瞻管理，优化资产结构，加强重点领域风险管控，持续强化\n存量风险化解，资产质量整体平稳。\n（2）发放贷款和垫款按产品划分的结构分布及质量情况\n（货币单位：人民币百万元）\n项\n目\n2026 年 6 月 30 日\n2025 年 12 月 31 日\n不良率增减\n余额\n占比\n不良率\n余额\n占比\n不良率\n企业贷款\n1,725,301\n50.0%\n0.87%\n1,663,546\n49.1%\n0.87%\n-\n其中：一般企业贷款\n1,633,015\n47.3%\n0.92%\n1,552,081\n45.8%\n0.94%\n-0.02 个百分点\n贴现\n92,286\n2.7%\n-\n111,465\n3.3%\n-\n-\n个人贷款\n1,726,973\n50.0%\n1.23%\n1,727,294\n50.9"
+      },
+      {
+        "parent_id": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527_parent_34",
+        "document_id": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527",
+        "file_sha256": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527",
+        "source_filename": "平安银行_000001_2026H1.pdf",
+        "company_name": "平安银行",
+        "company_code": "000001",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "第三章\n管理层讨论与分析\n30\n平安银行股份有限公司\n2026 年半年度报告\n（4）重大资产和股权出售\n 出售重大资产情况\n□适用\n√不适用\n本行报告期未出售重大资产。\n 出售重大股权情况\n□适用\n√不适用\n（5）对 2026 年 1-9 月经营业绩的预计\n预测年初至下一报告期期末的累计净利润可能为亏损或者与上年同期相比发生大幅度变动的警\n示及原因说明\n□适用\n√不适用\n3.2.5 贷款资产质量分析\n（1）发放贷款和垫款五级分类情况\n（货币单位：人民币百万元）\n项\n目\n2026 年 6 月 30 日\n2025 年 12 月 31 日\n期末较上年末\n增减\n余额\n占比\n余额\n占比\n正常贷款\n3,352,859\n97.12%\n3,295,809\n97.20%\n1.7%\n关注贷款\n63,181\n1.83%\n59,328\n1.75%\n6.5%\n不良贷款\n36,234\n1.05%\n35,703\n1.05%\n1.5%\n其中：次级\n18,065\n0.52%\n17,561\n0.52%\n2.9%\n可疑\n10,747\n0.31%\n10,924\n0.32%\n(1.6%)\n损失\n7,422\n0.22%\n7,"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "exact_007",
+    "category": "exact_value",
+    "question": "中芯国际2025年度营业收入是多少？",
+    "target_company_codes": [
+      "688981"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "中芯国际_688981_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": "中芯国际2025年度营业收入为67,323,192千元。",
+    "gold_evidence": [
+      {
+        "parent_id": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531_parent_158",
+        "document_id": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531",
+        "file_sha256": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531",
+        "source_filename": "中芯国际_688981_2025FY.pdf",
+        "company_name": "中芯国际",
+        "company_code": "688981",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "中芯国际集成电路制造有限公司2025 年年度报告\n127 / 232\n合并利润表\n2025 年 1—12 月\n单位：千元\n币种：人民币\n项目\n附注\n2025 年度\n2024 年度\n一、营业总收入\n七、61\n67,323,192\n57,795,570\n其中：营业收入\n七、61\n67,323,192\n57,795,570\n利息收入\n-\n-\n已赚保费\n-\n-\n手续费及佣金收入\n-\n-\n二、营业总成本\n61,955,640\n55,058,871\n其中：营业成本\n七、61\n52,765,123\n47,051,267\n利息支出\n-\n-\n手续费及佣金支出\n-\n-\n退保金\n-\n-\n赔付支出净额\n-\n-\n提取保险责任准备金净额\n-\n-\n保单红利支出\n-\n-\n分保费用\n-\n-\n税金及附加\n七、62\n303,005\n276,214\n销售费用\n七、63\n304,795\n281,549\n管理费用\n七、64\n3,434,995\n3,835,368\n研发费用\n七、65\n5,518,596\n5,447,122\n财务费用\n七、66\n-370,874\n-1,832,649\n其中：利息费用\n2,663,015\n2,114,"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "exact_008",
+    "category": "exact_value",
+    "question": "北方华创2025年上半年归属于上市公司股东的净利润是多少？",
+    "target_company_codes": [
+      "002371"
+    ],
+    "target_report_periods": [
+      "2025H1"
+    ],
+    "expected_documents": [
+      "北方华创_002371_2025H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": "3,207,978,523.58元",
+    "gold_evidence": [
+      {
+        "parent_id": "e9ad46964c5595c7a6bd2ddfbf1b2e5cc3f85747fe86c0821ce8d689b9fd1e11_parent_7",
+        "document_id": "e9ad46964c5595c7a6bd2ddfbf1b2e5cc3f85747fe86c0821ce8d689b9fd1e11",
+        "file_sha256": "e9ad46964c5595c7a6bd2ddfbf1b2e5cc3f85747fe86c0821ce8d689b9fd1e11",
+        "source_filename": "北方华创_002371_2025H1.pdf",
+        "company_name": "北方华创",
+        "company_code": "002371",
+        "report_year": 2025,
+        "period_type": "H1",
+        "report_period": "2025H1",
+        "evidence_excerpt": "北方华创科技集团股份有限公司 2025 年半年度报告全文\n8\n四、主要会计数据和财务指标\n公司是否需追溯调整或重述以前年度会计数据\n是 否\n追溯调整或重述原因\n同一控制下企业合并\n本报告期\n上年同期\n本报告期比上年同期\n增减\n调整前\n调整后\n调整后\n营业收入（元）\n16,141,546,184.74\n12,334,907,204.28\n12,463,584,943.88\n29.51%\n归属于上市公司股东\n的净利润（元）\n3,207,978,523.58\n2,780,604,301.25\n2,790,294,946.72\n14.97%\n归属于上市公司股东\n的扣除非经常性损益\n的净利润（元）\n3,180,943,277.08\n2,639,902,199.17\n2,647,090,718.55\n20.17%\n经营活动产生的现金\n流量净额（元）\n-3,191,375,954.04\n-292,472,215.89\n-313,699,468.26\n-917.34%\n基本每股收益（元/\n股）\n4.4496\n3.8817\n3.8952\n14.23%\n稀释每股收益（元/\n股）\n4.4479\n3.87"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "exact_009",
+    "category": "exact_value",
+    "question": "比亚迪2026年上半年经营活动产生的现金流量净额是多少？",
+    "target_company_codes": [
+      "002594"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "比亚迪_002594_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": "37,334,744千元（即37,334,744,000元）",
+    "gold_evidence": [
+      {
+        "parent_id": "2648a8c4ebf637da4eeb79e58791c1faf457daa687914e325ff37d1b9676a48c_parent_100",
+        "document_id": "2648a8c4ebf637da4eeb79e58791c1faf457daa687914e325ff37d1b9676a48c",
+        "file_sha256": "2648a8c4ebf637da4eeb79e58791c1faf457daa687914e325ff37d1b9676a48c",
+        "source_filename": "比亚迪_002594_2026H1.pdf",
+        "company_name": "比亚迪",
+        "company_code": "002594",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "比亚迪股份有限公司 2026 年半年度报告全文 \n71 \n \n4、合并现金流量表 \n \n \n \n \n后附财务报表附注为本财务报表的组成部分 \n \n \n  \n附注七 \n  \n截至2026年 \n6月30日止 \n6个月期间 \n    \n截至2025年 \n6月30日止 \n6个月期间 \n  \n  \n  \n \n  \n(未经审计)    \n(未经审计)   \n \n \n \n \n \n \n  \n一、 经营活动产生的现金流量： \n \n  \n  \n    \n    \n  \n  \n \n  \n  \n    \n    \n  \n销售商品、提供服务收到的现金 \n \n  \n368,775,408 \n \n402,581,644  \n  \n收到的税费返还 \n \n  \n13,658,521 \n \n 8,717,878   \n  \n收到其他与经营活动有关的现金 \n61 \n  \n10,160,478 \n \n11,435,207  \n  \n  \n \n  \n \n \n  \n  \n经营活动现金流入小计 \n \n  \n392,594,407 \n \n422,734,729  \n  \n  \n \n  \n \n \n  \n  \n购买商品、接受服务支付的现"
+      },
+      {
+        "parent_id": "2648a8c4ebf637da4eeb79e58791c1faf457daa687914e325ff37d1b9676a48c_parent_30",
+        "document_id": "2648a8c4ebf637da4eeb79e58791c1faf457daa687914e325ff37d1b9676a48c",
+        "file_sha256": "2648a8c4ebf637da4eeb79e58791c1faf457daa687914e325ff37d1b9676a48c",
+        "source_filename": "比亚迪_002594_2026H1.pdf",
+        "company_name": "比亚迪",
+        "company_code": "002594",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "收益所致 \n所得税费用 \n2,280,028,000.00 \n2,871,076,000.00 \n-20.59%  \n研发投入 \n28,860,958,000.00 \n30,880,339,000.00 \n-6.54%  \n经营活动产生的现金\n流量净额 \n37,334,744,000.00 \n31,833,471,000.00 \n17.28%  \n投资活动产生的现金\n流量净额 \n-55,570,464,000.00 \n-74,495,747,000.00 \n-25.40%  \n筹资活动产生的现金\n流量净额 \n6,387,847,000.00 \n49,657,739,000.00 \n-87.14% \n主要是上期配售 H 股\n收到的现金大于本期\n借款取得的现金净额\n影响所致 \n现金及现金等价物净\n增加额 \n-12,776,112,000.00 \n7,460,238,000.00 \n-271.26%  \n公司报告期利润构成或利润来源发生重大变动 \n□适用 不适用 \n公司报告期利润构成或利润来源没有发生重大变动。"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "exact_010",
+    "category": "exact_value",
+    "question": "贵州茅台2025年度归属于上市公司股东的净利润是多少？",
+    "target_company_codes": [
+      "600519"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "document_hit",
+      "evidence_recall",
+      "answer_correctness"
+    ],
+    "gold_answer": "82,320,067,101.68元",
+    "gold_evidence": [
+      {
+        "parent_id": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288_parent_3",
+        "document_id": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "file_sha256": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "source_filename": "贵州茅台_600519_2025FY.pdf",
+        "company_name": "贵州茅台",
+        "company_code": "600519",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "贵州茅台酒股份有限公司2025 年年度报告\n6 / 143\n六、 其他相关资料\n公司聘请的会计师事务所\n（境内）\n名称\n天健会计师事务所(特殊普通合伙)\n办公地址\n浙江省杭州市西湖区灵隐街道西溪路 128 号\n签字会计师姓名\n李青龙\n梁正勇\n曾志\n七、 近三年主要会计数据和财务指标\n(一) 主要会计数据\n单位：元\n币种：人民币\n主要会计数据\n2025年\n2024年\n本期比\n上年同\n期增减\n(%)\n2023年\n营业收入\n168,838,102,514.79\n170,899,152,276.34\n-1.21\n147,693,604,994.14\n利润总额\n114,755,261,605.08\n119,638,578,194.46\n-4.08\n103,662,553,689.81\n归属于上市公司股东的净利润\n82,320,067,101.68\n86,228,146,421.62\n-4.53\n74,734,071,550.75\n归属于上市公司股东的扣除非\n经常性损益的净利润\n82,293,107,655.25\n86,240,905,977.42\n-4.58\n74,752,564,425.52\n"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "cause_001",
+    "category": "cause_explanation",
+    "question": "贵州茅台2026年半年报中如何解释营业收入变化？",
+    "target_company_codes": [
+      "600519"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": "提供的Parent内容中未包含贵州茅台2026年半年报对营业收入变化的解释，仅披露了主要子公司（如贵州茅台酒销售有限公司、贵州茅台酱香酒营销有限公司）的营业收入金额。",
+    "gold_evidence": [
+      {
+        "parent_id": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6_parent_12",
+        "document_id": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6",
+        "file_sha256": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6",
+        "source_filename": "贵州茅台_600519_2026H1.pdf",
+        "company_name": "贵州茅台",
+        "company_code": "600519",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "贵州茅台酒股份有限公司2026 年半年度报告\n11 / 110\n衍生品投资情况\n□适用 √不适用\n(五)\n重大资产和股权出售\n□适用 √不适用\n(六)\n主要控股参股公司分析\n√适用 □不适用\n主要子公司及对公司净利润影响达 10%以上的参股公司情况\n√适用 □不适用\n单位：万元 币种：人民币\n公司名称\n公司类型\n主要业务\n注册资本\n总资产\n净资产\n营业收入\n营业利润\n净利润\n贵州茅台酒销售有限公司\n子公司\n酒、饮料及茶叶批发\n1,000.00\n10,331,087.77\n8,845,126.71\n7,648,174.67\n3,293,048.51\n2,486,942.89\n贵州茅台酱香酒营销有限公司\n子公司\n酒、饮料及茶叶批发\n20,000.00\n2,497,042.15\n2,004,247.54\n1,266,138.15\n352,248.53\n271,148.18\n报告期内取得和处置子公司的情况\n√适用 □不适用\n公司名称\n报告期内取得和处置子公司方式\n对整体生产经营和业绩的影响\n贵州爱茅台数字科技有限公司\n投资设立\n贵州爱茅台数字科技有限公司紧紧围绕“产业数\n字化”和“数字产业化”"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "cause_002",
+    "category": "cause_explanation",
+    "question": "五粮液2025年年报中经营活动现金流变化的主要原因是什么？",
+    "target_company_codes": [
+      "000858"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "五粮液_000858_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": "根据所提供的Parent内容，五粮液2025年年报中列示了经营活动现金流量净额为29,706,259,919.13元，同比下降12.47%，但提供的文档片段中未包含经营活动现金流变化的主要原因说明。",
+    "gold_evidence": [
+      {
+        "parent_id": "09133e1f44b3bb4b2cebe211529ad68f5b04b6be10b43870f2a78c947d5910a4_parent_19",
+        "document_id": "09133e1f44b3bb4b2cebe211529ad68f5b04b6be10b43870f2a78c947d5910a4",
+        "file_sha256": "09133e1f44b3bb4b2cebe211529ad68f5b04b6be10b43870f2a78c947d5910a4",
+        "source_filename": "五粮液_000858_2025FY.pdf",
+        "company_name": "五粮液",
+        "company_code": "000858",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "宜宾五粮液股份有限公司 2025 年度报告全文 \n17 \n研发人员数量占比 \n10.24% \n10.27% \n-0.03% \n研发人员学历结构 \n本科 \n924 \n921 \n0.33% \n硕士 \n180 \n176 \n2.27% \n博士 \n30 \n25 \n20.00% \n研发人员年龄构成 \n30 岁以下 \n783 \n774 \n1.16% \n30-40 岁 \n1,108 \n1,105 \n0.27% \n40 岁以上 \n690 \n701 \n-1.57% \n公司研发投入情况 \n \n2025 年 \n2024 年 \n变动比例 \n研发投入金额（元） \n449,183,817.50 \n405,053,632.27 \n10.89% \n研发投入占营业收入比例 \n1.11% \n0.45% \n0.66% \n研发投入资本化的金额（元） \n0.00 \n0.00 \n0.00% \n资本化研发投入占研发投入的比例 \n0.00% \n0.00% \n0.00% \n公司研发人员构成发生重大变化的原因及影响 \n□适用 不适用 \n研发投入总额占营业收入的比重较上年发生显著变化的原因 \n□适用 不适用 \n研发投入资本化率大幅变动的"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "cause_003",
+    "category": "cause_explanation",
+    "question": "比亚迪2025年年报中如何解释利润变化的主要原因？",
+    "target_company_codes": [
+      "002594"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "比亚迪_002594_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": "提供的Parent内容中未包含比亚迪2025年年报对利润变化主要原因的解释。相关内容仅提及：报告期内公司经营活动产生的现金净流量与本年度净利润不存在重大差异；非主营业务中投资收益（主要是对合营公司及理财产品投资收益）占利润总额的7.19%，公允价值变动损益（主要是理财收益计提、对外投资公司估值变动等）占利润总额的0.92%。",
+    "gold_evidence": [
+      {
+        "parent_id": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b_parent_59",
+        "document_id": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b",
+        "file_sha256": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b",
+        "source_filename": "比亚迪_002594_2025FY.pdf",
+        "company_name": "比亚迪",
+        "company_code": "002594",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "比亚迪股份有限公司 2025 年年度报告全文 \n40 \n研发投入总额占营业收入的比重较上年发生显著变化的原因 \n□适用 不适用 \n研发投入资本化率大幅变动的原因及其合理性说明 \n□适用 不适用 \n5、现金流 \n单位：元 \n项目 \n2025 年 \n2024 年 \n同比增减 \n经营活动现金流入小计 \n861,740,107,000.00 \n814,817,630,000.00 \n5.76% \n经营活动现金流出小计 \n802,604,563,000.00 \n681,363,757,000.00 \n17.79% \n经营活动产生的现金流量净额 \n59,135,544,000.00 \n133,453,873,000.00 \n-55.69% \n投资活动现金流入小计 \n25,591,775,000.00 \n15,400,173,000.00 \n66.18% \n投资活动现金流出小计 \n223,054,884,000.00 \n144,482,455,000.00 \n54.38% \n投资活动产生的现金流量净额 \n-197,463,109,000.00 \n-129,082,282,000.00 \n52.9"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "cause_004",
+    "category": "cause_explanation",
+    "question": "宁德时代2026年半年报中营业收入变化的主要原因是什么？",
+    "target_company_codes": [
+      "300750"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "宁德时代_300750_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": "宁德时代2026年半年报中营业收入变化的主要原因是业务规模增长带动收入增加。",
+    "gold_evidence": [
+      {
+        "parent_id": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9_parent_16",
+        "document_id": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+        "file_sha256": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+        "source_filename": "宁德时代_300750_2026H1.pdf",
+        "company_name": "宁德时代",
+        "company_code": "300750",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "宁德时代新能源科技股份有限公司 2026 年半年度报告全文 \n15 \n零碳技术研发及综合能源服务，于海南省交付光储超充零碳微网示范站。 \n（4）供应链及产能 \n为进一步保障电池生产所需的上游关键资源及材料供应，公司积极布局自有及合作矿产资源项目，\n报告期内新设时代资源集团作为新能源矿产领域的专业投资运营与管理平台，围绕锂、镍、磷等关键资\n源整合现有矿业资产并拓展海内外优质项目，持续强化产业链一体化竞争优势。 \n为满足市场及客户需求，报告期内公司加大境内外锂电池生产基地建设投入，持续提升交付能力。\n公司稳步推进济宁基地、中州基地、溧阳基地、宜宾基地、印尼工厂、匈牙利工厂及西班牙合资工厂等\n项目的建设。 \n（5）可持续发展 \n公司高度重视可持续发展及履行社会责任。报告期内，ESG 治理成效持续获得认可，入选 2026 年\n《财富》中国 ESG 影响力榜，并以新能源行业循环经济实践入选深交所上市公司 ESG 实践案例集。公司\n有序推进零碳战略，在 2025 年已实现核心运营碳中和的基础上，持续深化工厂节能减排及电气化改造，\n同步推进供应链碳排放数据质量管理与供应链降碳，推动实现价值链碳中和目"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "cause_005",
+    "category": "cause_explanation",
+    "question": "招商银行2026年上半年净息差变化的主要原因是什么？",
+    "target_company_codes": [
+      "600036"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "招商银行_600036_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": "提供的Parent内容中未包含招商银行2026年上半年净息差变化及其原因的相关信息，无法回答该问题。",
+    "gold_evidence": [
+      {
+        "parent_id": "c7e68aeca3c8ec331ce7ecfde5faee9d97fa74e302944bf0e7141b154f9704a4_parent_0",
+        "document_id": "c7e68aeca3c8ec331ce7ecfde5faee9d97fa74e302944bf0e7141b154f9704a4",
+        "file_sha256": "c7e68aeca3c8ec331ce7ecfde5faee9d97fa74e302944bf0e7141b154f9704a4",
+        "source_filename": "招商银行_600036_2026H1.pdf",
+        "company_name": "招商银行",
+        "company_code": "600036",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "2026年半年度報告\nA 股股票代碼：600036\n招 商 銀 行 股 份 有 限 公 司\n招商银行股份有限公司\n2026年半年度报告（A股）\n1\n目录\n目录\n2 \n释义\n2 \n重大风险提示\n2 \n备查文件目录\n3 \n重要提示\n4 \n第一章 公司基本情况\n6 \n第二章 会计数据和财务指标摘要\n10 \n第三章 管理层讨论与分析\n10 \n3.1 总体经营情况分析\n11 \n3.2 利润表分析\n17 \n3.3 资产负债表分析\n22 \n3.4 贷款质量分析\n28 \n3.5 资本充足情况分析\n32 \n3.6 分部经营业绩\n32 \n3.7 根据监管要求披露的其他财务信息\n33 \n3.8 发展战略实施情况\n37 \n3.9 经营中关注的重点问题\n42 \n3.10 业务运作\n54 \n3.11 风险管理\n58 \n3.12 “提质增效重回报” 行动方案执行情况\n59 \n3.13 前景展望与应对措施\n60 \n第四章 环境、社会与治理(ESG)\n70 \n第五章 公司治理\n75 \n第六章 重要事项\n78 \n第七章 股份变动及股东情况\n81 \n第八章 财务报告\n招商银行股份有限公司\n2026年半年度报告（A股）\n2\n"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "cause_006",
+    "category": "cause_explanation",
+    "question": "平安银行2025年年报如何解释资产质量变化？",
+    "target_company_codes": [
+      "000001"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "平安银行_000001_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": "平安银行2025年年报解释，在宏观经济稳中有进但外部环境存在不确定性的背景下，本行通过强化资产质量管控、优化资产结构、加大问题资产处置力度，使风险指标保持良好水平。具体表现为：不良贷款率1.05%，较上年末下降0.01个百分点；不良贷款生成率1.63%，同比下降0.17个百分点；拨备覆盖率220.88%，较上年末下降29.83个百分点。企业贷款方面，不良率0.87%较上年末上升0.17个百分点，主要因部分存量房地产业务风险增加，但对整体资产质量影响可控；个人贷款方面，不良率1.23%较上年末下降0.16个百分点，得益于升级风险模型及持续优化客群和资产结构。",
+    "gold_evidence": [
+      {
+        "parent_id": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c_parent_76",
+        "document_id": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "file_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_filename": "平安银行_000001_2025FY.pdf",
+        "company_name": "平安银行",
+        "company_code": "000001",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "第三章\n管理层讨论与分析\n52\n平安银行股份有限公司\n2025 年年度报告\n3.4 经营中关注的重点\n3.4.1 关于净息差\n2025 年，本集团净息差 1.78%，同比 2024 年下降 9 个基点，主要受贷款利率下行和业务结构调\n整等因素影响。\n负债端，本行坚持量价平衡发展，聚焦调结构、降成本，付息率显著优化。一是积极落实市场\n定价自律要求，加强高成本存款管控，顺应降息周期，降低付息成本；二是提升客户服务能力，拓\n展业务合作的广度和深度，增强客户粘性，推动结算类等低成本存款稳步增长；三是根据市场变化，\n敏捷调控存款和同业负债的吸收节奏，优化整体负债成本。2025 年，吸收存款平均付息率 1.65%，\n同比 2024 年下降 42 个基点；计息负债平均付息率 1.67%，同比 2024 年下降 47 个基点。\n资产端，受市场利率下行及资产结构调整影响，资产收益率进一步下行，且下行幅度大于计息\n负债优化幅度。一是本行紧跟国家重大战略规划，积极支持实体经济发展，加大对重点行业、重点\n区域和重点客户的信贷支持力度，提升优质客群占比，带动客群结构和资产结构持续优化；二是受\n市场利率持续下行、"
+      },
+      {
+        "parent_id": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c_parent_51",
+        "document_id": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "file_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_filename": "平安银行_000001_2025FY.pdf",
+        "company_name": "平安银行",
+        "company_code": "000001",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "第三章\n管理层讨论与分析\n37\n平安银行股份有限公司\n2025 年年度报告\n贴现\n111,465\n3.3%\n-\n185,729\n5.5%\n-\n-\n个人贷款\n1,727,294\n50.9%\n1.23%\n1,767,168\n52.4%\n1.39%\n-0.16 个百分点\n其中：住房按揭贷款\n355,148\n10.5%\n0.28%\n326,098\n9.7%\n0.47%\n-0.19 个百分点\n信用卡应收账款\n405,442\n11.9%\n2.24%\n434,997\n12.9%\n2.56%\n-0.32 个百分点\n消费性贷款\n463,017\n13.6%\n1.12%\n474,663\n14.1%\n1.35%\n-0.23 个百分点\n经营性贷款\n503,687\n14.9%\n1.17%\n531,410\n15.7%\n1.02%\n+0.15 个百分点\n发放贷款和垫款本金总额\n3,390,840\n100.0%\n1.05%\n3,374,103\n100.0%\n1.06%\n-0.01 个百分点\n企业贷款方面，2025 年末，本行企业贷款不良率 0.87%，较上年末上升 0.17 个百分点，主要是\n部分存量房地产业务风险增加"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "cause_007",
+    "category": "cause_explanation",
+    "question": "中芯国际2025年年报中营业收入变化的主要原因是什么？",
+    "target_company_codes": [
+      "688981"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "中芯国际_688981_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": "中芯国际2025年营业收入变动的主要原因是本年晶圆销量增加。销售晶圆的数量（折合8英寸标准逻辑）由上年的802.1万片增加20.9%至本年的969.7万片。",
+    "gold_evidence": [
+      {
+        "parent_id": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531_parent_27",
+        "document_id": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531",
+        "file_sha256": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531",
+        "source_filename": "中芯国际_688981_2025FY.pdf",
+        "company_name": "中芯国际",
+        "company_code": "688981",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "中芯国际集成电路制造有限公司2025 年年度报告\n25 / 232\n主营业务分析\n1.利润表及现金流量表相关科目变动分析表\n单位：千元\n币种：人民币\n科目\n本期数\n上年同期数\n变动比例（%）\n营业收入\n67,323,192\n57,795,570\n16.5\n营业成本\n52,765,123\n47,051,267\n12.1\n毛利\n14,558,069\n10,744,303\n35.5\n销售费用\n304,795\n281,549\n8.3\n管理费用\n3,434,995\n3,835,368\n-10.4\n研发费用\n5,518,596\n5,447,122\n1.3\n财务费用\n-370,874\n-1,832,649\n不适用\n投资收益\n-56,415\n1,099,723\n-105.1\n营业外支出\n540,723\n23,138\n2,236.9\n所得税费用\n576,736\n918,904\n-37.2\n经营活动产生的现金流量净额\n20,080,979\n22,658,629\n-11.4\n投资活动产生的现金流量净额\n-42,138,175\n-30,669,293\n不适用\n筹资活动产生的现金流量净额\n17,453,618\n"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "cause_008",
+    "category": "cause_explanation",
+    "question": "北方华创2026年半年报中净利润变化的主要原因是什么？",
+    "target_company_codes": [
+      "002371"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "北方华创_002371_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": "2026年1-6月归属于上市公司股东的净利润同比增长5.05%，主要原因包括：①公司积极布局多款高端半导体设备研发，持续加大研发投入，计入损益的研发费用同比增加6.00亿元（增长28.87%）；②为应对市场规模扩大，市场拓展及客户服务团队人员数量增加，以及芯源微销售费用并表，销售费用同比增加2.95亿元（增长63.46%）；③毛利率由42.17%下降到40.07%，主要因新产品在客户端验证过程中零部件迭代升级成本增加较多，以及为部分大批量采购客户提供了一定的商务优惠。",
+    "gold_evidence": [
+      {
+        "parent_id": "d1126db582cc8521907d9c6b5cca767c94606e8d15b19a0672235550b9cc88e2_parent_7",
+        "document_id": "d1126db582cc8521907d9c6b5cca767c94606e8d15b19a0672235550b9cc88e2",
+        "file_sha256": "d1126db582cc8521907d9c6b5cca767c94606e8d15b19a0672235550b9cc88e2",
+        "source_filename": "北方华创_002371_2026H1.pdf",
+        "company_name": "北方华创",
+        "company_code": "002371",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "北方华创科技集团股份有限公司 2026 年半年度报告全文\n8\n四、主要会计数据和财务指标\n公司是否需追溯调整或重述以前年度会计数据\n□是 否\n本报告期\n上年同期\n本报告期比上年同期增减\n营业收入（元）\n20,161,416,890.56\n16,141,546,184.74\n24.90%\n归属于上市公司股东的净利\n润（元）\n3,370,020,676.75\n3,207,978,523.58\n5.05%\n归属于上市公司股东的扣除\n非经常性损益的净利润\n（元）\n3,340,719,149.36\n3,180,943,277.08\n5.02%\n经营活动产生的现金流量净\n额（元）\n3,773,698,817.34\n-3,191,375,954.04\n218.25%\n基本每股收益（元/股）\n4.6486\n4.4496\n4.47%\n稀释每股收益（元/股）\n4.6466\n4.4479\n4.47%\n加权平均净资产收益率\n8.58%\n9.81%\n-1.23%\n本报告期末\n上年度末\n本报告期末比上年度末增减\n总资产（元）\n93,921,830,047.83\n89,800,578,023.69\n4.59%\n归"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "biz_001",
+    "category": "business_risk",
+    "question": "贵州茅台2025年年报披露的主要业务和产品结构是什么？",
+    "target_company_codes": [
+      "600519"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": "贵州茅台2025年年报披露，公司主要业务是茅台酒及系列酒的生产与销售，主导产品为",
+    "gold_evidence": [
+      {
+        "parent_id": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288_parent_6",
+        "document_id": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "file_sha256": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "source_filename": "贵州茅台_600519_2025FY.pdf",
+        "company_name": "贵州茅台",
+        "company_code": "600519",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "贵州茅台酒股份有限公司2025 年年度报告\n8 / 143\n对公司将《公开发行证券的公司信息披露解释性公告第 1 号——非经常性损益》未列举的项目认定\n为非经常性损益项目且金额重大的，以及将《公开发行证券的公司信息披露解释性公告第 1 号——\n非经常性损益》中列举的非经常性损益项目界定为经常性损益的项目，应说明原因。\n□适用 √不适用\n十一、 存在股权激励、员工持股计划的公司可选择披露扣除股份支付影响后的净利润\n□适用 √不适用\n十二、 采用公允价值计量的项目\n√适用 □不适用\n单位：元\n币种：人民币\n项目名称\n期初余额\n期末余额\n当期变动\n对当期利润的影响\n金额\n交易性金融资产\n248,513,280.00\n-248,513,280.00\n265,351.99\n应收款项融资\n4,457,064,160.16\n4,457,064,160.16\n-19,841,855.81\n其他非流动金融资产\n4,028,978,995.56\n4,105,141,593.22\n76,162,597.66\n76,162,597.66\n其他债权投资\n3,496,539,016.41\n3,496,539,01"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "biz_002",
+    "category": "business_risk",
+    "question": "五粮液2026年半年报中披露了哪些主要销售渠道或营销模式？",
+    "target_company_codes": [
+      "000858"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "五粮液_000858_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": "五粮液2026年半年报披露的主要销售模式包括：1. 经销模式：包括传统渠道运营商模式、KA卖场等，主要在线下销售，以经销模式为主，采用",
+    "gold_evidence": [
+      {
+        "parent_id": "15153679faee48d1b1b00c50557a88bdcbdf8cb4cbc49b8762e10f70210dfb5b_parent_6",
+        "document_id": "15153679faee48d1b1b00c50557a88bdcbdf8cb4cbc49b8762e10f70210dfb5b",
+        "file_sha256": "15153679faee48d1b1b00c50557a88bdcbdf8cb4cbc49b8762e10f70210dfb5b",
+        "source_filename": "五粮液_000858_2026H1.pdf",
+        "company_name": "五粮液",
+        "company_code": "000858",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "宜宾五粮液股份有限公司 2026 年半年度报告全文 \n9 \n2、主要销售模式 \n经销模式：包括传统渠道运营商模式、KA 卖场等，主要在线下销售。 \n直销模式：包括团购销售模式，直接面向团体消费者销售产品；专卖店模式，直接面向零售终端和\n团体消费者；线上销售模式，通过天猫、京东等电商平台销售产品。 \n3、经销模式 \n适用 □不适用 \n（1）不同模式、不同产品的营业收入、营业成本、毛利率情况 \n单位：元 \n项目 \n营业收入 \n营业成本 \n毛利率 \n营业收入比 \n上年同期增减 \n营业成本比 \n上年同期增减 \n毛利率比上年\n同期增减 \n销售模式 \n酒类产品 \n26,866,607,488.06 \n4,135,094,056.13 \n84.61% \n23.27% \n13.09% \n1.39% \n其中：经销模式 \n18,475,857,791.19 \n3,119,569,233.66 \n83.12% \n36.33% \n1.74% \n5.74% \n   直销模式 \n8,390,749,696.87 \n1,015,524,822.47 \n87.90% \n1.81% \n72.11% \n-4.94% \n"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "biz_003",
+    "category": "business_risk",
+    "question": "比亚迪2025年年报中研发投入情况如何？",
+    "target_company_codes": [
+      "002594"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "比亚迪_002594_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": "2025年比亚迪研发投入金额约634.41亿元（63,441,379,000元），同比增长17.13%，再创历史新高；研发投入占营业收入比例为7.89%。其中，研发投入资本化金额为54.63亿元，资本化研发投入占研发投入的比例为8.61%。研发费用为579.78亿元，同比增长8.99%。研发人员数量为127,665人，同比增长4.99%，占比14.68%。截至2025年末，公司拥有超12万名研发工程师，全球累计申请专利超7.1万项、授权专利超4.2万项。",
+    "gold_evidence": [
+      {
+        "parent_id": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b_parent_58",
+        "document_id": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b",
+        "file_sha256": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b",
+        "source_filename": "比亚迪_002594_2025FY.pdf",
+        "company_name": "比亚迪",
+        "company_code": "002594",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "网，提高单位线径功率传输能力，\n分别达到三相 380V 的 4 倍与 8 倍；\n通过高频变换技术，提高设备功率\n密度；通过采用换流器控制短路电\n流，融合控制保护与主回路一体化\n设计，减少柜体数量，提高集成\n度；通过在线监测技术，实现全系\n统故障自动定位及隔离。 \n作为行业内在低运能行业\n率先提出直流配电技术解\n决方案的企业，具有行业\n领先地位。该项技术将巩\n固公司在新型配电领域的\n核心竞争力，拓展多元应\n用场景，为公司在轨道业\n务的长期发展提供重要支\n撑。 \n公司研发人员情况 \n \n2025 年 \n2024 年 \n变动比例 \n研发人员数量（人） \n127,665 \n121,598 \n4.99% \n研发人员数量占比 \n14.68% \n12.55% \n2.13% \n研发人员学历结构 \n本科（人） \n55,564 \n53,222 \n4.40% \n硕士（人） \n33,230 \n28,842 \n15.21% \n博士（人） \n3,011 \n2,403 \n25.30% \n研发人员年龄构成 \n30 岁以下（人） \n67,429 \n68,548 \n-1.63% \n30~40 岁（人） \n50,749 \n"
+      },
+      {
+        "parent_id": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b_parent_82",
+        "document_id": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b",
+        "file_sha256": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b",
+        "source_filename": "比亚迪_002594_2025FY.pdf",
+        "company_name": "比亚迪",
+        "company_code": "002594",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "比亚迪股份有限公司 2025 年年度报告全文 \n55 \n端化取得多维突破，产品结构持续优化。年内，“仰望”、“腾势”、“方程豹”品牌合计销量实现同比翻倍增长。其\n中，仰望 U9X 跑出全球汽车极速和圈速双第一纪录，以极致技术重塑超豪华标杆；腾势 N9 三破高速避让世界纪录，将鱼\n钩测试驶入速度提升至 210km/h，以极致安全舒适赢得市场认可；方程豹全年销量同比增长 316%，凭借硬核性能与独特\n设计，让硬派越野电动车从小众走向大众。全球化进展方面，本集团海外市场业务高歌猛进，全年整车出口突破百万辆，\n同比增长 1.4 倍，位列中国新能源汽车出口榜首，且在前十大整车出口企业中增速最快，全球化布局再提速。2025 年公\n司研发投入高达 634 亿元，再创历史新高。截至 2025 年 12 月 31 日，公司拥有超 12 万名研发工程师，全球累计申请专\n利超 7.1 万项、授权专利超 4.2 万项。过去一年，公司在电动化领域围绕纯电平台、插电混动平台、智能底盘三大核心\n技术领域，实现了从充电速度到动力性能、从能耗优化到底盘控制的全维度创新。在智能化领域，公司发布“全民智驾”\n战略，以“天神"
+      },
+      {
+        "parent_id": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b_parent_42",
+        "document_id": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b",
+        "file_sha256": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b",
+        "source_filename": "比亚迪_002594_2025FY.pdf",
+        "company_name": "比亚迪",
+        "company_code": "002594",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "比亚迪股份有限公司 2025 年年度报告全文 \n32 \n主要供应商其他情况说明 \n□适用 不适用 \n报告期内公司贸易业务收入占营业收入比例超过 10% \n□适用 不适用 \n3、费用 \n单位：元 \n \n2025 年 \n2024 年 \n同比增减 \n重大变动说明 \n销售费用 \n26,184,568,000.00 \n24,085,317,000.00 \n8.72% 主要是广告展览费增加所致 \n管理费用 \n20,199,944,000.00 \n18,644,661,000.00 \n8.34% 主要是职工薪酬和折旧及摊\n销增加所致 \n财务费用 \n-649,350,000.00 \n1,216,206,000.00 \n-153.39% 主要是本期为汇兑收益，上\n年同期为汇兑损失所致 \n研发费用 \n57,978,105,000.00 \n53,194,745,000.00 \n8.99% 主要是折旧及摊销、检测\n费、物料消耗增加所致 \n4、研发投入 \n 适用 □不适用 \n主要研发项\n目名称 \n项目目的 \n项目进展 \n拟达到的目标 \n预计对公司未来发展的影\n响 \n第 二 代 刀 片\n电 池 及 闪 充\n"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "biz_004",
+    "category": "business_risk",
+    "question": "宁德时代2025年年报披露了哪些主要经营风险？",
+    "target_company_codes": [
+      "300750"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "宁德时代_300750_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": "根据宁德时代2025年年报披露，公司面临的主要经营风险（金融工具相关风险）包括：1. 信用风险：主要产生于银行存款、应收票据、应收账款及其他应收款等；2. 流动性风险；3. 市场风险：包括利率风险（主要产生于长期银行借款及应付债券等长期带息债务）、汇率风险（已确认的外币资产和负债及未来的外币交易存在外汇风险，计价货币主要为美元、欧元）以及其他价格风险（持有的上市权益工具投资承担证券市场变动的风险）。",
+    "gold_evidence": [
+      {
+        "parent_id": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9_parent_262",
+        "document_id": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+        "file_sha256": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+        "source_filename": "宁德时代_300750_2025FY.pdf",
+        "company_name": "宁德时代",
+        "company_code": "300750",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "宁德时代新能源科技股份有限公司 2025 年年度报告全文 \n209 \n十一、与金融工具相关的风险 \n1、金融工具产生的各类风险 \n本公司的主要金融工具包括货币资金、衍生金融资产、应收账款、应收票据、应收款项融资、其他\n应收款、一年内到期的非流动资产、其他流动资产、交易性金融资产、其他权益工具投资、其他非流动\n金融资产、长期应收款、衍生金融负债、应付账款、应付票据、应付股利、其他应付款、短期借款、一\n年内到期的非流动负债、长期借款、应付债券、租赁负债及长期应付款。各项金融工具的详细情况已于\n相关附注内披露。与这些金融工具有关的风险，以及本公司为降低这些风险所采取的风险管理政策如下\n所述。本公司管理层对这些风险敞口进行管理和监控以确保将上述风险控制在限定的范围之内。 \n（1）风险管理目标和政策 \n本公司从事风险管理的目标是在风险和收益之间取得适当的平衡，力求降低金融风险对本公司财务\n业绩的不利影响。基于该风险管理目标，本公司已制定风险管理政策以辨别和分析本公司所面临的风险，\n设定适当的风险可接受水平并设计相应的内部控制程序，以监控本公司的风险水平。本公司会定期审阅\n这些风险管理政策及有关内"
+      },
+      {
+        "parent_id": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9_parent_266",
+        "document_id": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+        "file_sha256": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+        "source_filename": "宁德时代_300750_2025FY.pdf",
+        "company_name": "宁德时代",
+        "company_code": "300750",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "宁德时代新能源科技股份有限公司 2025 年年度报告全文 \n211 \n金融工具的市场风险，是指金融工具的公允价值或未来现金流量因市场价格变动而发生波动的风险，\n包括利率风险、汇率风险和其他价格风险。 \n利率风险 \n利率风险，是指金融工具的公允价值或未来现金流量因市场利率变动而发生波动的风险。利率风险\n可源于已确认的计息金融工具和未确认的金融工具（如某些贷款承诺）。 \n本公司的利率风险主要产生于长期银行借款及应付债券等长期带息债务。浮动利率的金融负债使本\n公司面临现金流量利率风险，固定利率的金融负债使本公司面临公允价值利率风险。本公司根据当时的\n市场环境来决定固定利率及浮动利率合同的相对比例，并通过定期审阅与监察维持适当的固定和浮动利\n率工具组合。 \n本公司密切关注利率变动对本公司利率风险的影响。本公司目前并未采取利率对冲政策。但管理层\n负责监控利率风险，并将于需要时考虑对冲重大利率风险。利率上升会增加新增带息债务的成本以及本\n公司尚未付清的以浮动利率计息的带息债务的利息费用，并对本公司的财务业绩产生重大的不利影响，\n管理层会依据最新的市场状况及时做出调整，这些调整可能是进行利率互换的安"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "biz_005",
+    "category": "business_risk",
+    "question": "招商银行2025年年报如何描述信用风险管理？",
+    "target_company_codes": [
+      "600036"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "招商银行_600036_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": "招商银行2025年年报从管理层讨论与财务报告两个层面描述了信用风险管理：\n1. 管理理念：紧扣国家政策导向，坚持“稳质量就是稳根本”，全面提升风险管理水平，防范化解重点领域风险，加快数智化转型。\n2. 公司贷款管理措施：及时优化信贷政策和授信策略；突出抓好房地产、地方债务等重点领域风险防范化解；持续优化信贷流程，深化集团统一授信；推动存量不良资产清收提效；稳步推进风险管理数智化转型（如建设智能体、完善AI工具集）。\n3. 体系与流程：专为识别、评估和管理信用风险设计了系统架构、信用政策和程序，覆盖贷（投）前调查、贷（投）中审查、贷（投）后管理等全流程。\n4. 计量与分类：运用预期信用损失模型计提损失准备；在监管五级分类基础上实行十级分类管理；制定限额管理政策防范集中度风险。",
+    "gold_evidence": [
+      {
+        "parent_id": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79_parent_93",
+        "document_id": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79",
+        "file_sha256": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79",
+        "source_filename": "招商银行_600036_2025FY.pdf",
+        "company_name": "招商银行",
+        "company_code": "600036",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "招商银行股份有限公司\n2025年度报告（A股）\n62\n第三章 管理层讨论与分析\n招商信诺资管\n招商信诺资管成立于2020年，注册资本5亿元，是本公司间接控股的子公司，由本公司合营公司招商信诺和子公\n司招银国际分别持股87.3458%和12.6542%。招商信诺资管的经营范围包括受托管理委托人资金、发行保险资\n产管理产品及与资产管理相关的咨询业务等。\n截至报告期末，招商信诺资管总资产12.66亿元，净资产9.64亿元 ；报告期内实现净利润1.25亿元。\n招银欧洲\n招银欧洲成立于2021年，注册资本1亿欧元，是本公司在欧洲的全资子公司，也是本公司在欧盟与欧洲经济区的\n区域总部。招银欧洲为客户提供跨境融资、并购金融、私人银行、投资管理、金融市场、债券承销、贸易融资等\n多样化的金融产品和服务，围绕企业和个人的全球资产进行经营和配置。\n截至报告期末，招银欧洲总资产5.70亿欧元，净资产0.91亿欧元 ；报告期内实现净利润76.34万欧元。\n招银投资\n招银投资于2025年11月获批开业，注册资本150亿元，是本公司的全资子公司，主要开展市场化债转股业务及\n监管机构批准的其他业务。\n截至报告期末，招"
+      },
+      {
+        "parent_id": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79_parent_95",
+        "document_id": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79",
+        "file_sha256": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79",
+        "source_filename": "招商银行_600036_2025FY.pdf",
+        "company_name": "招商银行",
+        "company_code": "600036",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "招商银行股份有限公司\n2025年度报告（A股）\n63\n第三章 管理层讨论与分析\n报告期内，本公司积极应对风险形势变化，切实提升风险管理质效、保持资产质量总体稳定。公司贷款方面，本\n公司主要采取以下措施加强信用风险管理。一是及时优化信贷政策和授信策略。以大类资产配置为牵引，加强对\n行业发展趋势的前瞻评估，加大重点区域分行资产组织力度，挖掘中等授信客户“扩面增量”潜力，完善中长期\n资产组织策略，持续推进资产业务“一行一策”客户名单制工作，优化行业、区域、客群等维度的资产配置。二\n是突出抓好重点领域风险防范化解。围绕加快构建房地产发展新模式、积极有序化解地方债务风险、前瞻防范新\n旧动能转换及涉及“反内卷”影响的相关领域风险，严格落实国家和监管最新政策，加强预警排查监测，动态评\n估风险变化，主动应对和化解风险。三是持续优化信贷流程。深化集团统一授信，完善调查、审查、审批各环节\n工作范式，规范流程节点及角色的履职标准和要求，强化尽调审查质量监测和履职评价，提升授信规范性和方案\n适配性管理水平，完善监测、预警、分类、处置等全流程管控。四是进一步推动存量不良资产清收提效。聚焦重\n点领域，完善全行资产"
+      },
+      {
+        "parent_id": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79_parent_366",
+        "document_id": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79",
+        "file_sha256": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79",
+        "source_filename": "招商银行_600036_2025FY.pdf",
+        "company_name": "招商银行",
+        "company_code": "600036",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "招商银行股份有限公司\n2025年度报告（A股）\n259\n第八章 财务报告\n58. 风险管理\n(a) 信用风险\n信用风险是交易对手或债务人违约，使本集团可能蒙受损失的风险。当所有交易对手集中在单一行业或地区时，\n银行可能面临较大的信用风险。这主要是由于不同的交易对手会因处于同一地区或行业而受到同样的经济发展影\n响，可能影响到其还款能力。\n本集团专为有效识别、评估和管理信用风险而设计了系统架构、信用政策和程序。董事会委任的风险与资本管理\n委员会，负责监督和评估风险管理各职能部门的设置、组织架构、工作程序和效果。\n日常操作方面，董事会风险与资本管理委员会所督导的风险管理部门负责参与、协调配合并监控各业务部门和法\n律合规部等部门实施风险管理工作。本集团信用风险管理覆盖授信与投资业务的贷（投）前调查、贷（投）中审\n查、贷（投）后管理等各流程环节。\n本集团按照《商业银行预期信用损失法实施管理办法》的规定，运用预期信用损失模型，对以摊余成本计量的或\n以公允价值计量且其变动计入其他综合收益的表内承担信用风险的金融资产，以及贷款承诺和财务担保合同等表\n外承担信用风险的项目计提信用风险损失准备。\n在批发金"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "biz_006",
+    "category": "business_risk",
+    "question": "平安银行2026年半年报如何描述资产质量和风险管理情况？",
+    "target_company_codes": [
+      "000001"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "平安银行_000001_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": "平安银行2026年半年报描述资产质量整体平稳，风险抵补能力保持良好。截至2026年6月末，不良贷款率1.05%，与上年末持平；逾期60天以上及90天以上贷款偏离度分别为0.84和0.70；拨备覆盖率219.58%；上半年不良贷款生成率1.15%，同比下降0.49个百分点。企业贷款不良率0.87%、个人贷款不良率1.23%，均与上年末持平。风险管理方面，本行建立组织架构健全、职责边界清晰的风险治理架构，遵循匹配性、全覆盖、独立性、有效性四大原则完善全面风险管理体系。报告期内持续加强防线建设，确保风险偏好全面引领，升级各类风险管理政策与程序，深化数字化转型并加快AI大模型在风险各环节的应用。信用风险管理上坚持“把好增量、管好存量”，推进资产结构优化，强化重点领域风险管控，严格落实化债政策要求，稳妥化解存量债务风险。",
+    "gold_evidence": [
+      {
+        "parent_id": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527_parent_66",
+        "document_id": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527",
+        "file_sha256": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527",
+        "source_filename": "平安银行_000001_2026H1.pdf",
+        "company_name": "平安银行",
+        "company_code": "000001",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "第三章\n管理层讨论与分析\n49\n平安银行股份有限公司\n2026 年半年度报告\n3.5 风险管理\n本行建立组织架构健全、职责边界清晰的风险治理架构，建立多层次、相互衔接、有效制衡的\n运行机制。本行全面风险管理体系以提高本行全面风险管理水平，有效保障业务健康、可持续发展\n为目标，遵循匹配性、全覆盖、独立性、有效性四大基本原则，一是本行制定风险与收益相均衡的\n风险管理目标，使风险管理体系与业务发展战略、风险状况相匹配；二是本行确保全面风险管理覆\n盖全业务、全风险、全流程、全机构、全人员；三是本行风险管理架构保持独立性，风险条线人员、\n职责、报告路线及考核均保持相对独立，与业务条线形成制衡；四是本行根据风险管理结果，有效\n评估内部资本充足性，定期开展压力测试，确保资本水平与风险偏好、风险管理状况相适应，并能\n充分抵御所面临的各类风险。\n报告期内，本行持续完善全面风险管理体系，一是加强防线建设，结合本行风险防控重点，进\n一步优化风险管理综合评价指标及规则，压实一道防线风险防控职责；二是确保风险偏好的全面引\n领，持续完善各类风险偏好的监测、偏离处置与调整机制；三是不断升级各类风险管理政策与程序，\n"
+      },
+      {
+        "parent_id": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527_parent_35",
+        "document_id": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527",
+        "file_sha256": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527",
+        "source_filename": "平安银行_000001_2026H1.pdf",
+        "company_name": "平安银行",
+        "company_code": "000001",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "第三章\n管理层讨论与分析\n31\n平安银行股份有限公司\n2026 年半年度报告\n本行持续加强金融资产风险分类管理，审慎认定资产风险分类，真实反映资产质量。2026 年 6\n月末，不良贷款率 1.05%，与上年末持平；逾期 60 天以上贷款偏离度及逾期 90 天以上贷款偏离度分\n别为 0.84 和 0.70。本行持续强化风险前瞻管理，优化资产结构，加强重点领域风险管控，持续强化\n存量风险化解，资产质量整体平稳。\n（2）发放贷款和垫款按产品划分的结构分布及质量情况\n（货币单位：人民币百万元）\n项\n目\n2026 年 6 月 30 日\n2025 年 12 月 31 日\n不良率增减\n余额\n占比\n不良率\n余额\n占比\n不良率\n企业贷款\n1,725,301\n50.0%\n0.87%\n1,663,546\n49.1%\n0.87%\n-\n其中：一般企业贷款\n1,633,015\n47.3%\n0.92%\n1,552,081\n45.8%\n0.94%\n-0.02 个百分点\n贴现\n92,286\n2.7%\n-\n111,465\n3.3%\n-\n-\n个人贷款\n1,726,973\n50.0%\n1.23%\n1,727,294\n50.9"
+      },
+      {
+        "parent_id": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527_parent_20",
+        "document_id": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527",
+        "file_sha256": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527",
+        "source_filename": "平安银行_000001_2026H1.pdf",
+        "company_name": "平安银行",
+        "company_code": "000001",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "第三章\n管理层讨论与分析\n17\n平安银行股份有限公司\n2026 年半年度报告\n第三章\n管理层讨论与分析\n3.1 总体经营情况\n2026年上半年，本行坚持以“中国最卓越、全球领先的智能化零售银行”为战略目标，坚持“零\n售做强、对公做精、同业做专”战略方针，持续升级零售、对公、资金同业业务经营策略，持续强\n化风险管理，持续深化数字化转型，整体业务经营保持稳健。\n业务经营保持稳健，营收利润同比增长。2026 年上半年，本集团实现营业收入 706.17 亿元，同\n比增长 1.8%，实现净利润 256.96 亿元，同比增长 3.3%。净息差 1.80%，与去年同期持平，较去年全\n年上升 2 个基点。非利息净收入占比 37.28%，同比上升 1.42 个百分点，财富管理、债券投资等业务\n的非利息净收入同比增长。本行通过数字化转型驱动降本增效，业务及管理费 191.08 亿元，同比下\n降 0.5%，成本收入比 27.06%，同比下降 0.62 个百分点。\n持续优化资产结构，促进“量、价、险”平衡。2026 年 6 月末，本集团资产总额 60,287.85 亿元，\n较上年末增长 1.7%；发放贷款和垫"
+      },
+      {
+        "parent_id": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527_parent_61",
+        "document_id": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527",
+        "file_sha256": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527",
+        "source_filename": "平安银行_000001_2026H1.pdf",
+        "company_name": "平安银行",
+        "company_code": "000001",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "第三章\n管理层讨论与分析\n46\n平安银行股份有限公司\n2026 年半年度报告\n3.4 经营中关注的重点\n3.4.1 关于净息差\n2026 年上半年，本集团净息差 1.80%，与去年同期持平，较去年全年上升 2 个基点。\n负债端，本行坚持以资产定负债的组合经营策略，负债经营聚焦调结构、降成本，付息率显著\n优化，有效支撑净息差企稳。一是积极落实市场定价自律要求，管控高成本负债，叠加存款到期重\n定价效应，存款付息成本有效优化；二是持续提升客户服务能力，增强客户粘性，推动核心高质量\n存款稳步增长；三是根据市场变化，敏捷调控存款和同业负债的吸收节奏，优化整体负债成本。2026\n年上半年，本集团计息负债平均付息率 1.42%，较去年同期下降 37 个基点，较去年全年下降 25 个基\n点；吸收存款平均付息率 1.38%，较去年同期下降 38 个基点，较去年全年下降 27 个基点。\n资产端，受市场利率下行及资产结构调整影响，资产收益率进一步下行。一是本行紧跟国家重\n大战略规划，积极支持实体经济发展，加大对重点行业、重点区域和重点客户的信贷支持力度，提\n升优质客群占比，带动客群结构和资产结构持续优化；二"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "biz_007",
+    "category": "business_risk",
+    "question": "中芯国际2026年半年报披露的产能利用或产能相关经营情况如何？",
+    "target_company_codes": [
+      "688981"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "中芯国际_688981_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": "中芯国际2026年半年报未披露具体的产能利用率数值，但披露了以下产能相关经营情况：报告期内公司在手订单充足，部分产品类别供不应求；公司通过提升产能利用率、优化产品组合和工艺制程等措施提升整体盈利能力；同时，产能规模效应已成为客户衡量供应链稳定性的重要因素，公司持续拓展产能规模以强化竞争壁垒。",
+    "gold_evidence": [
+      {
+        "parent_id": "6a44b7cfe77129d47089ae71bee8c71d2733ae694b8910485e6c3e444de5cb13_parent_19",
+        "document_id": "6a44b7cfe77129d47089ae71bee8c71d2733ae694b8910485e6c3e444de5cb13",
+        "file_sha256": "6a44b7cfe77129d47089ae71bee8c71d2733ae694b8910485e6c3e444de5cb13",
+        "source_filename": "中芯国际_688981_2026H1.pdf",
+        "company_name": "中芯国际",
+        "company_code": "688981",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "中芯国际集成电路制造有限公司2026 年半年度报告\n18 / 167\n2.技术人才短缺或流失风险\n集成电路晶圆代工行业亦属于人才密集型行业。集成电路晶圆代工涉及上千道工艺、数十门\n专业学科知识的融合，且各环节的工艺配合和误差控制要求极高，不仅需要相关人才具备扎实的\n专业知识和长期的技术沉淀，也需要相关人才具备很强的综合能力和经验积累。\n公司多年来一直高度重视人力资源的科学管理，制定了较为合理的人才政策及薪酬管理体系，\n针对优秀人才实施了包括股权激励在内的多项激励措施，对稳定和吸引技术人才起到了积极作用。\n近年来，集成电路企业数量高速增长，行业优秀技术人才的供给出现了较大缺口，人才争夺\n激烈。如果公司有大量优秀的技术人才离职，而公司无法在短期内招聘到或培养出经验丰富的技\n术人才，可能对公司的持续竞争力产生不利影响。\n3.技术泄密风险\n技术是集成电路晶圆代工行业的核心竞争力，公司以技术创新为驱动力。\n公司十分重视对核心技术的保护工作，制定了包括信息安全保护制度在内的一系列严格完善\n的保密制度，并和相关技术人员签署了保密协议及竞业限制协议，以确保核心技术的保密性。\n但由于技术秘密保护措施的局"
+      },
+      {
+        "parent_id": "6a44b7cfe77129d47089ae71bee8c71d2733ae694b8910485e6c3e444de5cb13_parent_11",
+        "document_id": "6a44b7cfe77129d47089ae71bee8c71d2733ae694b8910485e6c3e444de5cb13",
+        "file_sha256": "6a44b7cfe77129d47089ae71bee8c71d2733ae694b8910485e6c3e444de5cb13",
+        "source_filename": "中芯国际_688981_2026H1.pdf",
+        "company_name": "中芯国际",
+        "company_code": "688981",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "中芯国际集成电路制造有限公司2026 年半年度报告\n13 / 167\n3.报告期内新技术、新产业、新业态、新模式的发展情况和未来发展趋势\n近年来，晶圆代工企业多以技术领先性、平台多样性、性能差异化作为吸引客户的核心优势。\n随着市场需求更趋多元化，企业在纵向追求更小的晶体管结构的同时，也更注重利用量产工艺节\n点的性能基础开展横向的衍生平台建设，以满足庞大的终端市场的差异化需求。\n与此同时，各类新型封装，设计服务以及光掩模等技术持续突破，为晶圆代工技术迭代赋能。\n在新型封装技术领域，各类形式的系统性解决方案有效地突破了晶体管线宽极限并进一步提高了\n多芯片集成的融合度；在设计服务领域，DTCO（Design Technology Co-Optimization，设计工艺\n协同优化）对具体设计和工艺匹配做评估和调整，有效地降低了半导体工艺开发的成本和使用风\n险；光掩模作为集成电路制造产业链上的核心关键工具，其掩模工艺和介质材料不断进化，进一\n步提升设计图形光刻的工艺表现。\n伴随全球行业格局的变化，晶圆代工企业在专注自身工艺技术与平台建设的同时，也愈加重\n视产业生态布局，其产能规模效应和在地化的"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "biz_008",
+    "category": "business_risk",
+    "question": "北方华创2025年年报中研发投入或研发人员情况如何？",
+    "target_company_codes": [
+      "002371"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "北方华创_002371_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "HyDE"
+    ],
+    "evaluation_focus": [
+      "semantic_recall",
+      "evidence_support"
+    ],
+    "gold_answer": "2025年，北方华创研发投入金额为7,277,149,612.81元，同比增长34.74%，占营业收入比例为18.49%；研发费用为5,435,445,365.50元，同比增长46.96%。研发人员数量为6,511人，同比增长42.07%，占公司总人数的30.86%。其中硕士4,137人、本科1,931人、博士268人。",
+    "gold_evidence": [
+      {
+        "parent_id": "af09ac4951073e650f8d4f428a7eaea6977e18a162cfb042000408a3fc49d50f_parent_52",
+        "document_id": "af09ac4951073e650f8d4f428a7eaea6977e18a162cfb042000408a3fc49d50f",
+        "file_sha256": "af09ac4951073e650f8d4f428a7eaea6977e18a162cfb042000408a3fc49d50f",
+        "source_filename": "北方华创_002371_2025FY.pdf",
+        "company_name": "北方华创",
+        "company_code": "002371",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "北方华创科技集团股份有限公司 2025 年年度报告全文\n35\n□适用 不适用\n（三）费用\n单位：元\n2025 年\n2024 年\n同比增减\n重大变动说明\n销售费用\n1,635,955,164.23\n1,101,147,598.57\n48.57%\n主要为公司为应对市\n场规模扩大，市场拓\n展及客户服务团队人\n员数量增加，导致本\n期薪酬、股权激励费\n用增加。\n管理费用\n3,433,421,029.99\n2,163,857,473.65\n58.67%\n主要为芯源微管理费\n用并表，半导体装备\n产业化台马基地投入\n使用导致折旧摊销增\n加，以及管理人员薪\n酬及股权激励费用增\n加。\n财务费用\n228,775,158.40\n62,716,207.67\n264.78%\n为满足订单增长、研\n发投入、并购需求，\n本期取得借款增加，\n利息费用增加。\n研发费用\n5,435,445,365.50\n3,698,631,501.10\n46.96%\n主要为公司为匹配业\n务规模的快速扩张，\n持续扩充研发团队，\n研发人员薪酬、股权\n激励费用增加。同时\n本期研发材料测试费\n增加。\n（四）研发投入\n适用 □不适用\n主要研发项目"
+      },
+      {
+        "parent_id": "af09ac4951073e650f8d4f428a7eaea6977e18a162cfb042000408a3fc49d50f_parent_53",
+        "document_id": "af09ac4951073e650f8d4f428a7eaea6977e18a162cfb042000408a3fc49d50f",
+        "file_sha256": "af09ac4951073e650f8d4f428a7eaea6977e18a162cfb042000408a3fc49d50f",
+        "source_filename": "北方华创_002371_2025FY.pdf",
+        "company_name": "北方华创",
+        "company_code": "002371",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "北方华创科技集团股份有限公司 2025 年年度报告全文\n36\n30-40 岁\n2,629\n1,889\n39.17%\n41-45 岁\n317\n239\n32.64%\n公司研发投入情况\n2025 年\n2024 年\n变动比例\n研发投入金额（元）\n7,277,149,612.81\n5,401,049,165.52\n34.74%\n研发投入占营业收入比例\n18.49%\n17.96%\n0.53%\n研发投入资本化的金额\n（元）\n2,510,972,689.63\n2,281,784,456.01\n10.04%\n资本化研发投入占研发投入\n的比例\n34.50%\n42.25%\n-7.75%\n公司研发人员构成发生重大变化的原因及影响\n□适用 不适用\n研发投入总额占营业收入的比重较上年发生显著变化的原因\n□适用 不适用\n研发投入资本化率大幅变动的原因及其合理性说明\n□适用 不适用\n（五）现金流\n单位：元\n项目\n2025 年\n2024 年\n同比增减\n经营活动现金流入小计\n40,208,357,152.81\n30,220,174,743.63\n33.05%\n经营活动现金流出小计\n38,074,912,574.96"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "yoy_001",
+    "category": "yoy_h1",
+    "question": "贵州茅台2026年上半年营业收入相比2025年上半年变化多少？",
+    "target_company_codes": [
+      "600519"
+    ],
+    "target_report_periods": [
+      "2025H1",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2025H1.pdf",
+      "贵州茅台_600519_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_correctness",
+      "calculation"
+    ],
+    "gold_answer": "根据财报数据，贵州茅台2026年上半年营业收入为90,703,260,964.48元，2025年上半年营业收入为89,389,354,416.84元，2026年上半年相比2025年上半年增加1,313,906,547.64元。",
+    "gold_evidence": [
+      {
+        "parent_id": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6_parent_35",
+        "document_id": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6",
+        "file_sha256": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6",
+        "source_filename": "贵州茅台_600519_2026H1.pdf",
+        "company_name": "贵州茅台",
+        "company_code": "600519",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "贵州茅台酒股份有限公司2026 年半年度报告\n30 / 110\n专项储备\n盈余公积\n49,251,429,608.71\n50,543,176,610.94\n未分配利润\n107,646,565,355.82\n127,322,996,467.02\n所有者权益（或股东权\n益）合计\n158,148,992,327.71\n178,999,246,453.61\n负债和所有者权益\n（或股东权益）总计\n168,620,407,364.98\n195,350,142,529.19\n公司负责人：陈华\n主管会计工作负责人：余思明\n会计机构负责人：蔡聪应\n合并利润表\n2026 年 1—6 月\n单位：元 币种：人民币\n项目\n附注\n2026 年半年度\n2025 年半年度\n一、营业总收入\n92,278,072,083.21\n91,093,762,553.97\n其中：营业收入\n43\n90,703,260,964.48\n89,389,354,416.84\n利息收入\n44\n1,574,811,118.73\n1,704,408,137.13\n已赚保费\n手续费及佣金收入\n二、营业总成本\n30,946,044,878.08\n28"
+      },
+      {
+        "parent_id": "c80fb7180169469053c396e65315414368bcfa9f1f1d4e3bf793c8fb327e6b0c_parent_5",
+        "document_id": "c80fb7180169469053c396e65315414368bcfa9f1f1d4e3bf793c8fb327e6b0c",
+        "file_sha256": "c80fb7180169469053c396e65315414368bcfa9f1f1d4e3bf793c8fb327e6b0c",
+        "source_filename": "贵州茅台_600519_2025H1.pdf",
+        "company_name": "贵州茅台",
+        "company_code": "600519",
+        "report_year": 2025,
+        "period_type": "H1",
+        "report_period": "2025H1",
+        "evidence_excerpt": "贵州茅台酒股份有限公司2025 年半年度报告\n7 / 103\n一是主要指标稳定向好。上半年，公司营业总收入 910.94 亿元，同比增长 9.16%；归属于上\n市公司股东的净利润 454.03 亿元，同比增长 8.89%，为完成全年工作任务奠定了坚实基础。茅台\n酒基酒产量约 4.37 万吨，系列酒基酒产量约 2.96 万吨，各轮次基酒符合轮次特征，生产质量稳\n中向好。\n二是市场营销稳中有进。迎难而上、主动作为，赴省区开展市场调研，强化措施应对，全力\n提振市场信心。茅台酒方面，利用“社会+自营”双渠道体系优势，不断优化运营体系，积极拓展\n销售渠道。系列酒方面，以茅台 1935、汉酱、茅台王子酒“一体两翼”总体产品结构为战略核心，\n拓展销售网络，打造样板市场。国际化方面，坚持“六大体系”齐抓共建，全面加大国际市场开\n拓力度，积极与世博会、亚洲职业高尔夫球巡回赛等国际 IP 合作，发布 5 款“走进系列”新品和\n“世博会纪念酒”。\n三是改革创新不断深化。坚持传承与创新协调发展，在坚守传统酿造技艺的同时，强化科技\n增能、数字赋能。积极推进创新平台建设，贵州省生物制造实验室正式揭牌运行，有序推进"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "yoy_002",
+    "category": "yoy_h1",
+    "question": "五粮液2026年上半年归母净利润相比2025年上半年变化多少？",
+    "target_company_codes": [
+      "000858"
+    ],
+    "target_report_periods": [
+      "2025H1",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "五粮液_000858_2025H1.pdf",
+      "五粮液_000858_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_correctness",
+      "calculation"
+    ],
+    "gold_answer": "根据财报数据，五粮液2026年上半年归属于上市公司股东的净利润为8,752,942,991.31元，2025年上半年为4,623,850,715.13元，2026年上半年相比2025年上半年增加4,129,092,276.18元，同比增长89.30%。",
+    "gold_evidence": [
+      {
+        "parent_id": "15153679faee48d1b1b00c50557a88bdcbdf8cb4cbc49b8762e10f70210dfb5b_parent_1",
+        "document_id": "15153679faee48d1b1b00c50557a88bdcbdf8cb4cbc49b8762e10f70210dfb5b",
+        "file_sha256": "15153679faee48d1b1b00c50557a88bdcbdf8cb4cbc49b8762e10f70210dfb5b",
+        "source_filename": "五粮液_000858_2026H1.pdf",
+        "company_name": "五粮液",
+        "company_code": "000858",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "宜宾五粮液股份有限公司 2026 年半年度报告全文 \n5 \n释 义 \n \n释义项 \n指 \n释义内容 \n公司、本公司、五粮液 \n指 \n宜宾五粮液股份有限公司 \n宜发展集团 \n指 \n宜宾发展控股集团有限公司 \n五粮液集团公司 \n指 \n四川省宜宾五粮液集团有限公司 \n五粮浓香公司 \n指 \n四川五粮液浓香酒有限公司 \n财务公司 \n指 \n四川省宜宾五粮液集团财务有限公司 \n进出口公司 \n指 \n四川省宜宾五粮液集团进出口有限公司 \n \n \n宜宾五粮液股份有限公司 2026 年半年度报告全文 \n6 \n第二节 公司简介和主要财务指标 \n一、公司简介 \n股票简称 \n五粮液 \n股票代码 \n000858 \n股票上市证券交易所 \n深圳证券交易所 \n公司的中文名称 \n宜宾五粮液股份有限公司 \n公司的中文简称（如有） \n五粮液 \n公司的外文名称（如有） \nWULIANGYE YIBIN CO.,LTD. \n公司的外文名称缩写（如有） \nWLY \n公司的法定代表人 \n邓敏 \n二、联系人和联系方式 \n \n董事会秘书 \n证券事务代表 \n姓名 \n李剑伟 \n黄会 \n联系地址 \n四川省宜宾市翠屏区岷江西路 150 号 \n四川"
+      },
+      {
+        "parent_id": "43763a06159d47b7ec2600a8c6c73fcc28799643849b5dd1f855ed29a9996f2a_parent_2",
+        "document_id": "43763a06159d47b7ec2600a8c6c73fcc28799643849b5dd1f855ed29a9996f2a",
+        "file_sha256": "43763a06159d47b7ec2600a8c6c73fcc28799643849b5dd1f855ed29a9996f2a",
+        "source_filename": "五粮液_000858_2025H1.pdf",
+        "company_name": "五粮液",
+        "company_code": "000858",
+        "report_year": 2025,
+        "period_type": "H1",
+        "report_period": "2025H1",
+        "evidence_excerpt": "宜宾五粮液股份有限公司 2025 年半年度报告全文\n6\n第二节 公司简介和主要财务指标\n一、公司简介\n股票简称\n五粮液\n股票代码\n000858\n股票上市证券交易所\n深圳证券交易所\n公司的中文名称\n宜宾五粮液股份有限公司\n公司的中文简称（如有）\n五粮液\n公司的外文名称（如有）\nWULIANGYE YIBIN CO.,LTD.\n公司的外文名称缩写（如有）\nWLY\n公司的法定代表人\n华涛（代）\n二、联系人和联系方式\n董事会秘书\n证券事务代表\n姓名\n章欣\n黄会\n联系地址\n四川省宜宾市翠屏区岷江西路 150 号\n四川省宜宾市翠屏区岷江西路 150 号\n电话\n（0831）3567000\n（0831）3567000\n传真\n（0831）3555958\n（0831）3555958\n电子信箱\n000858-wly@sohu.com\n000858-wly@sohu.com\n三、其他情况\n1、公司联系方式\n公司注册地址、公司办公地址及其邮政编码、公司网址、电子信箱等在报告期是否变化\n□适用 不适用\n公司注册地址、公司办公地址及其邮政编码、公司网址、电子信箱等在报告期无变化，具体可参见\n2024 年年报。\n2"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "yoy_003",
+    "category": "yoy_h1",
+    "question": "比亚迪2026年上半年营业收入相比2025年上半年变化多少？",
+    "target_company_codes": [
+      "002594"
+    ],
+    "target_report_periods": [
+      "2025H1",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "比亚迪_002594_2025H1.pdf",
+      "比亚迪_002594_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_correctness",
+      "calculation"
+    ],
+    "gold_answer": "比亚迪2026年上半年营业收入约人民币344,815百万元，相比2025年上半年的约人民币371,281百万元，同比下降7.13%。",
+    "gold_evidence": [
+      {
+        "parent_id": "c42620b87a67995ed7c2bc78fbcc99bede6732fede6a0dbb3f49221ac1ec96ea_parent_12",
+        "document_id": "c42620b87a67995ed7c2bc78fbcc99bede6732fede6a0dbb3f49221ac1ec96ea",
+        "file_sha256": "c42620b87a67995ed7c2bc78fbcc99bede6732fede6a0dbb3f49221ac1ec96ea",
+        "source_filename": "比亚迪_002594_2025H1.pdf",
+        "company_name": "比亚迪",
+        "company_code": "002594",
+        "report_year": 2025,
+        "period_type": "H1",
+        "report_period": "2025H1",
+        "evidence_excerpt": "比亚迪股份有限公司 2025 年半年度报告全文\n12\n比亚迪股份有限公司（“比亚迪”或“本公司”及其附属公司统称“本集团”）主要经营包括以新能源汽车为主的汽\n车业务、手机部件及组装业务、二次充电电池及光伏业务，并积极利用自身技术优势拓展城市轨道交通及其他业务。二零\n二五年上半年，本集团实现收入约人民币371,281百万元，同比增长23.30%，其中汽车、汽车相关产品及其他产品业务的收\n入约人民币302,506百万元，同比增长32.49%；手机部件、组装及其他产品业务的收入约人民币68,744百万元，同比降低\n5.54%；占本集团总收入的比例分别为81.48%和18.51%；研发投入约人民币30,880百万元，同比增长53.05%；归属于上市公\n司股东的净利润约人民币15,510百万元，同比增长13.79%。\n本集团坚守“技术为王、创新为本”的发展理念不动摇，以引领中国品牌自主创新为己任，凭借“敢想、敢干、敢坚\n持”的工程师精神及不断壮大的研发团队，成功在电池、电子及新能源汽车等多个领域持续创新，全面引领行业发展，打\n破海外品牌长期垄断，更推动全球市场格局重塑，展现中国智造的崭新高度。本"
+      },
+      {
+        "parent_id": "2648a8c4ebf637da4eeb79e58791c1faf457daa687914e325ff37d1b9676a48c_parent_15",
+        "document_id": "2648a8c4ebf637da4eeb79e58791c1faf457daa687914e325ff37d1b9676a48c",
+        "file_sha256": "2648a8c4ebf637da4eeb79e58791c1faf457daa687914e325ff37d1b9676a48c",
+        "source_filename": "比亚迪_002594_2026H1.pdf",
+        "company_name": "比亚迪",
+        "company_code": "002594",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "比亚迪股份有限公司 2026 年半年度报告全文 \n14 \n \n2. 业务回顾 \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n比亚迪股份有限公司（“比亚迪”或“本公司”及其附属公司统称“本集团”）主要经营包括新能源汽车业务、电子\n业务、二次充电电池及光伏业务，并积极利用自身技术优势拓展城市轨道交通及其他业务。二零二六年上半年，本集团实\n现收入约人民币 344,815 百万元，同比下降 7.13%，其中汽车、汽车相关产品及其他产品业务的收入约人民币 275,341 百万\n元，同比下降 8.98%；电子及其他产品业务的收入约人民币 69,405 百万元，同比增长 0.96%；占本集团总收入的比例分别\n为 79.85%和 20.13%；归属于上市公司股东的净利润约人民币 12,325 百万元，同比下降 20.54%。 \n作为一家以技术为驱动的科技公司，本集团怀揣太阳能、储能、电动车“三大绿色梦想”，坚守“技术为王、创新为\n本”的核心发展理念，秉持“敢想、敢干、敢坚持”的工程师精神。本集团长期深耕新能源汽车、储能及半导体等多个关\n键领域，并积极布局前沿科技，于二零二六年上半年"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "yoy_004",
+    "category": "yoy_h1",
+    "question": "宁德时代2026年上半年归母净利润相比2025年上半年变化多少？",
+    "target_company_codes": [
+      "300750"
+    ],
+    "target_report_periods": [
+      "2025H1",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "宁德时代_300750_2025H1.pdf",
+      "宁德时代_300750_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_correctness",
+      "calculation"
+    ],
+    "gold_answer": "宁德时代2026年上半年归母净利润为43,284,002千元，2025年上半年为30,485,139千元，相比增加12,798,863千元，同比增长41.98%。",
+    "gold_evidence": [
+      {
+        "parent_id": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9_parent_6",
+        "document_id": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+        "file_sha256": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+        "source_filename": "宁德时代_300750_2026H1.pdf",
+        "company_name": "宁德时代",
+        "company_code": "300750",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "宁德时代新能源科技股份有限公司 2026 年半年度报告全文 \n7 \n公司注册情况在报告期无变化，具体可参见 2025 年年报。 \n4、其他有关资料 \n其他有关资料在报告期是否变更情况 \n□适用 不适用 \n四、主要会计数据和财务指标 \n公司是否需追溯调整或重述以前年度会计数据 \n□是 否 \n项目 \n本报告期 \n上年同期 \n本报告期比上年同期增减 \n营业收入（千元） \n276,916,580  \n178,886,253  \n54.80% \n归属于上市公司股东的净利润\n（千元） \n           43,284,002  \n           30,485,139  \n41.98% \n归属于上市公司股东的扣除非\n经常性损益的净利润（千元） \n           39,013,300  \n           27,197,468  \n43.44% \n经营活动产生的现金流量净额\n（千元） \n           60,216,851  \n           58,687,066  \n2.61% \n基本每股收益（元/股） \n9.51  \n6.92  \n37.43% \n稀释每股收益（"
+      },
+      {
+        "parent_id": "94da19aaaf50205fa69d8afa9598262e1c785159c34c42f459bd1104fa14c46f_parent_6",
+        "document_id": "94da19aaaf50205fa69d8afa9598262e1c785159c34c42f459bd1104fa14c46f",
+        "file_sha256": "94da19aaaf50205fa69d8afa9598262e1c785159c34c42f459bd1104fa14c46f",
+        "source_filename": "宁德时代_300750_2025H1.pdf",
+        "company_name": "宁德时代",
+        "company_code": "300750",
+        "report_year": 2025,
+        "period_type": "H1",
+        "report_period": "2025H1",
+        "evidence_excerpt": "宁德时代新能源科技股份有限公司 2025 年半年度报告全文 \n7 \n公司注册情况在报告期无变化，具体可参见 2024 年年报。 \n4、其他有关资料 \n其他有关资料在报告期是否变更情况 \n□适用 不适用 \n四、主要会计数据和财务指标 \n公司是否需追溯调整或重述以前年度会计数据 \n□是 否 \n项目 \n本报告期 \n上年同期 \n本报告期比上年同期增减 \n营业收入（千元） \n178,886,253 \n166,766,834 \n7.27% \n归属于上市公司股东的净利\n润（千元） \n30,485,139 \n22,864,987 \n33.33% \n归属于上市公司股东的扣除\n非经常性损益的净利润（千\n元） \n27,197,468 \n20,053,941 \n35.62% \n经营活动产生的现金流量净\n额（千元） \n           58,687,066  \n           44,708,955  \n31.26% \n基本每股收益（元/股） \n6.92 \n5.20 \n33.08% \n稀释每股收益（元/股） \n6.92 \n5.20 \n33.08% \n加权平均净资产收益率 \n11.63% \n11.39"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "yoy_005",
+    "category": "yoy_h1",
+    "question": "招商银行2026年上半年营业收入相比2025年上半年变化多少？",
+    "target_company_codes": [
+      "600036"
+    ],
+    "target_report_periods": [
+      "2025H1",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "招商银行_600036_2025H1.pdf",
+      "招商银行_600036_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_correctness",
+      "calculation"
+    ],
+    "gold_answer": "招商银行2026年上半年营业收入为1,781.81亿元，2025年上半年为1,699.69亿元，同比增加82.12亿元，同比增长4.83%。",
+    "gold_evidence": [
+      {
+        "parent_id": "c7e68aeca3c8ec331ce7ecfde5faee9d97fa74e302944bf0e7141b154f9704a4_parent_9",
+        "document_id": "c7e68aeca3c8ec331ce7ecfde5faee9d97fa74e302944bf0e7141b154f9704a4",
+        "file_sha256": "c7e68aeca3c8ec331ce7ecfde5faee9d97fa74e302944bf0e7141b154f9704a4",
+        "source_filename": "招商银行_600036_2026H1.pdf",
+        "company_name": "招商银行",
+        "company_code": "600036",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "招商银行股份有限公司\n2026年半年度报告（A股）\n10\n管理层讨论与分析\n第三章 管理层讨论与分析\n3.1 总体经营情况分析\n3.1.1 外部经济形势与行业发展情况\n2026年上半年，中国经济起步有力，在 “十五五” 开局之年保持良好运行态势。供给升级、出口保持韧性、新\n动能投资增长和工业利润修复，共同构成经济平稳运行的重要支撑，新旧动能转换进一步加速。\n在此背景下，中国银行业总体平稳运行，资产规模持续稳健增长。在低利率周期、直接融资占比上升、居民去杠\n杆、有效信贷需求不足等因素影响下，银行净息差进一步收窄，营收增长仍然承压 ；资产质量整体稳定，但零售\n贷款面临风险压力。面对诸多挑战，银行业坚持高质量发展，积极落实各项宏观政策，不断提升服务实体经济质\n效。\n3.1.2 经营概要\n报告期内，本集团始终坚持质量、效益、规模协调发展理念，以打造价值银行为战略目标，各项业务稳健开展，\n资产负债规模稳步增长，经营效益稳中向好，资产质量总体稳定。\n报告期内，本集团实现营业收入1,781.81亿元，同比增长4.83% ；实现归属于本行股东的净利润764.45亿元，\n同比增长2.02% ；实现净利息"
+      },
+      {
+        "parent_id": "a6565daecb14061b2a29a92e4a7d0a188cd143cd31fa7c14cf6d168db768c9c4_parent_9",
+        "document_id": "a6565daecb14061b2a29a92e4a7d0a188cd143cd31fa7c14cf6d168db768c9c4",
+        "file_sha256": "a6565daecb14061b2a29a92e4a7d0a188cd143cd31fa7c14cf6d168db768c9c4",
+        "source_filename": "招商银行_600036_2025H1.pdf",
+        "company_name": "招商银行",
+        "company_code": "600036",
+        "report_year": 2025,
+        "period_type": "H1",
+        "report_period": "2025H1",
+        "evidence_excerpt": "招商银行股份有限公司\n2025年半年度报告（A股）\n10\n管理层讨论与分析\n第三章 管理层讨论与分析\n3.1 总体经营情况分析\n3.1.1 外部经济形势与行业发展情况\n2025年上半年，中国经济直面复杂形势和多重挑战，实现平稳增长。外需保持韧性，内需积极接棒，新旧动能\n加速转换，以高质量增长的确定性积极应对关税变局的不确定性。\n在政策托举、内需持续修复、增长动能改善的背景下，中国银行业总体稳健运行，规模持续稳步增长 ；但是在\nLPR（贷款市场报价利率）下调、有效信贷需求不足等因素的影响下，银行净利息收益率进一步收窄，营业收入压\n力仍然较大。尽管面临诸多挑战，银行业坚持高质量发展，积极落实各项宏观政策，不断提升服务实体经济质\n效。\n3.1.2 经营概要\n报告期内，本集团始终坚持 “质量、效益、规模” 动态均衡发展理念，以打造价值银行为战略目标，各项业务\n稳健开展，资产负债规模稳步增长，经营效益趋势向好，资产质量总体稳定。\n报告期内，本集团实现营业收入1,699.69亿元，同比下降1.72% ；实现归属于本行股东的净利润749.30亿元，\n同比增长0.25% ；实现净利息收入1,060.8"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "yoy_006",
+    "category": "yoy_h1",
+    "question": "平安银行2026年上半年不良贷款率相比2025年上半年有何变化？",
+    "target_company_codes": [
+      "000001"
+    ],
+    "target_report_periods": [
+      "2025H1",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "平安银行_000001_2025H1.pdf",
+      "平安银行_000001_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_correctness",
+      "calculation"
+    ],
+    "gold_answer": "平安银行2026年上半年（2026年6月末）不良贷款率为1.05%，与2025年上半年（2025年6月末）的不良贷款率1.05%相比没有变化，保持持平。",
+    "gold_evidence": [
+      {
+        "parent_id": "a4d593e4d2102a682b52e1fc6acf3c5d2815f6a1a0b7ae3dc77fa4fb76bb3617_parent_63",
+        "document_id": "a4d593e4d2102a682b52e1fc6acf3c5d2815f6a1a0b7ae3dc77fa4fb76bb3617",
+        "file_sha256": "a4d593e4d2102a682b52e1fc6acf3c5d2815f6a1a0b7ae3dc77fa4fb76bb3617",
+        "source_filename": "平安银行_000001_2025H1.pdf",
+        "company_name": "平安银行",
+        "company_code": "000001",
+        "report_year": 2025,
+        "period_type": "H1",
+        "report_period": "2025H1",
+        "evidence_excerpt": "第三章\n管理层讨论与分析\n46\n平安银行股份有限公司\n2025 年半年度报告\n3.4 经营中关注的重点\n3.4.1 关于净息差\n2025 年上半年，本集团净息差 1.80%，较去年同期下降 16 个基点，主要受市场利率下行、贷款\n业务结构调整等因素影响。\n负债端，本行坚持量价平衡发展，聚焦调结构、降成本，付息率显著优化。一是积极落实市场\n定价自律要求，加强高成本存款管控，顺应降息周期，降低付息成本；二是提升客户服务能力，拓\n展业务合作广度和深度，增强客户粘性，推动结算类等低成本存款稳步增长；三是根据市场变化，\n敏捷调控存款和同业负债的吸收节奏，优化整体负债成本。2025 年上半年，本集团吸收存款平均付\n息率 1.76%，较去年同期下降 42 个基点；计息负债平均付息率 1.79%，较去年同期下降 46 个基点。\n资产端，受市场利率下行及资产结构调整影响，资产收益率进一步下行，且下行幅度大于计息\n负债优化幅度。一是本行紧跟国家重大战略规划，积极支持实体经济发展，加大对重点行业、重点\n区域和重点客户的信贷支持力度，提升优质客群占比，带动客群结构和资产结构持续优化；二是受\n市场利率持续下行及"
+      },
+      {
+        "parent_id": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527_parent_61",
+        "document_id": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527",
+        "file_sha256": "04f7b69417f665164ea6b8c636bc6a1ec1f399cedc97faa0662226a54b4f5527",
+        "source_filename": "平安银行_000001_2026H1.pdf",
+        "company_name": "平安银行",
+        "company_code": "000001",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "第三章\n管理层讨论与分析\n46\n平安银行股份有限公司\n2026 年半年度报告\n3.4 经营中关注的重点\n3.4.1 关于净息差\n2026 年上半年，本集团净息差 1.80%，与去年同期持平，较去年全年上升 2 个基点。\n负债端，本行坚持以资产定负债的组合经营策略，负债经营聚焦调结构、降成本，付息率显著\n优化，有效支撑净息差企稳。一是积极落实市场定价自律要求，管控高成本负债，叠加存款到期重\n定价效应，存款付息成本有效优化；二是持续提升客户服务能力，增强客户粘性，推动核心高质量\n存款稳步增长；三是根据市场变化，敏捷调控存款和同业负债的吸收节奏，优化整体负债成本。2026\n年上半年，本集团计息负债平均付息率 1.42%，较去年同期下降 37 个基点，较去年全年下降 25 个基\n点；吸收存款平均付息率 1.38%，较去年同期下降 38 个基点，较去年全年下降 27 个基点。\n资产端，受市场利率下行及资产结构调整影响，资产收益率进一步下行。一是本行紧跟国家重\n大战略规划，积极支持实体经济发展，加大对重点行业、重点区域和重点客户的信贷支持力度，提\n升优质客群占比，带动客群结构和资产结构持续优化；二"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "yoy_007",
+    "category": "yoy_h1",
+    "question": "中芯国际2026年上半年营业收入相比2025年上半年变化多少？",
+    "target_company_codes": [
+      "688981"
+    ],
+    "target_report_periods": [
+      "2025H1",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "中芯国际_688981_2025H1.pdf",
+      "中芯国际_688981_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_correctness",
+      "calculation"
+    ],
+    "gold_answer": "中芯国际2026年上半年营业收入为人民币38,635.1百万元，2025年上半年营业收入为人民币32,348.0百万元，同比增加19.4%（增加约6,287.1百万元）。",
+    "gold_evidence": [
+      {
+        "parent_id": "b54b9a3cd5dada1ff007b88404cf04409962f0c678847adc356984746392ff50_parent_37",
+        "document_id": "b54b9a3cd5dada1ff007b88404cf04409962f0c678847adc356984746392ff50",
+        "file_sha256": "b54b9a3cd5dada1ff007b88404cf04409962f0c678847adc356984746392ff50",
+        "source_filename": "中芯国际_688981_2025H1.pdf",
+        "company_name": "中芯国际",
+        "company_code": "688981",
+        "report_year": 2025,
+        "period_type": "H1",
+        "report_period": "2025H1",
+        "evidence_excerpt": "中芯国际集成电路制造有限公司2025 年半年度报告\n29 / 153\n(五)重大资产和股权出售\n√适用 □不适用\n2025 年 6 月 5 日，本公司全资子公司中芯国际控股有限公司（“中芯控股”）及其他部分中\n芯集成电路（宁波）有限公司（“中芯宁波”）股东与湖南国科微电子股份有限公司（“国科微”）\n共同签署《发行股份及支付现金购买资产协议》，国科微拟以发行股份及支付现金的方式购买中\n芯宁波 94.366%的股权，其中包括中芯控股持有的中芯宁波 14.832%的股权，具体购买方式待最终\n交易价格确定后，将另行签署补充协议确定。交易完成后，中芯控股将不再持有中芯宁波的股权。\n截至本半年度报告日期，该交易尚未完成。\n(六)主要控股参股公司分析\n√适用 □不适用\n1.\n主要子公司及对公司净利润影响达 10%以上的参股公司情况\n√适用 □不适用\n本公司主要子公司为中芯上海、中芯北京、中芯天津、中芯北方、中芯深圳、中芯南方、中\n芯京城、中芯东方及中芯西青。以下为主要子公司的合并会计数据：\n单位：千元\n币种：人民币\n总资产\n净资产\n营业收入\n营业利润\n净利润\n370,466,534\n208,996,"
+      },
+      {
+        "parent_id": "6a44b7cfe77129d47089ae71bee8c71d2733ae694b8910485e6c3e444de5cb13_parent_15",
+        "document_id": "6a44b7cfe77129d47089ae71bee8c71d2733ae694b8910485e6c3e444de5cb13",
+        "file_sha256": "6a44b7cfe77129d47089ae71bee8c71d2733ae694b8910485e6c3e444de5cb13",
+        "source_filename": "中芯国际_688981_2026H1.pdf",
+        "company_name": "中芯国际",
+        "company_code": "688981",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "中芯国际集成电路制造有限公司2026 年半年度报告\n15 / 167\n(三)核心技术与研发进展\n1.核心技术及其先进性以及报告期内的变化情况\n中芯国际拥有全方位一体化的集成电路晶圆代工核心技术体系，快速有效地帮助客户实现新\n产品的导入验证到稳定量产。中芯国际成功开发了 8 英寸和 12 英寸的多种技术平台，为客户提供\n“一站式”晶圆代工和技术服务。\n2026 年上半年，多个平台项目开发按计划进行，详情请参阅下述在研项目情况。\n国家科学技术奖项获奖情况\n□适用 √不适用\n国家级专精特新“小巨人”企业、制造业“单项冠军”认定情况\n□适用 √不适用\n2.报告期内获得的研发成果\n报告期内获得的知识产权列表：\n本期新增\n累计数量\n申请数（个）\n获得数（个）\n申请数（个）\n获得数（个）\n发明专利\n160\n270\n18,666\n12,891\n实用新型专利\n-\n3\n1,897\n1,893\n布图设计\n-\n-\n94\n94\n合计\n160\n273\n20,657\n14,878\n3.研发投入情况表\n单位：千元 币种：人民币\n本期数\n上年同期数\n变化幅度（%）\n费用化研发投入\n2,725,399\n2,374,969"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "yoy_008",
+    "category": "yoy_h1",
+    "question": "北方华创2026年上半年归母净利润相比2025年上半年变化多少？",
+    "target_company_codes": [
+      "002371"
+    ],
+    "target_report_periods": [
+      "2025H1",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "北方华创_002371_2025H1.pdf",
+      "北方华创_002371_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_correctness",
+      "calculation"
+    ],
+    "gold_answer": "北方华创2026年上半年归属于上市公司股东的净利润为3,370,020,676.75元，2025年上半年为3,207,978,523.58元，增加162,042,153.17元，同比增长约5.05%。",
+    "gold_evidence": [
+      {
+        "parent_id": "d112552b63e9c0ac213212e11311050b6d5f650b05c18744c9f26d37650ea7be_parent_7",
+        "document_id": "d112552b63e9c0ac213212e11311050b6d5f650b05c18744c9f26d37650ea7be",
+        "file_sha256": "d112552b63e9c0ac213212e11311050b6d5f650b05c18744c9f26d37650ea7be",
+        "source_filename": "北方华创_002371_2026H1.pdf",
+        "company_name": "北方华创",
+        "company_code": "002371",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "归属于上市公司股东的净利润：2026H1为3,370,020,676.75元，2025H1为3,207,978,523.58元。"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    },
+    "gold_contract_version": "v2_parent_audit"
+  },
+  {
+    "id": "period_001",
+    "category": "period_mismatch",
+    "question": "贵州茅台2025年度营业收入与2026年上半年营业收入相比变化多少？请说明两个期间是否可直接视为同比。",
+    "target_company_codes": [
+      "600519"
+    ],
+    "target_report_periods": [
+      "2025FY",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2025FY.pdf",
+      "贵州茅台_600519_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_guardrail"
+    ],
+    "gold_answer": "根据财报数据，贵州茅台2025年度（全年）营业收入为168,838,102,514.79元（约1,688.38亿元），2026年上半年营业收入为90,703,260,964.48元（约907.03亿元）。两个期间不能直接视为同比：2025年度为完整会计年度（12个月）数据，而2026年上半年仅为半年度（6个月）数据，两者涵盖的时间跨度不同，不具备直接可比性。",
+    "gold_evidence": [
+      {
+        "parent_id": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288_parent_136",
+        "document_id": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "file_sha256": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "source_filename": "贵州茅台_600519_2025FY.pdf",
+        "company_name": "贵州茅台",
+        "company_code": "600519",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "贵州茅台酒股份有限公司2025 年年度报告\n107 / 143\n单位：元\n币种：人民币\n项目\n本期\n上期\n调整前上期末未分配利润\n182,787,415,205.05\n172,983,178,300.09\n调整期初未分配利润合计数（调增+，\n调减－）\n调整后期初未分配利润\n182,787,415,205.05\n172,983,178,300.09\n加：本期归属于母公司所有者的净利\n润\n82,320,067,101.68\n86,228,146,421.62\n减：提取法定盈余公积\n8,530,534,196.57\n7,637,030,384.26\n提取任意盈余公积\n提取一般风险准备\n应付普通股股利\n64,671,799,277.95\n68,786,879,132.40\n转作股本的普通股股利\n期末未分配利润\n191,905,148,832.21\n182,787,415,205.05\n44、 营业收入和营业成本\n(1).营业收入和营业成本情况\n√适用 □不适用\n单位：元\n币种：人民币\n项目\n本期发生额\n上期发生额\n收入\n成本\n收入\n成本\n主营业务\n168,774,585,187.65\n14,8"
+      },
+      {
+        "parent_id": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6_parent_99",
+        "document_id": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6",
+        "file_sha256": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6",
+        "source_filename": "贵州茅台_600519_2026H1.pdf",
+        "company_name": "贵州茅台",
+        "company_code": "600519",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "贵州茅台酒股份有限公司2026 年半年度报告\n73 / 110\n40、 盈余公积\n√适用 □不适用\n单位：元 币种：人民币\n项目\n期初余额\n本期增加\n本期减少\n期末余额\n法定盈余公积\n50,543,176,610.94\n1,706,238,132.67\n2,997,985,134.90\n49,251,429,608.71\n任意盈余公积\n储备基金\n企业发展基金\n其他\n合计\n50,543,176,610.94\n1,706,238,132.67\n2,997,985,134.90\n49,251,429,608.71\n盈余公积说明，包括本期增减变动情况、变动原因说明：\n盈余公积增加系按母公司净利润的 10%提取法定盈余公积，减少为回购股份完成注销所致。\n41、 一般风险准备\n单位：元 币种：人民币\n项目\n期初数\n本期增加\n本期减少\n期末数\n一般风险准备\n1,061,529,724.00\n1,061,529,724.00\n合计\n1,061,529,724.00\n1,061,529,724.00\n注：一般风险准备是公司控股子公司贵州茅台集团财务有限公司按照财政部《金融企业准备金计\n提管理办法》(财金"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "period_002",
+    "category": "period_mismatch",
+    "question": "五粮液2025年度营业收入与2026年上半年营业收入相比变化多少？这是否属于同口径同比？",
+    "target_company_codes": [
+      "000858"
+    ],
+    "target_report_periods": [
+      "2025FY",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "五粮液_000858_2025FY.pdf",
+      "五粮液_000858_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_guardrail"
+    ],
+    "gold_answer": "五粮液2025年度营业收入为40,528,509,770.23元，2026年上半年营业收入为28,416,674,541.77元。两者不属于同口径同比，因为2025年度为全年数据（12个月），而2026年上半年为半年度数据（6个月），报告期时间跨度不同，不可直接进行同比比较。",
+    "gold_evidence": [
+      {
+        "parent_id": "09133e1f44b3bb4b2cebe211529ad68f5b04b6be10b43870f2a78c947d5910a4_parent_12",
+        "document_id": "09133e1f44b3bb4b2cebe211529ad68f5b04b6be10b43870f2a78c947d5910a4",
+        "file_sha256": "09133e1f44b3bb4b2cebe211529ad68f5b04b6be10b43870f2a78c947d5910a4",
+        "source_filename": "五粮液_000858_2025FY.pdf",
+        "company_name": "五粮液",
+        "company_code": "000858",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "宜宾五粮液股份有限公司 2025 年度报告全文 \n13 \n四是管理水平进一步精进。全面贯彻落实中省市关于新一轮国企改革深化提升行动工作部署，持续\n构建高效专业的现代治理体系，ESG 评级在国际榜单 MSCI 中由 B 升至 BBB。 \n五是公司综合成效进一步显现。入选工信部首批中国消费品名品名单、纳入历史经典产业进行培育；\n入选工信部 2025 年度“卓越级智能工厂”。 \n2、收入与成本 \n（1）营业收入构成 \n单位：元 \n \n2025 年 \n2024 年 \n同比增减 \n金额 \n占营业收入比重 \n金额 \n占营业收入比重 \n营业收入合计 \n40,528,509,770.23 \n100.00% \n89,175,178,322.70 \n100.00% \n-54.55% \n分行业 \n制造业 \n40,528,509,770.23 \n100.00% \n89,175,178,322.70 \n100.00% \n-54.55% \n分产品 \n酒类产品 \n37,103,992,232.59 \n91.55% \n83,126,834,116.05 \n93.22% \n-55.36% \n非酒类产品 \n3,424,5"
+      },
+      {
+        "parent_id": "15153679faee48d1b1b00c50557a88bdcbdf8cb4cbc49b8762e10f70210dfb5b_parent_1",
+        "document_id": "15153679faee48d1b1b00c50557a88bdcbdf8cb4cbc49b8762e10f70210dfb5b",
+        "file_sha256": "15153679faee48d1b1b00c50557a88bdcbdf8cb4cbc49b8762e10f70210dfb5b",
+        "source_filename": "五粮液_000858_2026H1.pdf",
+        "company_name": "五粮液",
+        "company_code": "000858",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "宜宾五粮液股份有限公司 2026 年半年度报告全文 \n5 \n释 义 \n \n释义项 \n指 \n释义内容 \n公司、本公司、五粮液 \n指 \n宜宾五粮液股份有限公司 \n宜发展集团 \n指 \n宜宾发展控股集团有限公司 \n五粮液集团公司 \n指 \n四川省宜宾五粮液集团有限公司 \n五粮浓香公司 \n指 \n四川五粮液浓香酒有限公司 \n财务公司 \n指 \n四川省宜宾五粮液集团财务有限公司 \n进出口公司 \n指 \n四川省宜宾五粮液集团进出口有限公司 \n \n \n宜宾五粮液股份有限公司 2026 年半年度报告全文 \n6 \n第二节 公司简介和主要财务指标 \n一、公司简介 \n股票简称 \n五粮液 \n股票代码 \n000858 \n股票上市证券交易所 \n深圳证券交易所 \n公司的中文名称 \n宜宾五粮液股份有限公司 \n公司的中文简称（如有） \n五粮液 \n公司的外文名称（如有） \nWULIANGYE YIBIN CO.,LTD. \n公司的外文名称缩写（如有） \nWLY \n公司的法定代表人 \n邓敏 \n二、联系人和联系方式 \n \n董事会秘书 \n证券事务代表 \n姓名 \n李剑伟 \n黄会 \n联系地址 \n四川省宜宾市翠屏区岷江西路 150 号 \n四川"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "period_003",
+    "category": "period_mismatch",
+    "question": "比亚迪2025年度归母净利润与2026年上半年归母净利润可以直接比较同比增速吗？分别是多少？",
+    "target_company_codes": [
+      "002594"
+    ],
+    "target_report_periods": [
+      "2025FY",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "比亚迪_002594_2025FY.pdf",
+      "比亚迪_002594_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_guardrail"
+    ],
+    "gold_answer": "不可以直接比较同比增速。2025年度为全年数据，2026年上半年为半年度数据，两者时间跨度不同，不具备直接可比性。根据财报，比亚迪2025年度归属于上市公司股东的净利润为32,619,022,000.00元；2026年上半年归属于上市公司股东的净利润为12,325,408,000.00元。",
+    "gold_evidence": [
+      {
+        "parent_id": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b_parent_11",
+        "document_id": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b",
+        "file_sha256": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b",
+        "source_filename": "比亚迪_002594_2025FY.pdf",
+        "company_name": "比亚迪",
+        "company_code": "002594",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "比亚迪股份有限公司 2025 年年度报告全文 \n11 \n \n六、主要会计数据和财务指标 \n公司是否需追溯调整或重述以前年度会计数据 \n□是 否 \n \n2025 年 \n2024 年 \n本年比上年增减 \n2023 年 \n营业收入（元） \n803,964,958,000.00 777,102,455,000.00 \n3.46% 602,315,354,000.00 \n归属于上市公司股东的净利润（元） \n32,619,022,000.00 \n40,254,346,000.00 \n-18.97% \n30,040,811,000.00 \n归属于上市公司股东的扣除非经常性\n损益的净利润（元） \n29,445,703,000.00 \n36,982,887,000.00 \n-20.38% \n28,462,432,000.00 \n经营活动产生的现金流量净额（元） \n59,135,544,000.00 133,453,873,000.00 \n-55.69% 169,725,025,000.00 \n基本每股收益（元/股） \n3.58 \n4.61 \n-22.34% \n3.44 \n稀释每股收益（元/股） \n3."
+      },
+      {
+        "parent_id": "2648a8c4ebf637da4eeb79e58791c1faf457daa687914e325ff37d1b9676a48c_parent_3",
+        "document_id": "2648a8c4ebf637da4eeb79e58791c1faf457daa687914e325ff37d1b9676a48c",
+        "file_sha256": "2648a8c4ebf637da4eeb79e58791c1faf457daa687914e325ff37d1b9676a48c",
+        "source_filename": "比亚迪_002594_2026H1.pdf",
+        "company_name": "比亚迪",
+        "company_code": "002594",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "比亚迪股份有限公司 2026 年半年度报告全文 \n \n7 \n \n四、主要会计数据和财务指标 \n公司是否需追溯调整或重述以前年度会计数据 \n□是 否 \n \n本报告期 \n上年同期 \n本报告期比上年同期\n增减 \n营业收入（元） \n344,815,421,000.00 \n371,280,948,000.00 \n-7.13% \n归属于上市公司股东的净利润（元） \n12,325,408,000.00 \n15,510,533,000.00 \n-20.54% \n归属于上市公司股东的扣除非经常性损益的净利润\n（元） \n12,373,343,000.00 \n13,599,741,000.00 \n-9.02% \n经营活动产生的现金流量净额（元） \n37,334,744,000.00 \n31,833,471,000.00 \n17.28% \n基本每股收益（元/股） \n1.35 \n1.71 \n-21.05% \n稀释每股收益（元/股） \n1.35 \n1.71 \n-21.05% \n加权平均净资产收益率 \n4.86% \n7.43% \n-2.57% \n \n本报告期末 \n上年度末 \n本报告期末比上年度\n末增减 \n总资产（"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "period_004",
+    "category": "period_mismatch",
+    "question": "宁德时代2025年度营业收入与2026年上半年营业收入分别是多少？能否直接称为同比增长？",
+    "target_company_codes": [
+      "300750"
+    ],
+    "target_report_periods": [
+      "2025FY",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "宁德时代_300750_2025FY.pdf",
+      "宁德时代_300750_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_guardrail"
+    ],
+    "gold_answer": "宁德时代2025年度营业收入为423,701,834千元；2026年上半年营业收入为276,916,580千元。两者不能直接称为同比增长，因为2025年度为全年数据，而2026年上半年为半年度数据，报告期口径不同，不具备同比可比性。",
+    "gold_evidence": [
+      {
+        "parent_id": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9_parent_30",
+        "document_id": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+        "file_sha256": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+        "source_filename": "宁德时代_300750_2025FY.pdf",
+        "company_name": "宁德时代",
+        "company_code": "300750",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "宁德时代新能源科技股份有限公司 2025 年年度报告全文 \n24 \n（4）供应链及产能 \n公司致力于打造高效敏捷、技术创新、持续降本、绿色低碳的韧性供应链。公司推动技术、采购及\n质量体系紧密配合，通过搭建快速导入机制、签订长期协议、合资合作等方式保障供应稳定，通过强化\n大宗金属管理、推进低成本替代方案落地、助力供应商工艺优化升级等方式实现降低成本。此外，为进\n一步保障电池生产所需的上游关键资源及材料供应，公司亦积极推动自有及合作矿产资源项目的投资、\n建设及运营。 \n为满足市场及客户需求，报告期内，公司加大境内外锂电池生产基地建设投入，持续提升交付能力。\n公司稳步推进中州基地、济宁基地、福鼎基地、溧阳基地、宜宾基地、匈牙利工厂及印尼电池产业链等\n项目的建设。报告期内公司锂电池产能 772GWh，期末在建产能 321GWh。 \n（5）可持续发展 \n公司高度重视可持续发展及履行社会责任。报告期内，ESG 评级持续提升，管理成效获得广泛国际\n认可，MSCI ESG 评级维持 AA 级，EcoVadis 荣获可持续发展银牌认证。公司首次入选标普《可持续发展\n年鉴（全球版）》及富时罗素 FTSE4"
+      },
+      {
+        "parent_id": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9_parent_16",
+        "document_id": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+        "file_sha256": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+        "source_filename": "宁德时代_300750_2026H1.pdf",
+        "company_name": "宁德时代",
+        "company_code": "300750",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "宁德时代新能源科技股份有限公司 2026 年半年度报告全文 \n15 \n零碳技术研发及综合能源服务，于海南省交付光储超充零碳微网示范站。 \n（4）供应链及产能 \n为进一步保障电池生产所需的上游关键资源及材料供应，公司积极布局自有及合作矿产资源项目，\n报告期内新设时代资源集团作为新能源矿产领域的专业投资运营与管理平台，围绕锂、镍、磷等关键资\n源整合现有矿业资产并拓展海内外优质项目，持续强化产业链一体化竞争优势。 \n为满足市场及客户需求，报告期内公司加大境内外锂电池生产基地建设投入，持续提升交付能力。\n公司稳步推进济宁基地、中州基地、溧阳基地、宜宾基地、印尼工厂、匈牙利工厂及西班牙合资工厂等\n项目的建设。 \n（5）可持续发展 \n公司高度重视可持续发展及履行社会责任。报告期内，ESG 治理成效持续获得认可，入选 2026 年\n《财富》中国 ESG 影响力榜，并以新能源行业循环经济实践入选深交所上市公司 ESG 实践案例集。公司\n有序推进零碳战略，在 2025 年已实现核心运营碳中和的基础上，持续深化工厂节能减排及电气化改造，\n同步推进供应链碳排放数据质量管理与供应链降碳，推动实现价值链碳中和目"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "period_005",
+    "category": "period_mismatch",
+    "question": "招商银行2025年度营业收入与2026年上半年营业收入分别是多少？这种比较需要注意什么期间问题？",
+    "target_company_codes": [
+      "600036"
+    ],
+    "target_report_periods": [
+      "2025FY",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "招商银行_600036_2025FY.pdf",
+      "招商银行_600036_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_guardrail"
+    ],
+    "gold_answer": "招商银行2025年度（全年）合并营业收入为3,375.32亿元；2026年上半年（1-6月）合并营业收入为1,781.81亿元。比较时需注意期间问题：2025年度数据覆盖12个月，而2026年上半年数据仅覆盖6个月，两者时间跨度不同，不能直接对比绝对金额，需将半年度数据年化处理或采用同比口径进行比较。",
+    "gold_evidence": [
+      {
+        "parent_id": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79_parent_22",
+        "document_id": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79",
+        "file_sha256": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79",
+        "source_filename": "招商银行_600036_2025FY.pdf",
+        "company_name": "招商银行",
+        "company_code": "600036",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "招商银行股份有限公司\n2025年度报告（A股）\n19\n第三章 管理层讨论与分析\n3.2.2 营业收入\n报告期内，本集团实现营业收入3,375.32亿元，同比增长0.01%，其中净利息收入占比63.87%，非利息净收入\n占比36.13%。\n下表列出本集团近三年营业收入构成的占比情况。\n(%)\n2025年\n2024年\n2023年\n \n \n \n \n净利息收入\n63.87\n62.60\n63.30\n净手续费及佣金收入\n22.30\n21.36\n24.80\n其他净收入\n13.83\n16.04\n11.90\n \n \n \n \n合计\n100.00\n100.00\n100.00\n \n \n \n \n3.2.3 利息收入\n报告期内，本集团实现利息收入3,513.51亿元，同比下降6.12%，主要是因为生息资产收益率下降。贷款和垫\n款利息收入仍然是本集团利息收入的最大组成部分。\n贷款和垫款利息收入\n报告期内，本集团贷款和垫款利息收入2,335.47亿元，同比下降10.37%，主要是受贷款收益率下降影响。\n下表列出所示期间本集团贷款和垫款各组成部分的平均余额（日均余额，下同）、利息收入及平均收益率情况。\n2025年\n20"
+      },
+      {
+        "parent_id": "c7e68aeca3c8ec331ce7ecfde5faee9d97fa74e302944bf0e7141b154f9704a4_parent_9",
+        "document_id": "c7e68aeca3c8ec331ce7ecfde5faee9d97fa74e302944bf0e7141b154f9704a4",
+        "file_sha256": "c7e68aeca3c8ec331ce7ecfde5faee9d97fa74e302944bf0e7141b154f9704a4",
+        "source_filename": "招商银行_600036_2026H1.pdf",
+        "company_name": "招商银行",
+        "company_code": "600036",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "招商银行股份有限公司\n2026年半年度报告（A股）\n10\n管理层讨论与分析\n第三章 管理层讨论与分析\n3.1 总体经营情况分析\n3.1.1 外部经济形势与行业发展情况\n2026年上半年，中国经济起步有力，在 “十五五” 开局之年保持良好运行态势。供给升级、出口保持韧性、新\n动能投资增长和工业利润修复，共同构成经济平稳运行的重要支撑，新旧动能转换进一步加速。\n在此背景下，中国银行业总体平稳运行，资产规模持续稳健增长。在低利率周期、直接融资占比上升、居民去杠\n杆、有效信贷需求不足等因素影响下，银行净息差进一步收窄，营收增长仍然承压 ；资产质量整体稳定，但零售\n贷款面临风险压力。面对诸多挑战，银行业坚持高质量发展，积极落实各项宏观政策，不断提升服务实体经济质\n效。\n3.1.2 经营概要\n报告期内，本集团始终坚持质量、效益、规模协调发展理念，以打造价值银行为战略目标，各项业务稳健开展，\n资产负债规模稳步增长，经营效益稳中向好，资产质量总体稳定。\n报告期内，本集团实现营业收入1,781.81亿元，同比增长4.83% ；实现归属于本行股东的净利润764.45亿元，\n同比增长2.02% ；实现净利息"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "period_006",
+    "category": "period_mismatch",
+    "question": "中芯国际2025年度营业收入和2026年上半年营业收入分别是多少？可以直接计算同比吗？",
+    "target_company_codes": [
+      "688981"
+    ],
+    "target_report_periods": [
+      "2025FY",
+      "2026H1"
+    ],
+    "expected_documents": [
+      "中芯国际_688981_2025FY.pdf",
+      "中芯国际_688981_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "period_guardrail"
+    ],
+    "gold_answer": "中芯国际2025年度营业收入为67,323,192千元；2026年上半年营业收入为38,635,115千元。不可以直接计算同比，因为两者的报告期不同（一个是全年数据，一个是半年度数据），时间口径不一致，不具备直接同比的基础。",
+    "gold_evidence": [
+      {
+        "parent_id": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531_parent_27",
+        "document_id": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531",
+        "file_sha256": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531",
+        "source_filename": "中芯国际_688981_2025FY.pdf",
+        "company_name": "中芯国际",
+        "company_code": "688981",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "中芯国际集成电路制造有限公司2025 年年度报告\n25 / 232\n主营业务分析\n1.利润表及现金流量表相关科目变动分析表\n单位：千元\n币种：人民币\n科目\n本期数\n上年同期数\n变动比例（%）\n营业收入\n67,323,192\n57,795,570\n16.5\n营业成本\n52,765,123\n47,051,267\n12.1\n毛利\n14,558,069\n10,744,303\n35.5\n销售费用\n304,795\n281,549\n8.3\n管理费用\n3,434,995\n3,835,368\n-10.4\n研发费用\n5,518,596\n5,447,122\n1.3\n财务费用\n-370,874\n-1,832,649\n不适用\n投资收益\n-56,415\n1,099,723\n-105.1\n营业外支出\n540,723\n23,138\n2,236.9\n所得税费用\n576,736\n918,904\n-37.2\n经营活动产生的现金流量净额\n20,080,979\n22,658,629\n-11.4\n投资活动产生的现金流量净额\n-42,138,175\n-30,669,293\n不适用\n筹资活动产生的现金流量净额\n17,453,618\n"
+      },
+      {
+        "parent_id": "6a44b7cfe77129d47089ae71bee8c71d2733ae694b8910485e6c3e444de5cb13_parent_25",
+        "document_id": "6a44b7cfe77129d47089ae71bee8c71d2733ae694b8910485e6c3e444de5cb13",
+        "file_sha256": "6a44b7cfe77129d47089ae71bee8c71d2733ae694b8910485e6c3e444de5cb13",
+        "source_filename": "中芯国际_688981_2026H1.pdf",
+        "company_name": "中芯国际",
+        "company_code": "688981",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "中芯国际集成电路制造有限公司2026 年半年度报告\n22 / 167\n虽然在报告期内，公司的各个制造工厂并没有因为上述风险对营运带来影响，但是这些风险\n依然存在。如上述情况发生，可能在一定程度上造成公司的财产损失、人员伤害、业务中断及名\n誉受损。\n五、报告期内主要经营情况\n2026 年上半年，本集团实现营业收入人民币 38,635.1 百万元，实现归属于上市公司股东的\n净利润人民币 4,467.4 百万元。\n(一)主营业务分析\n1.利润表及现金流量表相关科目变动分析表\n单位：千元\n币种：人民币\n科目\n本期数\n上年同期数\n变动比例（%）\n营业收入\n38,635,115\n32,348,049\n19.4\n营业成本\n29,688,836\n25,260,909\n17.5\n毛利\n8,946,279\n7,087,140\n26.2\n销售费用\n162,623\n173,349\n-6.2\n管理费用\n1,412,762\n2,285,041\n-38.2\n研发费用\n2,725,399\n2,374,969\n14.8\n财务费用\n-89,989\n-506,732\n不适用\n投资收益\n1,363,130\n-141,942\n"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "cross_001",
+    "category": "cross_company",
+    "question": "比较贵州茅台和五粮液2026年上半年的营业收入。",
+    "target_company_codes": [
+      "600519",
+      "000858"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2026H1.pdf",
+      "五粮液_000858_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "company_correctness"
+    ],
+    "gold_answer": "2026年上半年，贵州茅台营业收入为90,703,260,964.48元，五粮液营业收入为28,416,674,541.77元，贵州茅台的营业收入高于五粮液。",
+    "gold_evidence": [
+      {
+        "parent_id": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6_parent_6",
+        "document_id": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6",
+        "file_sha256": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6",
+        "source_filename": "贵州茅台_600519_2026H1.pdf",
+        "company_name": "贵州茅台",
+        "company_code": "600519",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "贵州茅台酒股份有限公司2026 年半年度报告\n7 / 110\n二是优质稳产态势稳固。公司始终坚持“质量是生命之魂”，着力凝聚全员质量共识，深入\n践行“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，有效实施质量目标绩效管理，促进\n全产业链各环节各工序切实履行好质量主体责任，从品质、效率、协同等方面全面提升供应链组\n织能力，以满足“全面向 C”的要求。公司持续强化全过程质量管控、持续夯实质量基础、持续深\n化质量改进。上半年，茅台酒、系列酒分别实现基酒产量 4.1 万吨、3.1 万吨，轮次产酒特征更\n加明显、比例更加协调，持续保持优质稳产。\n三是改革转型初见成效。2026 年以来，公司始终坚持以消费者为中心、以市场需求为驱动，\n深入推进“全面向 C”茅台酒营销市场化改革。在产品结构上，系统梳理产品体系、明晰产品定\n位、优化产品结构、调控投放节奏，构建了以市场需求为导向的“金字塔”型产品结构，适配终\n端需求做好产品投放；在价格机制上，推动终端价格更加符合市场真实运行规律，构建了“随行\n就市、相对平稳、供需适配、量价平衡”的动态价格调整机制；在渠道布局上，构建批发、线下\n零售、线上零售、餐饮等"
+      },
+      {
+        "parent_id": "15153679faee48d1b1b00c50557a88bdcbdf8cb4cbc49b8762e10f70210dfb5b_parent_1",
+        "document_id": "15153679faee48d1b1b00c50557a88bdcbdf8cb4cbc49b8762e10f70210dfb5b",
+        "file_sha256": "15153679faee48d1b1b00c50557a88bdcbdf8cb4cbc49b8762e10f70210dfb5b",
+        "source_filename": "五粮液_000858_2026H1.pdf",
+        "company_name": "五粮液",
+        "company_code": "000858",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "宜宾五粮液股份有限公司 2026 年半年度报告全文 \n5 \n释 义 \n \n释义项 \n指 \n释义内容 \n公司、本公司、五粮液 \n指 \n宜宾五粮液股份有限公司 \n宜发展集团 \n指 \n宜宾发展控股集团有限公司 \n五粮液集团公司 \n指 \n四川省宜宾五粮液集团有限公司 \n五粮浓香公司 \n指 \n四川五粮液浓香酒有限公司 \n财务公司 \n指 \n四川省宜宾五粮液集团财务有限公司 \n进出口公司 \n指 \n四川省宜宾五粮液集团进出口有限公司 \n \n \n宜宾五粮液股份有限公司 2026 年半年度报告全文 \n6 \n第二节 公司简介和主要财务指标 \n一、公司简介 \n股票简称 \n五粮液 \n股票代码 \n000858 \n股票上市证券交易所 \n深圳证券交易所 \n公司的中文名称 \n宜宾五粮液股份有限公司 \n公司的中文简称（如有） \n五粮液 \n公司的外文名称（如有） \nWULIANGYE YIBIN CO.,LTD. \n公司的外文名称缩写（如有） \nWLY \n公司的法定代表人 \n邓敏 \n二、联系人和联系方式 \n \n董事会秘书 \n证券事务代表 \n姓名 \n李剑伟 \n黄会 \n联系地址 \n四川省宜宾市翠屏区岷江西路 150 号 \n四川"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "cross_002",
+    "category": "cross_company",
+    "question": "比较贵州茅台和五粮液2025年度归母净利润。",
+    "target_company_codes": [
+      "600519",
+      "000858"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2025FY.pdf",
+      "五粮液_000858_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "company_correctness"
+    ],
+    "gold_answer": "2025年度，贵州茅台合并报表中归属于上市公司普通股股东的净利润为82,320,067,101.68元；五粮液归属于上市公司股东的净利润为8,954,257,202.51元。贵州茅台的归母净利润远高于五粮液。",
+    "gold_evidence": [
+      {
+        "parent_id": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288_parent_40",
+        "document_id": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "file_sha256": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "source_filename": "贵州茅台_600519_2025FY.pdf",
+        "company_name": "贵州茅台",
+        "company_code": "600519",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "贵州茅台酒股份有限公司2025 年年度报告\n33 / 143\n2.根据公司 2025 年第一次临时股东大会审议通过的《2025 年中期利润分配方案》，公司以\n实施权益分派股权登记日总股本 125,227.02 万股为基数，向公司全体股东每 10 股派发现金红利\n239.57 元（含税）。该利润分配方案经公司董事会审议通过之后，提交公司股东大会审议通过。\n股东大会审议议案时，对中小股东进行了单独计票。该利润分配已于 2025 年 12 月实施完毕。\n报告期内，公司利润分配符合公司《章程》的规定。\n(二) 现金分红政策的专项说明\n√适用 □不适用\n是否符合公司章程的规定或股东会决议的要求\n√是 □否\n分红标准和比例是否明确和清晰\n√是 □否\n相关的决策程序和机制是否完备\n√是 □否\n独立董事是否履职尽责并发挥了应有的作用\n√是 □否\n中小股东是否有充分表达意见和诉求的机会，其合法权益是否得到了充分保\n护\n√是 □否\n(三) 报告期内盈利且母公司可供股东分配利润为正，但未提出现金利润分配方案预案的，公司应\n当详细披露原因以及未分配利润的用途和使用计划\n□适用 √不适用\n(四) 本报告期利润分"
+      },
+      {
+        "parent_id": "09133e1f44b3bb4b2cebe211529ad68f5b04b6be10b43870f2a78c947d5910a4_parent_3",
+        "document_id": "09133e1f44b3bb4b2cebe211529ad68f5b04b6be10b43870f2a78c947d5910a4",
+        "file_sha256": "09133e1f44b3bb4b2cebe211529ad68f5b04b6be10b43870f2a78c947d5910a4",
+        "source_filename": "五粮液_000858_2025FY.pdf",
+        "company_name": "五粮液",
+        "company_code": "000858",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "宜宾五粮液股份有限公司 2025 年度报告全文 \n7 \n公司聘请的报告期内履行持续督导职责的保荐机构 \n□适用 不适用 \n公司聘请的报告期内履行持续督导职责的财务顾问 \n□适用 不适用 \n六、主要会计数据和财务指标 \n公司是否需追溯调整或重述以前年度会计数据 \n□是 否 \n \n2025 年 \n2024 年 \n本年比上年增减 \n2023 年 \n营业收入（元） \n40,528,509,770.23 \n89,175,178,322.70 \n-54.55% \n83,272,067,317.19 \n归属于上市公司股东的\n净利润（元） \n8,954,257,202.51 \n31,853,172,533.98 \n-71.89% \n30,210,585,269.30 \n归属于上市公司股东的\n扣除非经常性损益的净\n利润（元） \n8,815,635,943.27 \n31,741,959,276.27 \n-72.23% \n30,116,468,910.79 \n经营活动产生的现金流\n量净额（元） \n29,706,259,919.13 \n33,939,755,192.78 \n-12.47% \n41,742"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "cross_003",
+    "category": "cross_company",
+    "question": "比较比亚迪和宁德时代2026年上半年的营业收入。",
+    "target_company_codes": [
+      "002594",
+      "300750"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "比亚迪_002594_2026H1.pdf",
+      "宁德时代_300750_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "company_correctness"
+    ],
+    "gold_answer": "2026年上半年，比亚迪营业收入为344,815,421千元（约3,448.15亿元），同比下降7.13%；宁德时代营业收入为276,916,580千元（约2,769.17亿元）。比亚迪的营业收入高于宁德时代。",
+    "gold_evidence": [
+      {
+        "parent_id": "2648a8c4ebf637da4eeb79e58791c1faf457daa687914e325ff37d1b9676a48c_parent_31",
+        "document_id": "2648a8c4ebf637da4eeb79e58791c1faf457daa687914e325ff37d1b9676a48c",
+        "file_sha256": "2648a8c4ebf637da4eeb79e58791c1faf457daa687914e325ff37d1b9676a48c",
+        "source_filename": "比亚迪_002594_2026H1.pdf",
+        "company_name": "比亚迪",
+        "company_code": "002594",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "比亚迪股份有限公司 2026 年半年度报告全文 \n \n26 \n \n营业收入构成 \n单位：元 \n \n本报告期 \n上年同期 \n同比增减 \n金额 \n占营业收入\n比重 \n金额 \n占营业收入\n比重 \n营业收入合计 \n344,815,421,000.00 \n100% \n371,280,948,000.00 \n100% \n-7.13% \n分行业 \n日用电子器件制\n造业 \n69,404,994,000.00 \n20.13% \n68,743,903,000.00 \n18.51% \n0.96% \n交通运输设备及\n电气制造业 \n275,341,358,000.00 \n79.85% \n302,506,271,000.00 \n81.48% \n-8.98% \n其他 \n69,069,000.00 \n0.02% \n30,774,000.00 \n0.01% \n124.44% \n分产品 \n电子及其他产品 \n69,404,994,000.00 \n20.13% \n68,743,903,000.00 \n18.51% \n0.96% \n汽车、汽车相关\n产品及其他产品 \n275,341,358,000.00 \n79.85% \n302"
+      },
+      {
+        "parent_id": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9_parent_86",
+        "document_id": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+        "file_sha256": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+        "source_filename": "宁德时代_300750_2026H1.pdf",
+        "company_name": "宁德时代",
+        "company_code": "300750",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "宁德时代新能源科技股份有限公司 2026 年半年度报告全文 \n77 \n其他权益工具 \n \n \n其中：优先股 \n \n \n永续债 \n \n \n资本公积 \n 166,987,461  \n 132,644,612  \n减：库存股 \n 6,932,212  \n 7,097,993  \n其他综合收益 \n 2,678,544  \n 3,734,297  \n专项储备 \n \n \n盈余公积 \n 2,313,325  \n 2,281,902  \n未分配利润 \n 145,440,692  \n 142,611,687  \n所有者权益合计 \n 315,114,461  \n 278,738,309  \n负债和所有者权益总计 \n 736,781,245  \n 643,206,871  \n3、合并利润表 \n单位：千元 \n项目 \n2026 年半年度 \n2025 年半年度 \n一、营业总收入 \n 276,916,580  \n 178,886,253  \n其中：营业收入 \n 276,916,580  \n 178,886,253  \n利息收入 \n \n \n已赚保费 \n \n \n手续费及佣金收入 \n \n \n二、营业总成本 \n 230,9"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "cross_004",
+    "category": "cross_company",
+    "question": "比较比亚迪和宁德时代2025年度的研发投入情况。",
+    "target_company_codes": [
+      "002594",
+      "300750"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "比亚迪_002594_2025FY.pdf",
+      "宁德时代_300750_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "company_correctness"
+    ],
+    "gold_answer": "比亚迪2025年度研发投入为63,441,379,000元，占营业收入7.89%；宁德时代为22,146,581千元（即22,146,581,000元），占营业收入5.23%。按金额计算，比亚迪高41,294,798,000元。",
+    "gold_evidence": [
+      {
+        "parent_id": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b_parent_58",
+        "document_id": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b",
+        "file_sha256": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b",
+        "source_filename": "比亚迪_002594_2025FY.pdf",
+        "company_name": "比亚迪",
+        "company_code": "002594",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "研发投入为63,441,379,000元，研发投入占营业收入比例为7.89%。"
+      },
+      {
+        "parent_id": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9_parent_39",
+        "document_id": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+        "file_sha256": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+        "source_filename": "宁德时代_300750_2025FY.pdf",
+        "company_name": "宁德时代",
+        "company_code": "300750",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "研发投入为22,146,581千元，研发投入占营业收入比例为5.23%。"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    },
+    "gold_contract_version": "v2_parent_audit"
+  },
+  {
+    "id": "cross_005",
+    "category": "cross_company",
+    "question": "比较招商银行和平安银行2026年上半年的净息差。",
+    "target_company_codes": [
+      "600036",
+      "000001"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "招商银行_600036_2026H1.pdf",
+      "平安银行_000001_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "company_correctness"
+    ],
+    "gold_answer": "招商银行2026年上半年净利息收益率为1.83%，平安银行净息差为1.80%。两者均以净利息收入相对于平均生息资产衡量，招商银行高0.03个百分点。",
+    "gold_evidence": [
+      {
+        "parent_id": "d4c708991d5bc7a972baac334d0e3af15e383f4e26f9bcafabdfd17bfad421e2_parent_7",
+        "document_id": "d4c708991d5bc7a972baac334d0e3af15e383f4e26f9bcafabdfd17bfad421e2",
+        "file_sha256": "d4c708991d5bc7a972baac334d0e3af15e383f4e26f9bcafabdfd17bfad421e2",
+        "source_filename": "招商银行_600036_2026H1.pdf",
+        "company_name": "招商银行",
+        "company_code": "600036",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "净利息收益率为1.83%。"
+      },
+      {
+        "parent_id": "7ab97c6f4dcf1a67341fbb5078718f780efda53a76e44d4693c220e53b9cc963_parent_61",
+        "document_id": "7ab97c6f4dcf1a67341fbb5078718f780efda53a76e44d4693c220e53b9cc963",
+        "file_sha256": "7ab97c6f4dcf1a67341fbb5078718f780efda53a76e44d4693c220e53b9cc963",
+        "source_filename": "平安银行_000001_2026H1.pdf",
+        "company_name": "平安银行",
+        "company_code": "000001",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "净息差为1.80%。"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    },
+    "gold_contract_version": "v2_parent_audit"
+  },
+  {
+    "id": "cross_006",
+    "category": "cross_company",
+    "question": "比较招商银行和平安银行2025年度的不良贷款率。",
+    "target_company_codes": [
+      "600036",
+      "000001"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "招商银行_600036_2025FY.pdf",
+      "平安银行_000001_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "company_correctness"
+    ],
+    "gold_answer": "2025年度，招商银行不良贷款率为0.94%，平安银行不良贷款率为1.05%。招商银行的不良贷款率低于平安银行。",
+    "gold_evidence": [
+      {
+        "parent_id": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79_parent_37",
+        "document_id": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79",
+        "file_sha256": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79",
+        "source_filename": "招商银行_600036_2025FY.pdf",
+        "company_name": "招商银行",
+        "company_code": "600036",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "招商银行股份有限公司\n2025年度报告（A股）\n30\n第三章 管理层讨论与分析\n3.3.3 股东权益\n截至报告期末，本集团归属于本行股东权益12,728.75亿元，较上年末增长3.82%。其中，未分配利润6,798.08\n亿元，较上年末增长7.21% ；其他综合收益252.30亿元，较上年末下降41.67%，主要是分类为以公允价值计量\n且其变动计入其他综合收益的金融资产估值较上年末减少。\n3.4 贷款质量分析\n3.4.1 按五级分类划分的贷款分布情况\n下表列出截至所示日期，本集团贷款五级分类情况。\n2025年12月31日\n2024年12月31日\n \n \n（人民币百万元，百分比除外）\n金额\n占总额\n百分比%\n金额\n占总额\n百分比%\n \n \n \n \n \n正常类贷款\n7,085,992\n97.63\n6,733,625\n97.76\n关注类贷款\n103,860\n1.43\n89,080\n1.29\n次级类贷款\n16,252\n0.23\n16,872\n0.25\n可疑类贷款\n19,689\n0.27\n23,054\n0.33\n损失类贷款\n32,265\n0.44\n25,684\n0.37\n贷款和垫款总额\n7,25"
+      },
+      {
+        "parent_id": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c_parent_49",
+        "document_id": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "file_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_filename": "平安银行_000001_2025FY.pdf",
+        "company_name": "平安银行",
+        "company_code": "000001",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "第三章\n管理层讨论与分析\n36\n平安银行股份有限公司\n2025 年年度报告\n3.2.7 贷款资产质量分析\n（1）发放贷款和垫款五级分类情况\n（货币单位：人民币百万元）\n项\n目\n2025 年 12 月 31 日\n2024 年 12 月 31 日\n本年末比上年末\n增减\n余额\n占比\n余额\n占比\n正常贷款\n3,295,809\n97.20%\n3,273,405\n97.01%\n0.7%\n关注贷款\n59,328\n1.75%\n64,960\n1.93%\n(8.7%)\n不良贷款\n35,703\n1.05%\n35,738\n1.06%\n(0.1%)\n其中：次级\n17,561\n0.52%\n15,707\n0.47%\n11.8%\n可疑\n10,924\n0.32%\n13,531\n0.40%\n(19.3%)\n损失\n7,218\n0.21%\n6,500\n0.19%\n11.0%\n发放贷款和垫款本金总额\n3,390,840\n100.00%\n3,374,103\n100.00%\n0.5%\n发放贷款和垫款减值准备\n(78,861)\n(89,600)\n(12.0%)\n其中：以摊余成本计量的发放贷\n款和垫款减值准备\n(78,445)\n(88"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "cross_007",
+    "category": "cross_company",
+    "question": "比较中芯国际和北方华创2026年上半年的营业收入。",
+    "target_company_codes": [
+      "688981",
+      "002371"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "中芯国际_688981_2026H1.pdf",
+      "北方华创_002371_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "company_correctness"
+    ],
+    "gold_answer": "2026年上半年，中芯国际实现营业收入人民币38,635.1百万元（约386.35亿元），北方华创实现营业收入20,161,416,890.56元（约201.61亿元）。中芯国际的营业收入高于北方华创。",
+    "gold_evidence": [
+      {
+        "parent_id": "6a44b7cfe77129d47089ae71bee8c71d2733ae694b8910485e6c3e444de5cb13_parent_25",
+        "document_id": "6a44b7cfe77129d47089ae71bee8c71d2733ae694b8910485e6c3e444de5cb13",
+        "file_sha256": "6a44b7cfe77129d47089ae71bee8c71d2733ae694b8910485e6c3e444de5cb13",
+        "source_filename": "中芯国际_688981_2026H1.pdf",
+        "company_name": "中芯国际",
+        "company_code": "688981",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "中芯国际集成电路制造有限公司2026 年半年度报告\n22 / 167\n虽然在报告期内，公司的各个制造工厂并没有因为上述风险对营运带来影响，但是这些风险\n依然存在。如上述情况发生，可能在一定程度上造成公司的财产损失、人员伤害、业务中断及名\n誉受损。\n五、报告期内主要经营情况\n2026 年上半年，本集团实现营业收入人民币 38,635.1 百万元，实现归属于上市公司股东的\n净利润人民币 4,467.4 百万元。\n(一)主营业务分析\n1.利润表及现金流量表相关科目变动分析表\n单位：千元\n币种：人民币\n科目\n本期数\n上年同期数\n变动比例（%）\n营业收入\n38,635,115\n32,348,049\n19.4\n营业成本\n29,688,836\n25,260,909\n17.5\n毛利\n8,946,279\n7,087,140\n26.2\n销售费用\n162,623\n173,349\n-6.2\n管理费用\n1,412,762\n2,285,041\n-38.2\n研发费用\n2,725,399\n2,374,969\n14.8\n财务费用\n-89,989\n-506,732\n不适用\n投资收益\n1,363,130\n-141,942\n"
+      },
+      {
+        "parent_id": "d1126db582cc8521907d9c6b5cca767c94606e8d15b19a0672235550b9cc88e2_parent_7",
+        "document_id": "d1126db582cc8521907d9c6b5cca767c94606e8d15b19a0672235550b9cc88e2",
+        "file_sha256": "d1126db582cc8521907d9c6b5cca767c94606e8d15b19a0672235550b9cc88e2",
+        "source_filename": "北方华创_002371_2026H1.pdf",
+        "company_name": "北方华创",
+        "company_code": "002371",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "北方华创科技集团股份有限公司 2026 年半年度报告全文\n8\n四、主要会计数据和财务指标\n公司是否需追溯调整或重述以前年度会计数据\n□是 否\n本报告期\n上年同期\n本报告期比上年同期增减\n营业收入（元）\n20,161,416,890.56\n16,141,546,184.74\n24.90%\n归属于上市公司股东的净利\n润（元）\n3,370,020,676.75\n3,207,978,523.58\n5.05%\n归属于上市公司股东的扣除\n非经常性损益的净利润\n（元）\n3,340,719,149.36\n3,180,943,277.08\n5.02%\n经营活动产生的现金流量净\n额（元）\n3,773,698,817.34\n-3,191,375,954.04\n218.25%\n基本每股收益（元/股）\n4.6486\n4.4496\n4.47%\n稀释每股收益（元/股）\n4.6466\n4.4479\n4.47%\n加权平均净资产收益率\n8.58%\n9.81%\n-1.23%\n本报告期末\n上年度末\n本报告期末比上年度末增减\n总资产（元）\n93,921,830,047.83\n89,800,578,023.69\n4.59%\n归"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "cross_008",
+    "category": "cross_company",
+    "question": "比较中芯国际和北方华创2025年度的研发投入情况。",
+    "target_company_codes": [
+      "688981",
+      "002371"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "中芯国际_688981_2025FY.pdf",
+      "北方华创_002371_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "required_doc_coverage",
+      "company_correctness"
+    ],
+    "gold_answer": "2025年度，中芯国际研发投入合计为人民币55.19亿元（全部为费用化），占营业收入比例为8.2%；北方华创研发投入金额为72.77亿元（其中费用化研发费用54.35亿元，资本化研发投入25.11亿元），占营业收入比例为18.49%。北方华创的研发投入总额及占营收比例均高于中芯国际。",
+    "gold_evidence": [
+      {
+        "parent_id": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531_parent_17",
+        "document_id": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531",
+        "file_sha256": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531",
+        "source_filename": "中芯国际_688981_2025FY.pdf",
+        "company_name": "中芯国际",
+        "company_code": "688981",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "中芯国际集成电路制造有限公司2025 年年度报告\n17 / 232\n核心技术与研发进展\n1.核心技术及其先进性以及报告期内的变化情况\n中芯国际拥有全方位一体化的集成电路晶圆代工核心技术体系，快速有效地帮助客户实现新\n产品的导入验证到稳定量产。中芯国际成功开发了 8 英寸和 12 英寸的多种技术平台，为客户提供\n“一站式”晶圆代工和技术服务。\n2025 年，多个平台项目开发按计划进行，详情请参阅下述在研项目情况。\n国家科学技术奖项获奖情况\n□适用 √不适用\n国家级专精特新“小巨人”企业、制造业“单项冠军”认定情况\n□适用 √不适用\n2.报告期内获得的研发成果\n报告期内获得的知识产权列表：\n本年新增\n累计数量\n申请数（个）\n获得数（个）\n申请数（个）\n获得数（个）\n发明专利\n290\n509\n18,506\n12,621\n实用新型专利\n5\n38\n1,897\n1,890\n布图设计权\n-\n-\n94\n94\n合计\n295\n547\n20,497\n14,605\n3.研发投入情况表\n单位：千元\n币种：人民币\n本年度\n上年度\n变化幅度（%）\n费用化研发投入\n5,518,596\n5,447,122\n1.3\n资本"
+      },
+      {
+        "parent_id": "af09ac4951073e650f8d4f428a7eaea6977e18a162cfb042000408a3fc49d50f_parent_53",
+        "document_id": "af09ac4951073e650f8d4f428a7eaea6977e18a162cfb042000408a3fc49d50f",
+        "file_sha256": "af09ac4951073e650f8d4f428a7eaea6977e18a162cfb042000408a3fc49d50f",
+        "source_filename": "北方华创_002371_2025FY.pdf",
+        "company_name": "北方华创",
+        "company_code": "002371",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "北方华创科技集团股份有限公司 2025 年年度报告全文\n36\n30-40 岁\n2,629\n1,889\n39.17%\n41-45 岁\n317\n239\n32.64%\n公司研发投入情况\n2025 年\n2024 年\n变动比例\n研发投入金额（元）\n7,277,149,612.81\n5,401,049,165.52\n34.74%\n研发投入占营业收入比例\n18.49%\n17.96%\n0.53%\n研发投入资本化的金额\n（元）\n2,510,972,689.63\n2,281,784,456.01\n10.04%\n资本化研发投入占研发投入\n的比例\n34.50%\n42.25%\n-7.75%\n公司研发人员构成发生重大变化的原因及影响\n□适用 不适用\n研发投入总额占营业收入的比重较上年发生显著变化的原因\n□适用 不适用\n研发投入资本化率大幅变动的原因及其合理性说明\n□适用 不适用\n（五）现金流\n单位：元\n项目\n2025 年\n2024 年\n同比增减\n经营活动现金流入小计\n40,208,357,152.81\n30,220,174,743.63\n33.05%\n经营活动现金流出小计\n38,074,912,574.96"
+      },
+      {
+        "parent_id": "af09ac4951073e650f8d4f428a7eaea6977e18a162cfb042000408a3fc49d50f_parent_11",
+        "document_id": "af09ac4951073e650f8d4f428a7eaea6977e18a162cfb042000408a3fc49d50f",
+        "file_sha256": "af09ac4951073e650f8d4f428a7eaea6977e18a162cfb042000408a3fc49d50f",
+        "source_filename": "北方华创_002371_2025FY.pdf",
+        "company_name": "北方华创",
+        "company_code": "002371",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "北方华创科技集团股份有限公司 2025 年年度报告全文\n11\n产（元）\n报告期内，公司总股本因资本公积金转增股本而增加，根据相关规定，为保持会计指标的前后期可比，按照调整后\n的最新股本列报基本每股收益、稀释每股收益。\n（1）2025 年公司营业收入 393.53 亿元，同比增长 30.85%，主要原因为：国内半导体设备市场持续上行，同时国产\n化替代持续加速。公司集成电路装备领域刻蚀、薄膜沉积、炉管、湿法清洗等多款设备市占率稳步提升，同时离子注入\n等新品快速落地形成新增量，工艺覆盖度及市场占有率显著增长。公司集成电路设备的营收同比增长超 50%，使得营业\n收入同比有较大增长。\n（2）2025 年公司归属于上市公司股东的净利润 55.22 亿元，同比下降 1.77%，主要原因为：\n①面对全球半导体技术快速迭代、AI 算力浪潮催生的先进工艺与先进封装设备需求升级，2025 年，公司研发投入\n大幅提升，聚焦核心赛道技术攻坚与新品研发验证，积极布局多款高端半导体设备研发，拓宽产品边界，筑牢技术护城\n河。2025 年，本期计入当期损益的研发费用 54.35 亿元，同比增长 17.66 亿元，增长幅"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "multi_001",
+    "category": "multi_evidence",
+    "question": "贵州茅台2026年上半年的营业收入、归母净利润和经营活动现金流量净额分别是多少？",
+    "target_company_codes": [
+      "600519"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "multi_evidence_recall",
+      "answer_completeness",
+      "required_doc_coverage"
+    ],
+    "gold_answer": "贵州茅台2026年上半年营业收入为90,703,260,964.48元，归属于上市公司股东的净利润为44,516,880,421.86元，经营活动产生的现金流量净额为70,690,750,119.06元。",
+    "gold_evidence": [
+      {
+        "parent_id": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6_parent_3",
+        "document_id": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6",
+        "file_sha256": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6",
+        "source_filename": "贵州茅台_600519_2026H1.pdf",
+        "company_name": "贵州茅台",
+        "company_code": "600519",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "贵州茅台酒股份有限公司2026 年半年度报告\n5 / 110\n七、 公司主要会计数据和财务指标\n(一) 主要会计数据\n单位：元 币种：人民币\n主要会计数据\n本报告期\n（1－6月）\n上年同期\n本报告期比\n上年同期增\n减(%)\n营业收入\n90,703,260,964.48\n89,389,354,416.84\n1.47\n利润总额\n61,438,419,177.29\n62,778,000,766.82\n-2.13\n归属于上市公司股东的净利润\n44,516,880,421.86\n45,402,962,298.10\n-1.95\n归属于上市公司股东的扣除非经\n常性损益的净利润\n44,464,207,646.01\n45,390,247,623.82\n-2.04\n经营活动产生的现金流量净额\n70,690,750,119.06\n13,119,061,031.33\n438.84\n本报告期末\n上年度末\n本报告期末\n比上年度末\n增减(%)\n归属于上市公司股东的净资产\n251,253,594,419.50\n244,637,811,032.18\n2.70\n总资产\n309,050,784,569.31\n303,834"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "multi_002",
+    "category": "multi_evidence",
+    "question": "比亚迪2025年度的营业收入、归母净利润和研发投入情况如何？",
+    "target_company_codes": [
+      "002594"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "比亚迪_002594_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "multi_evidence_recall",
+      "answer_completeness",
+      "required_doc_coverage"
+    ],
+    "gold_answer": "2025年度，比亚迪营业收入为803,964,958,000.00元；归属于上市公司股东的净利润为32,619,022,000.00元；研发投入金额为63,441,379,000.00元，占营业收入比例为7.89%。",
+    "gold_evidence": [
+      {
+        "parent_id": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b_parent_11",
+        "document_id": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b",
+        "file_sha256": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b",
+        "source_filename": "比亚迪_002594_2025FY.pdf",
+        "company_name": "比亚迪",
+        "company_code": "002594",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "比亚迪股份有限公司 2025 年年度报告全文 \n11 \n \n六、主要会计数据和财务指标 \n公司是否需追溯调整或重述以前年度会计数据 \n□是 否 \n \n2025 年 \n2024 年 \n本年比上年增减 \n2023 年 \n营业收入（元） \n803,964,958,000.00 777,102,455,000.00 \n3.46% 602,315,354,000.00 \n归属于上市公司股东的净利润（元） \n32,619,022,000.00 \n40,254,346,000.00 \n-18.97% \n30,040,811,000.00 \n归属于上市公司股东的扣除非经常性\n损益的净利润（元） \n29,445,703,000.00 \n36,982,887,000.00 \n-20.38% \n28,462,432,000.00 \n经营活动产生的现金流量净额（元） \n59,135,544,000.00 133,453,873,000.00 \n-55.69% 169,725,025,000.00 \n基本每股收益（元/股） \n3.58 \n4.61 \n-22.34% \n3.44 \n稀释每股收益（元/股） \n3."
+      },
+      {
+        "parent_id": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b_parent_58",
+        "document_id": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b",
+        "file_sha256": "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b",
+        "source_filename": "比亚迪_002594_2025FY.pdf",
+        "company_name": "比亚迪",
+        "company_code": "002594",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "网，提高单位线径功率传输能力，\n分别达到三相 380V 的 4 倍与 8 倍；\n通过高频变换技术，提高设备功率\n密度；通过采用换流器控制短路电\n流，融合控制保护与主回路一体化\n设计，减少柜体数量，提高集成\n度；通过在线监测技术，实现全系\n统故障自动定位及隔离。 \n作为行业内在低运能行业\n率先提出直流配电技术解\n决方案的企业，具有行业\n领先地位。该项技术将巩\n固公司在新型配电领域的\n核心竞争力，拓展多元应\n用场景，为公司在轨道业\n务的长期发展提供重要支\n撑。 \n公司研发人员情况 \n \n2025 年 \n2024 年 \n变动比例 \n研发人员数量（人） \n127,665 \n121,598 \n4.99% \n研发人员数量占比 \n14.68% \n12.55% \n2.13% \n研发人员学历结构 \n本科（人） \n55,564 \n53,222 \n4.40% \n硕士（人） \n33,230 \n28,842 \n15.21% \n博士（人） \n3,011 \n2,403 \n25.30% \n研发人员年龄构成 \n30 岁以下（人） \n67,429 \n68,548 \n-1.63% \n30~40 岁（人） \n50,749 \n"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "multi_003",
+    "category": "multi_evidence",
+    "question": "招商银行2026年上半年的营业收入、净息差和不良贷款率分别是多少？",
+    "target_company_codes": [
+      "600036"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "招商银行_600036_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "multi_evidence_recall",
+      "answer_completeness",
+      "required_doc_coverage"
+    ],
+    "gold_answer": "招商银行2026年上半年营业收入为1,781.81亿元，净息差（净利息收益率）为1.83%，不良贷款率为0.94%。",
+    "gold_evidence": [
+      {
+        "parent_id": "c7e68aeca3c8ec331ce7ecfde5faee9d97fa74e302944bf0e7141b154f9704a4_parent_9",
+        "document_id": "c7e68aeca3c8ec331ce7ecfde5faee9d97fa74e302944bf0e7141b154f9704a4",
+        "file_sha256": "c7e68aeca3c8ec331ce7ecfde5faee9d97fa74e302944bf0e7141b154f9704a4",
+        "source_filename": "招商银行_600036_2026H1.pdf",
+        "company_name": "招商银行",
+        "company_code": "600036",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "招商银行股份有限公司\n2026年半年度报告（A股）\n10\n管理层讨论与分析\n第三章 管理层讨论与分析\n3.1 总体经营情况分析\n3.1.1 外部经济形势与行业发展情况\n2026年上半年，中国经济起步有力，在 “十五五” 开局之年保持良好运行态势。供给升级、出口保持韧性、新\n动能投资增长和工业利润修复，共同构成经济平稳运行的重要支撑，新旧动能转换进一步加速。\n在此背景下，中国银行业总体平稳运行，资产规模持续稳健增长。在低利率周期、直接融资占比上升、居民去杠\n杆、有效信贷需求不足等因素影响下，银行净息差进一步收窄，营收增长仍然承压 ；资产质量整体稳定，但零售\n贷款面临风险压力。面对诸多挑战，银行业坚持高质量发展，积极落实各项宏观政策，不断提升服务实体经济质\n效。\n3.1.2 经营概要\n报告期内，本集团始终坚持质量、效益、规模协调发展理念，以打造价值银行为战略目标，各项业务稳健开展，\n资产负债规模稳步增长，经营效益稳中向好，资产质量总体稳定。\n报告期内，本集团实现营业收入1,781.81亿元，同比增长4.83% ；实现归属于本行股东的净利润764.45亿元，\n同比增长2.02% ；实现净利息"
+      },
+      {
+        "parent_id": "c7e68aeca3c8ec331ce7ecfde5faee9d97fa74e302944bf0e7141b154f9704a4_parent_7",
+        "document_id": "c7e68aeca3c8ec331ce7ecfde5faee9d97fa74e302944bf0e7141b154f9704a4",
+        "file_sha256": "c7e68aeca3c8ec331ce7ecfde5faee9d97fa74e302944bf0e7141b154f9704a4",
+        "source_filename": "招商银行_600036_2026H1.pdf",
+        "company_name": "招商银行",
+        "company_code": "600036",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "招商银行股份有限公司\n2026年半年度报告（A股）\n8\n第二章 会计数据和财务指标摘要\n2.2 本集团补充财务比率\n财务比率(%)\n2026年\n1-6月\n2025年\n1-6月\n本期比上年同期\n增减\n2024年\n1-6月\n \n \n \n \n \n盈利能力指标（年化）\n净利差(1)\n1.77\n1.79\n下降0.02个百分点\n1.88\n净利息收益率(2)\n1.83\n1.88\n下降0.05个百分点\n2.00\n \n \n \n \n \n占营业收入百分比\n － 净利息收入\n62.87\n62.41\n上升0.46个百分点\n60.39\n － 非利息净收入\n37.13\n37.59\n下降0.46个百分点\n39.61\n成本收入比(3)\n29.70\n30.11\n下降0.41个百分点\n29.74\n \n \n \n \n \n注 ：\n(1) \n净利差=总生息资产平均收益率 － 总计息负债平均成本率。\n(2) \n净利息收益率=净利息收入 ／ 总生息资产平均余额。\n(3) \n成本收入比=业务及管理费 ／ 营业收入。\n资产质量指标(%)\n2026年\n6月30日\n2025年\n12月31日\n本期末比上年末\n增减\n2024年\n12月31日\n \n"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "multi_004",
+    "category": "multi_evidence",
+    "question": "中芯国际2025年度的营业收入、毛利率以及研发投入情况如何？",
+    "target_company_codes": [
+      "688981"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "中芯国际_688981_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct",
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "multi_evidence_recall",
+      "answer_completeness",
+      "required_doc_coverage"
+    ],
+    "gold_answer": "2025年度，中芯国际全年实现销售收入人民币673.23亿元（即营业收入67,323,192千元），同比增长16.5%；毛利率为21.6%（致股东信中表述为增至22%）；研发投入合计人民币55.19亿元（即5,518,596千元），占营业收入比例为8.2%，全部为费用化研发投入。",
+    "gold_evidence": [
+      {
+        "parent_id": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531_parent_5",
+        "document_id": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531",
+        "file_sha256": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531",
+        "source_filename": "中芯国际_688981_2025FY.pdf",
+        "company_name": "中芯国际",
+        "company_code": "688981",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "中芯国际集成电路制造有限公司2025 年年度报告\n6 / 232\n第二节\n致股东的信\n尊敬的各位股东、投资人：\n2025 年是中芯国际成立的 25 周年，是公司全面深化改革、推动高质量发展的突破之年。\n这一年，我们持续聚焦主业发展，顺利推进项目进展，经营业绩再上新台阶。面对外部复杂\n多变的环境，公司保持深耕晶圆制造长期战略不动摇，稳步实施产能扩建，折合 8 英寸标准逻辑\n的月产能规模超过了 100 万片；全年实现销售收入人民币 673.23 亿元，同比增长 16.5%，继续巩\n固全球纯晶圆代工企业第二位置；产能利用率增至 93.5%，同比增长 8 个百分点；在折旧大幅增\n长的情况下，毛利率增至 22%，同比增加 3 个百分点。同时，公司实质性推进中芯北方少数股权\n收购、中芯南方增资扩股等项目，为未来发展奠定坚实基础。\n这一年，我们持续推动技术攻关，开放合作带动增量，协同产业链共同发展。随着下游应用\n场景更加多元化，人工智能、数据中心、自动驾驶等领域引领行业迈入新一轮快速增长周期，消\n费电子等智能终端迭代升级，产业链在地化转换加速，使得产业对于本土中高端领域芯片制造需\n求进一步提升。在此"
+      },
+      {
+        "parent_id": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531_parent_8",
+        "document_id": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531",
+        "file_sha256": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531",
+        "source_filename": "中芯国际_688981_2025FY.pdf",
+        "company_name": "中芯国际",
+        "company_code": "688981",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "中芯国际集成电路制造有限公司2025 年年度报告\n9 / 232\n主要财务指标\n主要财务指标\n2025年\n2024年\n本期比上年同期\n增减(%)\n2023年\n毛利率(%)\n21.6\n18.6\n增加3.0个百分点\n21.9\n净利率(%)\n10.7\n9.3\n增加1.4个百分点\n14.1\n息税折旧及摊销前利润率（%）\n56.1\n54.6\n增加1.5个百分点\n60.1\n基本每股收益（元／股）\n0.63\n0.46\n37.0\n0.61\n稀释每股收益（元／股）\n0.63\n0.46\n37.0\n0.61\n扣除非经常性损益后的基本每股\n收益（元／股）\n0.52\n0.33\n57.6\n0.41\n加权平均净资产收益率（%）\n(1)\n3.4\n2.5\n增加0.9个百分点\n3.5\n扣除非经常性损益后的加权平均\n净资产收益率（%）\n(2)\n2.8\n1.8\n增加1.0个百分点\n2.4\n研发投入占营业收入的比例（%）\n8.2\n9.4\n减少1.2个百分点\n11.0\n附注：\n(1) 加权平均净资产收益率=归属于上市公司股东的净利润/加权平均归属于上市公司股东的净资\n产\n(2) 扣除非经常性损益后的加权平均净资产收益率=归属于上"
+      },
+      {
+        "parent_id": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531_parent_17",
+        "document_id": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531",
+        "file_sha256": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531",
+        "source_filename": "中芯国际_688981_2025FY.pdf",
+        "company_name": "中芯国际",
+        "company_code": "688981",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "中芯国际集成电路制造有限公司2025 年年度报告\n17 / 232\n核心技术与研发进展\n1.核心技术及其先进性以及报告期内的变化情况\n中芯国际拥有全方位一体化的集成电路晶圆代工核心技术体系，快速有效地帮助客户实现新\n产品的导入验证到稳定量产。中芯国际成功开发了 8 英寸和 12 英寸的多种技术平台，为客户提供\n“一站式”晶圆代工和技术服务。\n2025 年，多个平台项目开发按计划进行，详情请参阅下述在研项目情况。\n国家科学技术奖项获奖情况\n□适用 √不适用\n国家级专精特新“小巨人”企业、制造业“单项冠军”认定情况\n□适用 √不适用\n2.报告期内获得的研发成果\n报告期内获得的知识产权列表：\n本年新增\n累计数量\n申请数（个）\n获得数（个）\n申请数（个）\n获得数（个）\n发明专利\n290\n509\n18,506\n12,621\n实用新型专利\n5\n38\n1,897\n1,890\n布图设计权\n-\n-\n94\n94\n合计\n295\n547\n20,497\n14,605\n3.研发投入情况表\n单位：千元\n币种：人民币\n本年度\n上年度\n变化幅度（%）\n费用化研发投入\n5,518,596\n5,447,122\n1.3\n资本"
+      },
+      {
+        "parent_id": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531_parent_224",
+        "document_id": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531",
+        "file_sha256": "c022cf9323967f66a239ce4f60b30507bc341db6e660a53db9c2966a9ef35531",
+        "source_filename": "中芯国际_688981_2025FY.pdf",
+        "company_name": "中芯国际",
+        "company_code": "688981",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "中芯国际集成电路制造有限公司2025 年年度报告\n190 / 232\n(2)营业收入、营业成本的分解信息\n√适用 □不适用\n单位：千元\n币种：人民币\n合同分类\n合计\n营业收入\n营业成本\n商品或服务类型\n集成电路晶圆代工\n62,794,043\n49,450,277\n其他\n4,529,149\n3,314,846\n市场或客户类型\n集成电路行业\n67,323,192\n52,765,123\n合同类型\n销售商品\n66,497,610\n52,018,243\n提供劳务\n644,482\n566,487\n租赁\n181,100\n180,393\n按商品转让或提供服务的时间分类\n在某一时点转让\n66,497,610\n52,018,243\n在某一时段内转让\n644,482\n566,487\n租赁\n181,100\n180,393\n按销售渠道分类\n直销\n67,142,092\n52,584,730\n租赁\n181,100\n180,393\n合计\n67,323,192\n52,765,123\n其他说明\n√适用 □不适用\n按经营地区分的营业收入分解情况如下：\n单位：千元\n币种：人民币\n合同分类\n营业收入\n按经营地分类\n主营业务收入"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 6,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "multi_005",
+    "category": "multi_evidence",
+    "question": "比较贵州茅台和五粮液2026年上半年的营业收入与归母净利润，并说明哪家公司规模更大。",
+    "target_company_codes": [
+      "600519",
+      "000858"
+    ],
+    "target_report_periods": [
+      "2026H1"
+    ],
+    "expected_documents": [
+      "贵州茅台_600519_2026H1.pdf",
+      "五粮液_000858_2026H1.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "multi_evidence_recall",
+      "answer_completeness",
+      "required_doc_coverage"
+    ],
+    "gold_answer": "严格按问题中的“营业收入”口径，贵州茅台2026年上半年营业收入为90,703,260,964.48元，归属于上市公司股东的净利润为44,516,880,421.86元；五粮液营业收入为28,416,674,541.77元，归属于上市公司股东的净利润为8,752,942,991.31元。两项指标均为贵州茅台更高。注：贵州茅台报告另披露营业总收入92,278,072,083.21元，不能与“营业收入”混用。",
+    "gold_evidence": [
+      {
+        "parent_id": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6_parent_3",
+        "document_id": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6",
+        "file_sha256": "0e10aa26be46b1cf3cd03f06e834c7fb98d5dd0d661b96f8fddd4af7e846a4f6",
+        "source_filename": "贵州茅台_600519_2026H1.pdf",
+        "company_name": "贵州茅台",
+        "company_code": "600519",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "营业收入90,703,260,964.48元；归属于上市公司股东的净利润44,516,880,421.86元。"
+      },
+      {
+        "parent_id": "c84fa7ebd2cee40f6312f09567dbf3f5a51233c5640fdd2b4218f28ec65c4276_parent_1",
+        "document_id": "c84fa7ebd2cee40f6312f09567dbf3f5a51233c5640fdd2b4218f28ec65c4276",
+        "file_sha256": "c84fa7ebd2cee40f6312f09567dbf3f5a51233c5640fdd2b4218f28ec65c4276",
+        "source_filename": "五粮液_000858_2026H1.pdf",
+        "company_name": "五粮液",
+        "company_code": "000858",
+        "report_year": 2026,
+        "period_type": "H1",
+        "report_period": "2026H1",
+        "evidence_excerpt": "营业收入28,416,674,541.77元；归属于上市公司股东的净利润8,752,942,991.31元。"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    },
+    "gold_contract_version": "v2_parent_audit"
+  },
+  {
+    "id": "multi_006",
+    "category": "multi_evidence",
+    "question": "比较招商银行和平安银行2025年度的不良贷款率和拨备覆盖率，并概括资产质量差异。",
+    "target_company_codes": [
+      "600036",
+      "000001"
+    ],
+    "target_report_periods": [
+      "2025FY"
+    ],
+    "expected_documents": [
+      "招商银行_600036_2025FY.pdf",
+      "平安银行_000001_2025FY.pdf"
+    ],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "SubQuery"
+    ],
+    "evaluation_focus": [
+      "multi_evidence_recall",
+      "answer_completeness",
+      "required_doc_coverage"
+    ],
+    "gold_answer": "2025年度，招商银行不良贷款率为0.94%，拨备覆盖率为391.79%；平安银行不良贷款率为1.05%，拨备覆盖率为220.88%。资产质量差异概括：招商银行的不良贷款率低于平安银行（0.94% vs 1.05%），且拨备覆盖率显著高于平安银行（391.79% vs 220.88%），表明招商银行的资产质量更优，风险抵补能力更强健。",
+    "gold_evidence": [
+      {
+        "parent_id": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79_parent_20",
+        "document_id": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79",
+        "file_sha256": "abe612a273468072b176dd51ea460c1e1596f8ca729cbc6db3fa28ba9a57ea79",
+        "source_filename": "招商银行_600036_2025FY.pdf",
+        "company_name": "招商银行",
+        "company_code": "600036",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "招商银行股份有限公司\n2025年度报告（A股）\n18\n管理层讨论与分析\n第三章 管理层讨论与分析\n3.1 总体经营情况分析\n3.1.1 外部经济形势与行业发展情况\n2025年，我国经济直面复杂变局，实现“十四五”圆满收官，GDP首次突破140万亿元，增速达5.0%。供给端加\n速修复，外需保持较快增长，新旧动能加速转换，价格温和修复。\n2025年，中国银行业致力于提升金融服务的适配性，积极融入现代化产业体系建设，全力滋养新质生产力发展\n的沃土。面对息差进一步收窄、内需不足、房地产对投资和消费的拖累持续等压力，银行业坚持稳健经营，资产\n规模保持平稳增长，风险、效益、资本等各类监管指标均总体保持平稳。\n3.1.2 经营概要\n2025年，本集团坚持质量、效益、规模协调发展，以“打造价值银行”为战略目标，稳健开展各项业务，资产负\n债规模稳步增长，经营效益稳中向好，资产质量保持稳定。\n报告期内，本集团实现营业收入3,375.32亿元，同比增长0.01%，其中，净利息收入2,155.93亿元，同比增长\n2.04%，非利息净收入1,219.39亿元，同比下降3.38% ；实现归属于本行股东的净利润1,"
+      },
+      {
+        "parent_id": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c_parent_49",
+        "document_id": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "file_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_filename": "平安银行_000001_2025FY.pdf",
+        "company_name": "平安银行",
+        "company_code": "000001",
+        "report_year": 2025,
+        "period_type": "FY",
+        "report_period": "2025FY",
+        "evidence_excerpt": "第三章\n管理层讨论与分析\n36\n平安银行股份有限公司\n2025 年年度报告\n3.2.7 贷款资产质量分析\n（1）发放贷款和垫款五级分类情况\n（货币单位：人民币百万元）\n项\n目\n2025 年 12 月 31 日\n2024 年 12 月 31 日\n本年末比上年末\n增减\n余额\n占比\n余额\n占比\n正常贷款\n3,295,809\n97.20%\n3,273,405\n97.01%\n0.7%\n关注贷款\n59,328\n1.75%\n64,960\n1.93%\n(8.7%)\n不良贷款\n35,703\n1.05%\n35,738\n1.06%\n(0.1%)\n其中：次级\n17,561\n0.52%\n15,707\n0.47%\n11.8%\n可疑\n10,924\n0.32%\n13,531\n0.40%\n(19.3%)\n损失\n7,218\n0.21%\n6,500\n0.19%\n11.0%\n发放贷款和垫款本金总额\n3,390,840\n100.00%\n3,374,103\n100.00%\n0.5%\n发放贷款和垫款减值准备\n(78,861)\n(89,600)\n(12.0%)\n其中：以摊余成本计量的发放贷\n款和垫款减值准备\n(78,445)\n(88"
+      }
+    ],
+    "gold_status": "generated_from_ingested_parents",
+    "expected_behavior": null,
+    "gold_generation": {
+      "model": "qwen3.8-max",
+      "candidate_parent_count": 12,
+      "source": "financial.financial_rag_v1 Parent data"
+    }
+  },
+  {
+    "id": "negative_001",
+    "category": "wrong_company_period",
+    "question": "贵州茅台2024年度营业收入是多少？",
+    "target_company_codes": [
+      "600519"
+    ],
+    "target_report_periods": [],
+    "expected_documents": [],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "wrong_period_rate",
+      "unsupported_answer_rate"
+    ],
+    "gold_answer": "不得用2025FY/2025H1/2026H1冒充2024FY；应明确知识库无对应报告。",
+    "gold_evidence": [],
+    "gold_status": "expected_no_corpus_evidence",
+    "expected_behavior": "不得用2025FY/2025H1/2026H1冒充2024FY；应明确知识库无对应报告。"
+  },
+  {
+    "id": "negative_002",
+    "category": "wrong_company_period",
+    "question": "宁德时代2026年度营业收入是多少？",
+    "target_company_codes": [
+      "300750"
+    ],
+    "target_report_periods": [],
+    "expected_documents": [],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "wrong_period_rate",
+      "unsupported_answer_rate"
+    ],
+    "gold_answer": "不得用2026H1冒充2026FY；应明确知识库无2026年度报告。",
+    "gold_evidence": [],
+    "gold_status": "expected_no_corpus_evidence",
+    "expected_behavior": "不得用2026H1冒充2026FY；应明确知识库无2026年度报告。"
+  },
+  {
+    "id": "negative_003",
+    "category": "wrong_company_period",
+    "question": "工商银行2026年上半年净息差是多少？",
+    "target_company_codes": [],
+    "target_report_periods": [],
+    "expected_documents": [],
+    "expected_route": "RAG",
+    "allowed_strategies": [
+      "Direct"
+    ],
+    "evaluation_focus": [
+      "wrong_company_rate",
+      "unsupported_answer_rate"
+    ],
+    "gold_answer": "不得引用招商银行/平安银行等其他银行回答；应说明知识库无工商银行对应报告。",
+    "gold_evidence": [],
+    "gold_status": "expected_no_corpus_evidence",
+    "expected_behavior": "不得引用招商银行/平安银行等其他银行回答；应说明知识库无工商银行对应报告。"
+  },
+  {
+    "id": "oos_001",
+    "category": "out_of_scope",
+    "question": "法国的首都是哪里？",
+    "target_company_codes": [],
+    "target_report_periods": [],
+    "expected_documents": [],
+    "expected_route": "OOS",
+    "allowed_strategies": [
+      "OOS"
+    ],
+    "evaluation_focus": [
+      "router_accuracy"
+    ],
+    "gold_answer": "应识别为非金融财报问题，不进入财报检索。",
+    "gold_evidence": [],
+    "gold_status": "expected_no_corpus_evidence",
+    "expected_behavior": "应识别为非金融财报问题，不进入财报检索。"
+  },
+  {
+    "id": "oos_002",
+    "category": "out_of_scope",
+    "question": "请用Python写一个快速排序。",
+    "target_company_codes": [],
+    "target_report_periods": [],
+    "expected_documents": [],
+    "expected_route": "OOS",
+    "allowed_strategies": [
+      "OOS"
+    ],
+    "evaluation_focus": [
+      "router_accuracy"
+    ],
+    "gold_answer": "应识别为非金融财报问题，不进入财报检索。",
+    "gold_evidence": [],
+    "gold_status": "expected_no_corpus_evidence",
+    "expected_behavior": "应识别为非金融财报问题，不进入财报检索。"
+  },
+  {
+    "id": "oos_003",
+    "category": "out_of_scope",
+    "question": "首尔明天天气怎么样？",
+    "target_company_codes": [],
+    "target_report_periods": [],
+    "expected_documents": [],
+    "expected_route": "OOS",
+    "allowed_strategies": [
+      "OOS"
+    ],
+    "evaluation_focus": [
+      "router_accuracy"
+    ],
+    "gold_answer": "应识别为非金融财报问题，不进入财报检索。",
+    "gold_evidence": [],
+    "gold_status": "expected_no_corpus_evidence",
+    "expected_behavior": "应识别为非金融财报问题，不进入财报检索。"
+  }
+]

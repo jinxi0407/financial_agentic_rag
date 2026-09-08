@@ -9,6 +9,15 @@ from base.config import config
 from base.logger import logger
 
 from rag_qa.core.query_router import FinancialQueryRouter
+from rag_qa.core.financial_calculator import (
+    build_calculation_guardrail,
+    build_calculation_note,
+    document_mentions_metric,
+)
+from rag_qa.core.financial_evidence import (
+    extract_verified_evidence,
+    format_verified_evidence_block,
+)
 # 将专业问题进一步分类，做策略选择
 from rag_qa.core.strategy_selector import StrategySelector  # 导入策略选择器
 
@@ -18,6 +27,9 @@ from rag_qa.core.strategy_selector import StrategySelector  # 导入策略选择
 
 #  定义 RAGSystem 类，封装 RAG 系统的核心逻辑
 class RAGSystem:
+    _MAX_DYNAMIC_CONTEXTS = 6
+    _MAX_MULTI_EVIDENCE_CONTEXTS = 8
+    _MAX_CONTEXT_CANDIDATE_POOL = 12
     #   初始化方法，设置 RAG 系统的基本参数
     # vector_store：milvus的查询相关的client
     # llm: 调用大模型的client
@@ -93,6 +105,131 @@ class RAGSystem:
 
         return selected_docs
 
+    @classmethod
+    def _context_limit(cls, query_metadata):
+        """Keep simple requests at M; expand only explicit multi-target/metric requests."""
+        if query_metadata is None:
+            return config.CANDIDATE_M
+        target_count = max(1, len(query_metadata.subquery_targets))
+        metric_count = max(1, len(query_metadata.requested_metrics))
+        if target_count == 1 and metric_count == 1:
+            return config.CANDIDATE_M
+        required_cell_count = len(cls._required_evidence_cells(query_metadata))
+        coverage_slots = max(target_count * metric_count, required_cell_count)
+        if query_metadata.requires_deterministic_calculation() and target_count > 1:
+            # Keep each target's top parent plus a metric-bearing parent for
+            # every target, so a comparison is not starved of one base value.
+            coverage_slots *= 2
+        max_contexts = (
+            cls._MAX_MULTI_EVIDENCE_CONTEXTS
+            if required_cell_count > cls._MAX_DYNAMIC_CONTEXTS
+            else cls._MAX_DYNAMIC_CONTEXTS
+        )
+        return min(max_contexts, max(config.CANDIDATE_M, coverage_slots))
+
+    @classmethod
+    def _context_candidate_pool_limit(cls, context_limit):
+        """Bound the answer-layer selection pool without changing Milvus top-k."""
+        return min(cls._MAX_CONTEXT_CANDIDATE_POOL, max(context_limit, context_limit * 2))
+
+    @staticmethod
+    def _target_bindings(query_metadata):
+        if query_metadata is None:
+            return ()
+        return tuple(
+            (target.company_code, target.report_period)
+            for target in query_metadata.subquery_targets
+            if target.company_code or target.report_period
+        )
+
+    @classmethod
+    def _required_evidence_cells(cls, query_metadata):
+        """Order cells by metric round so a capped budget still spans targets."""
+        if query_metadata is None:
+            return ()
+        target_bindings = cls._target_bindings(query_metadata)
+        metrics = query_metadata.requested_metrics
+        if not target_bindings or not metrics:
+            return ()
+        return tuple(
+            (company_code, report_period, metric)
+            for metric in metrics
+            for company_code, report_period in target_bindings
+        )
+
+    @staticmethod
+    def _document_matches_evidence_cell(document, cell):
+        company_code, report_period, metric = cell
+        return (
+            document.metadata.get("company_code") == company_code
+            and document.metadata.get("report_period") == report_period
+            and document_mentions_metric(document, metric)
+        )
+
+    @classmethod
+    def _evidence_cell_status(cls, documents, query_metadata):
+        """Return a serializable coverage view for diagnostics and evaluations."""
+        return [
+            {
+                "company_code": company_code,
+                "report_period": report_period,
+                "metric": metric,
+                "parent_id": next(
+                    (
+                        document.metadata.get("parent_id")
+                        for document in documents
+                        if cls._document_matches_evidence_cell(
+                            document, (company_code, report_period, metric)
+                        )
+                    ),
+                    None,
+                ),
+            }
+            for company_code, report_period, metric in cls._required_evidence_cells(query_metadata)
+        ]
+
+    @classmethod
+    def _select_context_docs(cls, ranked_docs, context_limit, query_metadata):
+        """Preserve explicit target and metric coverage before score-order backfill."""
+        target_bindings = cls._target_bindings(query_metadata)
+        metrics = query_metadata.requested_metrics if query_metadata else ()
+        if len(target_bindings) <= 1 and len(metrics) <= 1:
+            return ranked_docs[:context_limit]
+
+        selected = []
+        selected_parent_ids = set()
+
+        def score_and_order(item):
+            index, document = item
+            score = document.metadata.get("rerank_score")
+            return (float(score) if score is not None else float("-inf"), -index)
+
+        for cell in cls._required_evidence_cells(query_metadata):
+            if any(cls._document_matches_evidence_cell(document, cell) for document in selected):
+                continue
+            candidates = [
+                item for item in enumerate(ranked_docs)
+                if item[1].metadata.get("parent_id") not in selected_parent_ids
+                and cls._document_matches_evidence_cell(item[1], cell)
+            ]
+            if not candidates:
+                continue
+            _, document = max(candidates, key=score_and_order)
+            selected.append(document)
+            selected_parent_ids.add(document.metadata.get("parent_id"))
+            if len(selected) >= context_limit:
+                return selected
+
+        for doc in ranked_docs:
+            parent_id = doc.metadata.get("parent_id")
+            if parent_id in selected_parent_ids:
+                continue
+            selected.append(doc)
+            selected_parent_ids.add(parent_id)
+            if len(selected) >= context_limit:
+                break
+        return selected
+
     """
     需求：实现假设文档嵌入（HyDE）检索策略
     思路步骤：
@@ -102,7 +239,9 @@ class RAGSystem:
     """
 
     #   定义私有方法，使用假设文档进行检索（HyDE）
-    def _retrieve_with_hyde(self, query, source_filter=None, metadata_filter=None):
+    def _retrieve_with_hyde(
+            self, query, source_filter=None, metadata_filter=None, result_limit=None
+    ):
         logger.info(f"使用 HyDE 策略进行检索 (查询: '{query}')")
         #   获取假设问题生成的 Prompt 模板
         # TODO 1. 获取假设检索对应提示词模板
@@ -124,6 +263,7 @@ class RAGSystem:
                 k=config.RETRIEVAL_K,
                 source_filter=source_filter,
                 metadata_filter=metadata_filter,
+                result_limit=result_limit,
             )
         except Exception as e:
             logger.error(f"HyDE 策略执行失败: {e}")
@@ -141,7 +281,7 @@ class RAGSystem:
     #   定义私有方法，使用子查询进行检索
     def _retrieve_with_subqueries(
             self, query, source_filter=None, metadata_filter=None, subquery_filters=None,
-            subquery_targets=None,
+            subquery_targets=None, result_limit=None,
     ):
         logger.info(f"使用子查询策略进行检索 (查询: '{query}')")
         #   获取子查询生成的 Prompt 模板
@@ -226,6 +366,7 @@ class RAGSystem:
                     k=config.RETRIEVAL_K,
                     source_filter=source_filter,
                     metadata_filters=per_subquery_filters,
+                    result_limit=result_limit,
                     return_diagnostics=True,
                 )
             )
@@ -244,7 +385,7 @@ class RAGSystem:
 
             aggregation_started_at = time.perf_counter()
             final_docs = self._merge_subquery_results_coverage_first(
-                subquery_results, config.CANDIDATE_M
+                subquery_results, result_limit or config.CANDIDATE_M
             )
             aggregation_seconds = time.perf_counter() - aggregation_started_at
             logger.info(
@@ -276,7 +417,9 @@ class RAGSystem:
     """
 
     #   定义私有方法，使用回溯问题进行检索
-    def _retrieve_with_backtracking(self, query, source_filter=None, metadata_filter=None):
+    def _retrieve_with_backtracking(
+            self, query, source_filter=None, metadata_filter=None, result_limit=None
+    ):
         logger.info(f"使用回溯问题策略进行检索 (查询: '{query}')")
         #   获取回溯问题生成的 Prompt 模板
         backtrack_prompt_template = RAGPrompts.backtracking_prompt()  # 使用 template 后缀区分
@@ -292,6 +435,7 @@ class RAGSystem:
                 k=config.RETRIEVAL_K,
                 source_filter=source_filter,
                 metadata_filter=metadata_filter,
+                result_limit=result_limit,
             )
         except Exception as e:
             logger.error(f"回溯问题策略执行失败: {e}")
@@ -315,6 +459,7 @@ class RAGSystem:
             metadata_filter=None,
             subquery_filters=None,
             subquery_targets=None,
+            query_metadata=None,
     ):
         retrieval_started_at = time.perf_counter()
         # 如果未指定检索策略，则使用策略选择器选择
@@ -325,19 +470,23 @@ class RAGSystem:
         elif strategy_selection_seconds is None:
             strategy_selection_seconds = 0.0
 
+        context_limit = self._context_limit(query_metadata)
+        candidate_pool_limit = self._context_candidate_pool_limit(context_limit)
+
         # 根据检索策略选择不同的检索方式
         ranked_parent_chunks = []  # 初始化
         if strategy == "回溯问题检索":
             ranked_parent_chunks = self._retrieve_with_backtracking(
-                query, source_filter, metadata_filter
+                query, source_filter, metadata_filter, candidate_pool_limit
             )
         elif strategy == "子查询检索":
             ranked_parent_chunks = self._retrieve_with_subqueries(
-                query, source_filter, metadata_filter, subquery_filters, subquery_targets
+                query, source_filter, metadata_filter, subquery_filters, subquery_targets,
+                candidate_pool_limit,
             )
         elif strategy == "假设问题检索":
             ranked_parent_chunks = self._retrieve_with_hyde(
-                query, source_filter, metadata_filter
+                query, source_filter, metadata_filter, candidate_pool_limit
             )
         else:  # 默认或“直接检索”
             logger.info(f"使用直接检索策略 (查询: '{query}')")
@@ -346,11 +495,14 @@ class RAGSystem:
                 k=config.RETRIEVAL_K,
                 source_filter=source_filter,
                 metadata_filter=metadata_filter,
+                result_limit=candidate_pool_limit,
             )  # 注意 hybrid_search_with_rerank 返回的是 rerank 后的父文档
 
         logger.info(f"策略 '{strategy}' 检索到 {len(ranked_parent_chunks)} 个候选文档 (可能已是父文档)")
 
-        final_context_docs = ranked_parent_chunks[:config.CANDIDATE_M]
+        final_context_docs = self._select_context_docs(
+            ranked_parent_chunks, context_limit, query_metadata
+        )
 
         logger.info(f"最终选取 {len(final_context_docs)} 个文档作为上下文")
         logger.info(
@@ -376,7 +528,7 @@ class RAGSystem:
     # 定义方法，生成答案
     def generate_answer(
             self, query, history=None, source_filter=None, metadata_filter=None, subquery_filters=None,
-            subquery_targets=None, strategy=None,
+            subquery_targets=None, strategy=None, query_metadata=None,
     ):
         # 记录查询开始时间
         start_time = time.time()
@@ -414,11 +566,30 @@ class RAGSystem:
             subquery_targets=subquery_targets,
             strategy=strategy,
             strategy_selection_seconds=strategy_selection_seconds,
+            query_metadata=query_metadata,
         )  # 传递 strategy
 
         #   准备上下文
         if context_docs:
             context = "\n\n".join([doc.page_content for doc in context_docs])  # 使用换行符分隔文档
+            verified_evidence = extract_verified_evidence(
+                context_docs,
+                query_metadata.requested_metrics if query_metadata else None,
+            )
+            evidence_block = format_verified_evidence_block(verified_evidence)
+            calculation_note = build_calculation_note(query_metadata, verified_evidence)
+            calculation_guardrail = build_calculation_guardrail(
+                query_metadata, verified_evidence
+            )
+            if evidence_block:
+                context = f"{context}\n\n{evidence_block}"
+                logger.info("已添加 %d 条已验证财务数值", len(verified_evidence))
+            if calculation_note:
+                context = f"{context}\n\n{calculation_note}"
+                logger.info("已添加基于证据的确定性计算结果")
+            if calculation_guardrail:
+                context = f"{context}\n\n{calculation_guardrail}"
+                logger.info("已添加未验证计算 Guardrail")
             logger.info(f"构建上下文完成，包含 {len(context_docs)} 个文档块")
             # logger.debug(f"上下文内容:\n{context[:500]}...") # Debug 日志可以打印部分上下文
         else:

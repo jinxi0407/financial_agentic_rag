@@ -39,6 +39,15 @@ class IntegratedQASystem():
     def __init__(self):
         self.logger = logger
         self.config = config
+        runtime_config = self.config.runtime_config_snapshot()
+        self.logger.info(
+            "运行时配置: RETRIEVAL_K=%s, CANDIDATE_M=%s, git_commit=%s, Milvus=%s/%s",
+            runtime_config["retrieval_k"],
+            runtime_config["candidate_m"],
+            runtime_config["git_commit"],
+            runtime_config["milvus_database"],
+            runtime_config["milvus_collection"],
+        )
         self.client = None
 
         if not config.DASHSCOPE_API_KEY:
@@ -310,6 +319,7 @@ class IntegratedQASystem():
                 metadata_filter=query_metadata.to_metadata_filter(),
                 subquery_targets=query_metadata.subquery_plan() if deterministic_subqueries else None,
                 strategy="子查询检索" if deterministic_subqueries else None,
+                query_metadata=query_metadata,
             )
             token_stream = (rag_result,) if isinstance(rag_result, str) else rag_result
             for token in token_stream:

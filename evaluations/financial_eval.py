@@ -20,6 +20,7 @@ from openai import OpenAI
 from pymilvus import MilvusClient
 
 from base.config import config
+from base.logger import logger
 
 
 ROOT = Path(__file__).resolve().parent
@@ -275,6 +276,15 @@ def _write_json_atomic(path: Path, payload: Any) -> None:
     temporary_path.replace(path)
 
 
+def _evaluation_report(cases_path: Path, runtime_config: dict[str, Any], results: list[dict[str, Any]]):
+    return {
+        "dataset": str(cases_path),
+        "runtime_config": runtime_config,
+        "metrics": _metrics(results),
+        "results": results,
+    }
+
+
 def _document_metadata(document: Any) -> dict[str, Any]:
     metadata = getattr(document, "metadata", {}) or {}
     return {
@@ -470,6 +480,15 @@ System answer: {answer}
 
 def run_evaluation(cases_path: Path, output_path: Path, judge_answers: bool = False) -> dict[str, Any]:
     cases = json.loads(cases_path.read_text(encoding="utf-8"))
+    runtime_config = config.runtime_config_snapshot()
+    logger.info(
+        "评测运行时配置: RETRIEVAL_K=%s, CANDIDATE_M=%s, git_commit=%s, Milvus=%s/%s",
+        runtime_config["retrieval_k"],
+        runtime_config["candidate_m"],
+        runtime_config["git_commit"],
+        runtime_config["milvus_database"],
+        runtime_config["milvus_collection"],
+    )
     missing_gold = [case["id"] for case in cases if not case.get("gold_answer")]
     if missing_gold:
         raise RuntimeError(f"Dataset has missing gold_answer values: {', '.join(missing_gold)}")
@@ -521,7 +540,7 @@ def run_evaluation(cases_path: Path, output_path: Path, judge_answers: bool = Fa
                 result["excluded_from_metrics"] = True
                 _write_json_atomic(
                     output_path,
-                    {"dataset": str(cases_path), "metrics": _metrics(list(results_by_id.values())), "results": list(results_by_id.values())},
+                    _evaluation_report(cases_path, runtime_config, list(results_by_id.values())),
                 )
                 raise EvaluationApiFailure(result["error"])
     for index, case in enumerate(pending_cases, start=1):
@@ -574,7 +593,7 @@ def run_evaluation(cases_path: Path, output_path: Path, judge_answers: bool = Fa
         partial_results = [results_by_id[case["id"]] for case in cases if case["id"] in results_by_id]
         _write_json_atomic(
             output_path,
-            {"dataset": str(cases_path), "metrics": _metrics(partial_results), "results": partial_results},
+            _evaluation_report(cases_path, runtime_config, partial_results),
         )
         print(
             f"[{len(prior_results) + index}/{len(cases)}] evaluated {case['id']} "
@@ -585,8 +604,8 @@ def run_evaluation(cases_path: Path, output_path: Path, judge_answers: bool = Fa
             raise EvaluationApiFailure(result["error"] or "Evaluation request failed")
 
     results = [results_by_id[case["id"]] for case in cases if case["id"] in results_by_id]
-    metrics = _metrics(results)
-    report = {"dataset": str(cases_path), "metrics": metrics, "results": results}
+    report = _evaluation_report(cases_path, runtime_config, results)
+    metrics = report["metrics"]
     output_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return metrics
 
