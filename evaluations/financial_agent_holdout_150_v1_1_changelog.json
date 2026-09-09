@@ -1,0 +1,51 @@
+{
+  "version": "financial_agent_holdout_150_v1_1_scoring",
+  "scope": "offline scoring-only; no questions, production code, or raw v1 artifacts were changed",
+  "changes": [
+    {
+      "type": "gold_label_correction",
+      "case_id": "agent_holdout_077",
+      "old": {
+        "expected_report_periods": [
+          "2024FY"
+        ]
+      },
+      "new": {
+        "expected_report_periods": [
+          "2024H1"
+        ]
+      },
+      "reason": "question explicitly says 2024H1"
+    },
+    {
+      "type": "gold_label_correction",
+      "case_id": "agent_holdout_090",
+      "old": {
+        "expected_report_periods": [
+          "2024FY"
+        ]
+      },
+      "new": {
+        "expected_report_periods": [
+          "2024H1"
+        ]
+      },
+      "reason": "question explicitly says 2024H1"
+    },
+    {
+      "type": "scoring_correction",
+      "area": "guardrail",
+      "reason": "only deterministic guardrail_status/flags enter denominator; status=passed without a behavior-specific flag is unevaluable, not false"
+    },
+    {
+      "type": "scoring_correction",
+      "area": "thread_isolation",
+      "reason": "isolation checks exact company-context recovery and absence of foreign companies; it does not require historical report_period on News/Market turns"
+    },
+    {
+      "type": "scoring_correction",
+      "area": "composite_completion",
+      "reason": "external timeout is not a planner failure when tools were planned and attempted, final answer exists, and guardrail recorded safe degradation"
+    }
+  ]
+}
