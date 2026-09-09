@@ -39,6 +39,8 @@ export function useAgentStream() {
   const [backendStatus, setBackendStatus] = useState<"ready" | "online" | "offline">("ready");
   const socketRef = useRef<WebSocket | null>(null);
   const completedRef = useRef(false);
+  const activeRequestRef = useRef<string | null>(null);
+  const mockTimerRef = useRef<number[]>([]);
   const [userId, setUserId] = useState("");
   const [threadId, setThreadId] = useState("");
 
@@ -48,7 +50,10 @@ export function useAgentStream() {
     if (!stored) localStorage.setItem("financial-agent-user-id", currentUser);
     setUserId(currentUser);
     setThreadId(newId());
-    return () => socketRef.current?.close();
+    return () => {
+      mockTimerRef.current.forEach(window.clearTimeout);
+      socketRef.current?.close();
+    };
   }, []);
 
   const updateAssistant = useCallback((id: string, change: (message: ChatMessage) => ChatMessage) => {
@@ -64,6 +69,11 @@ export function useAgentStream() {
       },
     }));
   }, [updateAssistant]);
+
+  const clearMockTimers = useCallback(() => {
+    mockTimerRef.current.forEach(window.clearTimeout);
+    mockTimerRef.current = [];
+  }, []);
 
   const applyEvent = useCallback((assistantId: string, event: AgentEvent) => {
     switch (event.type) {
@@ -136,8 +146,14 @@ export function useAgentStream() {
 
   const send = useCallback((query: string) => {
     if (!query.trim() || isStreaming || !threadId || !userId) return;
+    completedRef.current = true;
+    activeRequestRef.current = null;
+    clearMockTimers();
     socketRef.current?.close();
+    socketRef.current = null;
     completedRef.current = false;
+    const requestId = newId();
+    activeRequestRef.current = requestId;
     setIsStreaming(true);
     const assistantId = newId();
     setMessages((items) => [
@@ -148,7 +164,12 @@ export function useAgentStream() {
 
     if (isMockMode) {
       mockEvents(query.trim(), threadId, userId).forEach((event, index) => {
-        window.setTimeout(() => applyEvent(assistantId, event), index * 180);
+        const timer = window.setTimeout(() => {
+          if (activeRequestRef.current !== requestId) return;
+          applyEvent(assistantId, event);
+          if (event.type === "end" || event.type === "error") activeRequestRef.current = null;
+        }, index * 180);
+        mockTimerRef.current.push(timer);
       });
       return;
     }
@@ -159,36 +180,55 @@ export function useAgentStream() {
     } catch {
       setBackendStatus("offline");
       applyEvent(assistantId, { type: "error", data: { code: "AGENT_EXECUTION_ERROR", message: "Agent request failed." }, timestamp: new Date().toISOString() });
+      activeRequestRef.current = null;
       return;
     }
     socketRef.current = socket;
+    const applyForRequest = (event: AgentEvent) => {
+      if (activeRequestRef.current !== requestId) return;
+      applyEvent(assistantId, event);
+      if (event.type === "end" || event.type === "error") activeRequestRef.current = null;
+    };
     socket.onopen = () => {
       setBackendStatus("online");
       socket.send(JSON.stringify({ query: query.trim(), thread_id: threadId, user_id: userId }));
     };
     socket.onmessage = (message) => {
       try {
-        applyEvent(assistantId, JSON.parse(message.data) as AgentEvent);
+        applyForRequest(JSON.parse(message.data) as AgentEvent);
       } catch {
-        applyEvent(assistantId, { type: "error", data: { code: "AGENT_EXECUTION_ERROR", message: "Agent request failed." }, timestamp: new Date().toISOString() });
+        applyForRequest({ type: "error", data: { code: "AGENT_EXECUTION_ERROR", message: "Agent request failed." }, timestamp: new Date().toISOString() });
       }
     };
     socket.onerror = () => setBackendStatus("offline");
     socket.onclose = () => {
       if (!completedRef.current) {
         setBackendStatus("offline");
-        applyEvent(assistantId, { type: "error", data: { code: "AGENT_EXECUTION_ERROR", message: "Agent request failed." }, timestamp: new Date().toISOString() });
+        applyForRequest({ type: "error", data: { code: "AGENT_EXECUTION_ERROR", message: "Agent request failed." }, timestamp: new Date().toISOString() });
       }
     };
-  }, [applyEvent, isStreaming, threadId, userId]);
+  }, [applyEvent, clearMockTimers, isStreaming, threadId, userId]);
 
   const newChat = useCallback(() => {
-    socketRef.current?.close();
     completedRef.current = true;
+    activeRequestRef.current = null;
+    clearMockTimers();
+    socketRef.current?.close();
+    socketRef.current = null;
     setMessages([]);
     setThreadId(newId());
     setIsStreaming(false);
-  }, []);
+  }, [clearMockTimers]);
 
-  return { messages, isStreaming, backendStatus, userId, threadId, send, newChat, isMockMode };
+  return {
+    messages,
+    isStreaming,
+    backendStatus,
+    isReady: Boolean(userId && threadId),
+    userId,
+    threadId,
+    send,
+    newChat,
+    isMockMode,
+  };
 }

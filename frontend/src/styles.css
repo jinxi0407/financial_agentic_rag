@@ -11,7 +11,7 @@ button, textarea { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button:focus-visible, a:focus-visible, textarea:focus-visible { outline: 2px solid #7c8053; outline-offset: 3px; }
 
-.app-shell { width: min(100% - 32px, 1000px); min-height: 100vh; margin: 0 auto; display: flex; flex-direction: column; }
+.app-shell { width: min(100% - 32px, 1200px); min-height: 100vh; margin: 0 auto; display: flex; flex-direction: column; }
 .app-header { min-height: 86px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e8e0d1; }
 .brand { display: flex; gap: 11px; align-items: center; }
 .brand-mark { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 7px; color: #fffdf8; background: #686d4b; font-weight: 700; font-size: 14px; }
@@ -22,6 +22,26 @@ button:focus-visible, a:focus-visible, textarea:focus-visible { outline: 2px sol
 .app-header button { color: #4f5438; font-weight: 650; }
 .mode-banner, .offline-banner { margin-top: 14px; border: 1px solid #e8e0d1; border-radius: 6px; padding: 9px 12px; color: #6d6658; background: #f5f0e5; font-size: 13px; }
 .offline-banner a { color: #4f5438; }
+
+.app-body { display: grid; grid-template-columns: 204px minmax(0, 1fr); flex: 1; min-height: 0; gap: 28px; }
+.chat-column { display: flex; min-width: 0; min-height: 0; flex-direction: column; }
+.company-sidebar { min-width: 0; padding: 28px 24px 18px 0; border-right: 1px solid #e8e0d1; }
+.company-sidebar-content { position: sticky; top: 18px; }
+.company-mobile-toggle { display: none; }
+.company-sidebar-heading { margin-bottom: 16px; }
+.company-sidebar-heading h2 { margin: 0; color: #4c493f; font-size: 13px; font-weight: 700; }
+.company-sidebar-heading p { margin: 4px 0 0; color: #918a7d; font-size: 11px; }
+.company-list { display: grid; gap: 3px; }
+.company-item { position: relative; display: flex; width: 100%; align-items: center; gap: 9px; padding: 7px 6px; border: 0; border-radius: 6px; color: #4c493f; background: transparent; text-align: left; cursor: pointer; }
+.company-item::before { position: absolute; left: 0; width: 2px; height: 22px; border-radius: 2px; background: transparent; content: ""; }
+.company-item:hover { background: #f5f0e5; }
+.company-item.is-selected { color: #414633; background: #f1ecdf; }
+.company-item.is-selected::before { background: #727950; }
+.company-mark { display: grid; width: 30px; height: 30px; flex: 0 0 30px; place-items: center; border: 1px solid #ddd4c2; border-radius: 50%; color: #626849; background: #fffdf8; font-size: 12px; font-weight: 700; }
+.company-copy { display: grid; min-width: 0; gap: 2px; }
+.company-copy strong { overflow: hidden; font-size: 13px; font-weight: 620; text-overflow: ellipsis; white-space: nowrap; }
+.company-copy small { color: #918a7d; font-size: 11px; letter-spacing: .25px; }
+.report-period-note { margin: 20px 4px 0; color: #918a7d; font-size: 11px; line-height: 1.55; }
 
 .conversation { flex: 1; min-height: 0; overflow-y: auto; scrollbar-gutter: stable; }
 .conversation.empty { display: grid; place-items: center; padding: 72px 0 128px; }
@@ -98,7 +118,7 @@ footer { padding: 12px 0 18px; color: #918a7d; font-size: 11px; text-align: cent
 @keyframes appear { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
 @media (max-width: 640px) {
-  .app-shell { width: min(100% - 24px, 1000px); }
+  .app-shell { width: min(100% - 24px, 1200px); }
   .app-header { min-height: 72px; }
   .brand p { display: none; }
   .conversation.empty { padding: 54px 0 96px; }
@@ -107,4 +127,19 @@ footer { padding: 12px 0 18px; color: #918a7d; font-size: 11px; text-align: cent
   .message-list { padding-top: 20px; }
   .activity-intent { max-width: 48%; }
   .trace-grid { grid-template-columns: 95px 1fr; }
+}
+
+@media (max-width: 760px) {
+  .app-body { display: block; }
+  .company-sidebar { padding: 12px 0 0; border-right: 0; border-bottom: 1px solid #e8e0d1; }
+  .company-mobile-toggle { display: grid; width: 100%; grid-template-columns: 1fr auto auto; align-items: center; gap: 10px; padding: 0 0 12px; border: 0; color: #4c493f; background: transparent; text-align: left; cursor: pointer; }
+  .company-mobile-toggle > span:first-child { font-size: 13px; font-weight: 700; }
+  .company-mobile-toggle small { color: #918a7d; font-size: 11px; }
+  .company-mobile-toggle > span:last-child { color: #6e7450; font-size: 18px; line-height: 1; }
+  .company-sidebar-content { display: none; position: static; padding: 4px 0 15px; }
+  .company-sidebar.is-open .company-sidebar-content { display: block; }
+  .company-sidebar-heading { display: none; }
+  .company-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+  .company-item { padding: 7px 5px; }
+  .report-period-note { margin: 14px 0 0; }
 }

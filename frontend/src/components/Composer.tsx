@@ -1,14 +1,18 @@
-import { FormEvent, KeyboardEvent, useRef } from "react";
+import { FormEvent, KeyboardEvent, useEffect, useRef } from "react";
 
 interface ComposerProps {
   value: string;
   disabled: boolean;
+  focusRequest: number;
   onChange: (value: string) => void;
   onSend: () => void;
 }
 
-export function Composer({ value, disabled, onChange, onSend }: ComposerProps) {
+export function Composer({ value, disabled, focusRequest, onChange, onSend }: ComposerProps) {
   const textarea = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    if (focusRequest) textarea.current?.focus();
+  }, [focusRequest]);
   const submit = (event: FormEvent) => {
     event.preventDefault();
     onSend();
