@@ -3,6 +3,7 @@
 import re
 
 from .schemas import PlannerDecision
+from .tools.calculator_tool import CalculatorTool
 
 
 _MARKET_TERMS = ("股价", "行情", "涨停", "跌停", "成交量", "市值", "实时行情", "最新股价", "涨跌", "市场表现", "股票表现", "这个票")
@@ -153,6 +154,9 @@ class FinancialPlanner:
     @staticmethod
     def simple_calculation_request(query: str) -> dict | None:
         """Parse only unambiguous, self-contained calculator requests."""
+        expression = CalculatorTool.parse_safe_expression(query)
+        if expression and CalculatorTool.is_compound_expression(expression):
+            return {"operation": "expression", "expression": expression}
         match = _PERCENTAGE_POINT_PATTERN.search(query)
         if match:
             return {

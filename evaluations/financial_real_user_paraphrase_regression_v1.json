@@ -93,6 +93,17 @@
     {"id":"real_080","category":"unsupported","session_id":"single-080","turn_index":1,"question":"看看它的财报","expected_intent":"unsupported","expected_tools":[],"checks":["no_company_pronoun"]},
     {"id":"real_081","category":"memory_explicit_override","session_id":"override-byd-news","turn_index":1,"question":"先看看五粮液的财报","expected_intent":"financial_report_query","expected_tools":["financial_rag"],"expected_company_codes":["000858"]},
     {"id":"real_082","category":"memory_explicit_override","session_id":"override-byd-news","turn_index":2,"question":"那比亚迪最近有什么新闻","expected_intent":"news_query","expected_tools":["news_mcp"],"expected_company_codes":["002594"],"checks":["memory_company"]},
-    {"id":"real_083","category":"greeting_identity","session_id":"single-083","turn_index":1,"question":"你好，你能做什么？","expected_intent":"greeting","expected_tools":[],"checks":["identity"]}
+    {"id":"real_083","category":"greeting_identity","session_id":"single-083","turn_index":1,"question":"你好，你能做什么？","expected_intent":"greeting","expected_tools":[],"checks":["identity"]},
+
+    {"id":"real_084","category":"compound_arithmetic","session_id":"single-084","turn_index":1,"question":"1+9*3是多少","expected_intent":"calculation_query","expected_tools":["calculator"],"expected_arithmetic_result":28,"checks":["arithmetic_exact"]},
+    {"id":"real_085","category":"compound_arithmetic","session_id":"single-085","turn_index":1,"question":"(1+9)*3是多少","expected_intent":"calculation_query","expected_tools":["calculator"],"expected_arithmetic_result":30,"checks":["arithmetic_exact"]},
+    {"id":"real_086","category":"compound_arithmetic","session_id":"single-086","turn_index":1,"question":"100/4+5","expected_intent":"calculation_query","expected_tools":["calculator"],"expected_arithmetic_result":30,"checks":["arithmetic_exact"]},
+    {"id":"real_087","category":"compound_arithmetic","session_id":"single-087","turn_index":1,"question":"100-20*2","expected_intent":"calculation_query","expected_tools":["calculator"],"expected_arithmetic_result":60,"checks":["arithmetic_exact"]},
+    {"id":"real_088","category":"compound_arithmetic","session_id":"single-088","turn_index":1,"question":"10+20/5","expected_intent":"calculation_query","expected_tools":["calculator"],"expected_arithmetic_result":14,"checks":["arithmetic_exact"]},
+    {"id":"real_089","category":"compound_arithmetic","session_id":"single-089","turn_index":1,"question":"1+9×3","expected_intent":"calculation_query","expected_tools":["calculator"],"expected_arithmetic_result":28,"checks":["arithmetic_exact"]},
+    {"id":"real_090","category":"compound_arithmetic","session_id":"single-090","turn_index":1,"question":"100÷4+5","expected_intent":"calculation_query","expected_tools":["calculator"],"expected_arithmetic_result":30,"checks":["arithmetic_exact"]},
+    {"id":"real_091","category":"calculator_rejection","session_id":"single-091","turn_index":1,"question":"__import__('os').system('x')","expected_intent":"unsupported","expected_tools":[]},
+    {"id":"real_092","category":"calculator_rejection","session_id":"single-092","turn_index":1,"question":"open('x')","expected_intent":"unsupported","expected_tools":[]},
+    {"id":"real_093","category":"calculator_rejection","session_id":"single-093","turn_index":1,"question":"2**100","expected_intent":"unsupported","expected_tools":[]}
   ]
 }

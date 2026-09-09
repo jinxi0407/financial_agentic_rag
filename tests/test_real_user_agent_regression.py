@@ -9,7 +9,7 @@ class RealUserAgentRegressionTests(unittest.TestCase):
     def test_dataset_audit_and_size(self):
         audit = audit_dataset(load_dataset())
         self.assertTrue(audit["passed"])
-        self.assertEqual(82, audit["case_count"])
+        self.assertEqual(92, audit["case_count"])
 
     def test_greeting_and_definition_do_not_become_calculations(self):
         planner = FinancialPlanner()
@@ -37,6 +37,21 @@ class RealUserAgentRegressionTests(unittest.TestCase):
         }.items():
             self.assertEqual(operation, planner.simple_calculation_request(query)["operation"])
         for query in ("贵州茅台600519现在股价怎么样", "比亚迪2026H1营业收入是多少", "看看2025FY报告"):
+            self.assertIsNone(planner.simple_calculation_request(query))
+        for query, expected in {
+            "1+9*3是多少": 28,
+            "(1+9)*3是多少": 30,
+            "100/4+5": 30,
+            "100-20*2": 60,
+            "10+20/5": 14,
+            "1+9×3": 28,
+            "100÷4+5": 30,
+        }.items():
+            request = planner.simple_calculation_request(query)
+            self.assertEqual("expression", request["operation"])
+            result = make_agent().calculator.run(**request)
+            self.assertEqual(expected, result.result)
+        for query in ("__import__('os').system('x')", "open('x')", "2**100"):
             self.assertIsNone(planner.simple_calculation_request(query))
 
     def test_market_news_paraphrases_and_thread_context(self):

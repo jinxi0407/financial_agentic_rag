@@ -420,7 +420,7 @@ class LangGraphFinancialAgent:
             return f"{direction}了 {abs(value):.1f}。"
         if operation == "ratio":
             return f"计算结果为 {value:.2f}。"
-        if operation in {"addition", "subtraction", "multiplication"}:
+        if operation in {"addition", "subtraction", "multiplication", "expression"}:
             return f"计算结果为 {value:g}。"
         return f"计算结果为 {value}。"
 

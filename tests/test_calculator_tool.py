@@ -52,6 +52,27 @@ class CalculatorToolTests(unittest.TestCase):
             self.assertTrue(result.success)
             self.assertEqual(expected, result.result)
 
+    def test_safe_compound_expressions_respect_precedence(self):
+        cases = {
+            "1+9*3是多少": 28,
+            "(1+9)*3是多少": 30,
+            "100/4+5": 30,
+            "100-20*2": 60,
+            "10+20/5": 14,
+            "1+9×3": 28,
+            "100÷4+5": 30,
+        }
+        for expression, expected in cases.items():
+            result = self.tool.run("expression", expression=expression)
+            self.assertTrue(result.success, expression)
+            self.assertEqual(expected, result.result, expression)
+
+    def test_unsafe_expressions_are_rejected(self):
+        for expression in ("__import__('os').system('x')", "open('x')", "2**100"):
+            result = self.tool.run("expression", expression=expression)
+            self.assertFalse(result.success, expression)
+            self.assertIn("unsafe arithmetic expression", result.error)
+
     def test_division_by_zero_is_safe(self):
         result = self.tool.run("growth_rate", current=120, previous=0)
         self.assertFalse(result.success)
