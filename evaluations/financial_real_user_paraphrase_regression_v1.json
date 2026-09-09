@@ -1,0 +1,62 @@
+{
+  "version": "dev-v1",
+  "purpose": "Development-only real-user paraphrase regression. It is not a frozen holdout or production benchmark.",
+  "cases": [
+    {"id":"real_001","category":"greeting_identity","session_id":"single-001","turn_index":1,"question":"hi","expected_intent":"greeting","expected_tools":[],"checks":["greeting"]},
+    {"id":"real_002","category":"greeting_identity","session_id":"single-002","turn_index":1,"question":"hello","expected_intent":"greeting","expected_tools":[],"checks":["greeting"]},
+    {"id":"real_003","category":"greeting_identity","session_id":"single-003","turn_index":1,"question":"你好","expected_intent":"greeting","expected_tools":[],"checks":["greeting"]},
+    {"id":"real_004","category":"greeting_identity","session_id":"single-004","turn_index":1,"question":"您好","expected_intent":"greeting","expected_tools":[],"checks":["greeting"]},
+    {"id":"real_005","category":"greeting_identity","session_id":"single-005","turn_index":1,"question":"你是什么？","expected_intent":"greeting","expected_tools":[],"checks":["identity"]},
+    {"id":"real_006","category":"greeting_identity","session_id":"single-006","turn_index":1,"question":"你能做什么？","expected_intent":"greeting","expected_tools":[],"checks":["identity"]},
+
+    {"id":"real_007","category":"definition_faq","session_id":"single-007","turn_index":1,"question":"什么是流动比率？","expected_intent":"financial_report_query","expected_tools":["financial_rag"],"checks":["faq_route"]},
+    {"id":"real_008","category":"definition_faq","session_id":"single-008","turn_index":1,"question":"流动比率是啥？","expected_intent":"financial_report_query","expected_tools":["financial_rag"],"checks":["faq_route"]},
+    {"id":"real_009","category":"definition_faq","session_id":"single-009","turn_index":1,"question":"什么是速动比率？","expected_intent":"financial_report_query","expected_tools":["financial_rag"],"checks":["faq_route"]},
+    {"id":"real_010","category":"definition_faq","session_id":"single-010","turn_index":1,"question":"市盈率是什么意思？","expected_intent":"financial_report_query","expected_tools":["financial_rag"],"checks":["faq_route"]},
+    {"id":"real_011","category":"definition_faq","session_id":"single-011","turn_index":1,"question":"ROE 是什么？","expected_intent":"financial_report_query","expected_tools":["financial_rag"],"checks":["faq_route"]},
+    {"id":"real_012","category":"definition_faq","session_id":"single-012","turn_index":1,"question":"什么叫归母净利润？","expected_intent":"financial_report_query","expected_tools":["financial_rag"],"checks":["faq_route"]},
+    {"id":"real_013","category":"definition_faq","session_id":"single-013","turn_index":1,"question":"营业收入和净利润有什么区别？","expected_intent":"financial_report_query","expected_tools":["financial_rag"],"checks":["faq_route"]},
+
+    {"id":"real_014","category":"calculator","session_id":"single-014","turn_index":1,"question":"从80增长到100，增长率是多少？","expected_intent":"calculation_query","expected_tools":["calculator"],"checks":["calculator_percent"]},
+    {"id":"real_015","category":"calculator","session_id":"single-015","turn_index":1,"question":"100比80增长多少百分比？","expected_intent":"calculation_query","expected_tools":["calculator"],"checks":["calculator_percent"]},
+    {"id":"real_016","category":"calculator","session_id":"single-016","turn_index":1,"question":"80到100增加了多少？","expected_intent":"calculation_query","expected_tools":["calculator"],"checks":["calculator_absolute"]},
+    {"id":"real_017","category":"calculator","session_id":"single-017","turn_index":1,"question":"20除以80是多少？","expected_intent":"calculation_query","expected_tools":["calculator"],"checks":["calculator_ratio"]},
+    {"id":"real_018","category":"calculator","session_id":"single-018","turn_index":1,"question":"从100减少到80，减少了多少？","expected_intent":"calculation_query","expected_tools":["calculator"],"checks":["calculator_absolute"]},
+    {"id":"real_019","category":"calculator","session_id":"single-019","turn_index":1,"question":"不良贷款率从1.2%降到1.0%，下降多少个百分点？","expected_intent":"calculation_query","expected_tools":["calculator"],"checks":["calculator_percentage_point"]},
+
+    {"id":"real_020","category":"market_paraphrase","session_id":"single-020","turn_index":1,"question":"看看贵州茅台现在的股票行情","expected_intent":"market_query","expected_tools":["market_mcp"],"expected_company_codes":["600519"],"checks":["market_format"]},
+    {"id":"real_021","category":"market_paraphrase","session_id":"single-021","turn_index":1,"question":"贵州茅台现在股价怎么样？","expected_intent":"market_query","expected_tools":["market_mcp"],"expected_company_codes":["600519"],"checks":["market_format"]},
+    {"id":"real_022","category":"market_paraphrase","session_id":"single-022","turn_index":1,"question":"比亚迪当前市场表现怎么样？","expected_intent":"market_query","expected_tools":["market_mcp"],"expected_company_codes":["002594"],"checks":["market_format"]},
+    {"id":"real_023","category":"market_paraphrase","session_id":"single-023","turn_index":1,"question":"帮我看看比亚迪这个票","expected_intent":"market_query","expected_tools":["market_mcp"],"expected_company_codes":["002594"],"checks":["market_format"]},
+    {"id":"real_024","category":"market_paraphrase","session_id":"single-024","turn_index":1,"question":"宁德时代今天行情如何？","expected_intent":"market_query","expected_tools":["market_mcp"],"expected_company_codes":["300750"],"checks":["market_format"]},
+
+    {"id":"real_025","category":"news_paraphrase","session_id":"single-025","turn_index":1,"question":"中芯国际最近有什么新闻？","expected_intent":"news_query","expected_tools":["news_mcp"],"expected_company_codes":["688981"]},
+    {"id":"real_026","category":"news_paraphrase","session_id":"single-026","turn_index":1,"question":"中芯国际最近发生什么了？","expected_intent":"news_query","expected_tools":["news_mcp"],"expected_company_codes":["688981"]},
+    {"id":"real_027","category":"news_paraphrase","session_id":"single-027","turn_index":1,"question":"帮我看看茅台最近的消息","expected_intent":"news_query","expected_tools":["news_mcp"],"expected_company_codes":["600519"]},
+    {"id":"real_028","category":"news_paraphrase","session_id":"single-028","turn_index":1,"question":"比亚迪最近有什么值得关注的新闻？","expected_intent":"news_query","expected_tools":["news_mcp"],"expected_company_codes":["002594"]},
+
+    {"id":"real_029","category":"memory_pronoun","session_id":"memory-byd-market","turn_index":1,"question":"查比亚迪2026H1营业收入","expected_intent":"financial_report_query","expected_tools":["financial_rag"],"expected_company_codes":["002594"],"expected_report_periods":["2026H1"]},
+    {"id":"real_030","category":"memory_pronoun","session_id":"memory-byd-market","turn_index":2,"question":"看看它现在的股票行情","expected_intent":"market_query","expected_tools":["market_mcp"],"expected_company_codes":["002594"],"checks":["memory_company"]},
+    {"id":"real_031","category":"memory_pronoun","session_id":"memory-mt-news","turn_index":1,"question":"看看贵州茅台财报","expected_intent":"financial_report_query","expected_tools":["financial_rag"],"expected_company_codes":["600519"]},
+    {"id":"real_032","category":"memory_pronoun","session_id":"memory-mt-news","turn_index":2,"question":"那它最近有什么新闻？","expected_intent":"news_query","expected_tools":["news_mcp"],"expected_company_codes":["600519"],"checks":["memory_company"]},
+    {"id":"real_033","category":"memory_pronoun","session_id":"memory-bank-market","turn_index":1,"question":"比较招商银行和平安银行2025H1财报","expected_intent":"financial_report_query","expected_tools":["financial_rag"],"expected_company_codes":["600036","000001"],"expected_report_periods":["2025H1"]},
+    {"id":"real_034","category":"memory_pronoun","session_id":"memory-bank-market","turn_index":2,"question":"它们当前行情如何？","expected_intent":"market_query","expected_tools":["market_mcp"],"expected_company_codes":["600036","000001"],"checks":["memory_company"]},
+
+    {"id":"real_035","category":"unspecified_period","session_id":"single-035","turn_index":1,"question":"茅台的财报看看","expected_intent":"financial_report_query","expected_tools":["financial_rag"],"expected_company_codes":["600519"],"expected_period_options":["2025H1","2025FY","2026H1"],"checks":["period_clarity"]},
+    {"id":"real_036","category":"unspecified_period","session_id":"single-036","turn_index":1,"question":"看一下比亚迪最近的财报","expected_intent":"financial_report_query","expected_tools":["financial_rag"],"expected_company_codes":["002594"],"expected_period_options":["2025H1","2025FY","2026H1"],"checks":["period_clarity"]},
+    {"id":"real_037","category":"unspecified_period","session_id":"single-037","turn_index":1,"question":"招商银行有哪些年度报告？","expected_intent":"financial_report_query","expected_tools":["financial_rag"],"expected_company_codes":["600036"],"expected_period_options":["2025FY"],"checks":["period_clarity"]},
+    {"id":"real_038","category":"unspecified_period","session_id":"single-038","turn_index":1,"question":"中芯国际的半年度报告能看吗？","expected_intent":"financial_report_query","expected_tools":["financial_rag"],"expected_company_codes":["688981"],"expected_period_options":["2025H1","2026H1"],"checks":["period_clarity"]},
+
+    {"id":"real_039","category":"unsupported","session_id":"single-039","turn_index":1,"question":"帮我写一首诗","expected_intent":"unsupported","expected_tools":[],"checks":["friendly_unsupported"]},
+    {"id":"real_040","category":"unsupported","session_id":"single-040","turn_index":1,"question":"今天天气怎么样","expected_intent":"unsupported","expected_tools":[],"checks":["friendly_unsupported"]},
+    {"id":"real_041","category":"unsupported","session_id":"single-041","turn_index":1,"question":"给我推荐电影","expected_intent":"unsupported","expected_tools":[],"checks":["friendly_unsupported"]},
+    {"id":"real_042","category":"unsupported","session_id":"single-042","turn_index":1,"question":"帮我规划一次日本旅行","expected_intent":"unsupported","expected_tools":[],"checks":["friendly_unsupported"]},
+    {"id":"real_043","category":"unsupported","session_id":"single-043","turn_index":1,"question":"教我做意大利面","expected_intent":"unsupported","expected_tools":[],"checks":["friendly_unsupported"]},
+
+    {"id":"real_044","category":"composite","session_id":"single-044","turn_index":1,"question":"结合比亚迪2026H1财报和现在行情分析一下","expected_intent":"composite_query","expected_tools":["financial_rag","market_mcp"],"expected_company_codes":["002594"],"expected_report_periods":["2026H1"]},
+    {"id":"real_045","category":"composite","session_id":"single-045","turn_index":1,"question":"看看中芯国际财报、最近新闻和当前股票表现","expected_intent":"composite_query","expected_tools":["financial_rag","market_mcp","news_mcp"],"expected_company_codes":["688981"]},
+    {"id":"real_046","category":"composite","session_id":"single-046","turn_index":1,"question":"比较茅台和五粮液财报，再看看茅台现在行情","expected_intent":"composite_query","expected_tools":["financial_rag","market_mcp"],"expected_company_codes":["600519","000858"]},
+    {"id":"real_047","category":"composite","session_id":"single-047","turn_index":1,"question":"宁德时代2025FY营收、近期新闻和行情一起看看","expected_intent":"composite_query","expected_tools":["financial_rag","market_mcp","news_mcp"],"expected_company_codes":["300750"],"expected_report_periods":["2025FY"]},
+    {"id":"real_048","category":"composite","session_id":"single-048","turn_index":1,"question":"比较招商银行和平安银行2026H1财务表现，再看最近新闻","expected_intent":"composite_query","expected_tools":["financial_rag","news_mcp"],"expected_company_codes":["600036","000001"],"expected_report_periods":["2026H1"]}
+  ]
+}

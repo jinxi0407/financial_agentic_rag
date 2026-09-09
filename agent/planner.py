@@ -5,18 +5,30 @@ import re
 from .schemas import PlannerDecision
 
 
-_MARKET_TERMS = ("股价", "行情", "涨停", "跌停", "成交量", "市值", "实时行情", "最新股价", "涨跌")
-_NEWS_TERMS = ("新闻", "资讯", "消息", "news", "舆情", "公告", "事件")
+_MARKET_TERMS = ("股价", "行情", "涨停", "跌停", "成交量", "市值", "实时行情", "最新股价", "涨跌", "市场表现", "股票表现", "这个票")
+_NEWS_TERMS = ("新闻", "资讯", "消息", "news", "舆情", "公告", "事件", "发生什么")
 _FINANCIAL_REPORT_TERMS = (
-    "财报", "年报", "半年报", "半年度", "季度报告", "营业收入", "营业总收入",
+    "财报", "年报", "年度报告", "半年报", "半年度", "季度报告", "营业收入", "营业总收入",
     "净利润", "归母", "毛利率", "研发", "现金流", "净息差", "不良贷款率",
     "拨备覆盖率", "资产负债率", "同比", "环比", "roe", "财务指标",
     "财务表现", "营收", "h1", "fy",
 )
-_CALCULATION_TERMS = ("增长率", "增长", "增加", "减少", "差值", "比率", "百分点")
+_DEFINITION_TERMS = ("流动比率", "速动比率", "市盈率", "roe", "归母净利润", "营业收入和净利润")
+_GREETING_PATTERN = re.compile(r"^(?:hi|hello|你好|您好|嗨)[!！。,.\s]*$", re.I)
+_IDENTITY_PATTERN = re.compile(r"^(?:你是什么|你能做什么)[？?！!。\s]*$")
 _SIMPLE_GROWTH_PATTERN = re.compile(
     r"从\s*(?P<previous>-?\d+(?:\.\d+)?)\s*(?:增长(?:到)?|增加(?:到)?|变为|到)\s*"
     r"(?P<current>-?\d+(?:\.\d+)?)(?=[，,。！？?\s]|$)"
+)
+_COMPARE_GROWTH_PATTERN = re.compile(
+    r"(?P<current>-?\d+(?:\.\d+)?)\s*比\s*(?P<previous>-?\d+(?:\.\d+)?)\s*增长(?:了|多少)?(?:百分比|%)?"
+)
+_ABSOLUTE_CHANGE_PATTERN = re.compile(
+    r"(?:从\s*)?(?P<previous>-?\d+(?:\.\d+)?)\s*(?:(?:增加|减少|上升|下降)(?:到|至)|(?:到|至))\s*(?P<current>-?\d+(?:\.\d+)?)(?:\s*(?:增加|减少|上升|下降))?"
+)
+_RATIO_PATTERN = re.compile(r"(?P<numerator>-?\d+(?:\.\d+)?)\s*(?:除以|/)\s*(?P<denominator>-?\d+(?:\.\d+)?)")
+_PERCENTAGE_POINT_PATTERN = re.compile(
+    r"(?:从\s*)?(?P<previous>-?\d+(?:\.\d+)?)%\s*(?:降到|下降至|到|至|升到|上升至)\s*(?P<current>-?\d+(?:\.\d+)?)%.*百分点"
 )
 
 
@@ -35,9 +47,21 @@ class FinancialPlanner:
                 tools=(),
                 reason="查询为空，无法选择金融财报工具。",
             )
+        if _GREETING_PATTERN.match(normalized) or _IDENTITY_PATTERN.match(normalized):
+            return PlannerDecision(
+                intent="greeting",
+                tools=(),
+                reason="用户正在问候或询问 Agent 能力范围。",
+            )
         has_market = any(term in lowered for term in _MARKET_TERMS)
         has_news = any(term in lowered for term in _NEWS_TERMS)
         has_report = any(term in lowered for term in _FINANCIAL_REPORT_TERMS)
+        if any(term in lowered for term in _DEFINITION_TERMS):
+            return PlannerDecision(
+                intent="financial_report_query",
+                tools=("financial_rag",),
+                reason="用户询问金融定义，交由 Financial RAG 的 FAQ fast path 处理。",
+            )
         if (has_market or has_news) and has_report:
             tools = ["financial_rag"]
             if has_market:
@@ -73,12 +97,6 @@ class FinancialPlanner:
                 tools=("financial_rag",),
                 reason="用户询问冻结财报语料中的金融指标或报告信息。",
             )
-        if any(term in lowered for term in _CALCULATION_TERMS):
-            return PlannerDecision(
-                intent="calculation_query",
-                tools=("calculator",),
-                reason="用户请求确定性数值计算。",
-            )
         return PlannerDecision(
             intent="unsupported",
             tools=(),
@@ -108,14 +126,35 @@ class FinancialPlanner:
 
     @staticmethod
     def simple_calculation_request(query: str) -> dict | None:
-        """Parse only the unambiguous MVP growth-rate sentence form."""
-        if "增长率" not in query:
-            return None
+        """Parse only unambiguous, self-contained calculator requests."""
+        match = _PERCENTAGE_POINT_PATTERN.search(query)
+        if match:
+            return {
+                "operation": "percentage_point_change",
+                "current": float(match.group("current")),
+                "previous": float(match.group("previous")),
+            }
         match = _SIMPLE_GROWTH_PATTERN.search(query)
         if not match:
-            return None
-        return {
-            "operation": "growth_rate",
-            "current": float(match.group("current")),
-            "previous": float(match.group("previous")),
-        }
+            match = _COMPARE_GROWTH_PATTERN.search(query)
+        if match:
+            return {
+                "operation": "growth_rate",
+                "current": float(match.group("current")),
+                "previous": float(match.group("previous")),
+            }
+        match = _ABSOLUTE_CHANGE_PATTERN.search(query)
+        if match:
+            return {
+                "operation": "absolute_change",
+                "current": float(match.group("current")),
+                "previous": float(match.group("previous")),
+            }
+        match = _RATIO_PATTERN.search(query)
+        if match:
+            return {
+                "operation": "ratio",
+                "numerator": float(match.group("numerator")),
+                "denominator": float(match.group("denominator")),
+            }
+        return None

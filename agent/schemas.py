@@ -5,6 +5,7 @@ from typing import Literal
 
 
 PlannerIntent = Literal[
+    "greeting",
     "financial_report_query",
     "calculation_query",
     "market_query",

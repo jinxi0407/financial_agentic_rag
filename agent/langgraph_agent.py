@@ -196,7 +196,10 @@ class LangGraphFinancialAgent:
     def _period(query: str) -> str | None:
         import re
         match = re.search(r"(20\d{2})(?:年)?(?:H1|上半年|半年度)", query, re.I)
-        return f"{match.group(1)}H1" if match else None
+        if match:
+            return f"{match.group(1)}H1"
+        match = re.search(r"(20\d{2})(?:年)?(?:FY|年度|全年|年报)", query, re.I)
+        return f"{match.group(1)}FY" if match else None
 
     def _financial_rag(self, state: AgentState):
         if "financial_rag" not in state.get("required_tools", []): return {}
@@ -247,16 +250,23 @@ class LangGraphFinancialAgent:
         return response
 
     def _aggregation(self, state):
+        if state.get("intent") == "greeting":
+            return {"draft_answer": self._greeting_answer(state.get("query", ""))}
+        if state.get("intent") == "unsupported":
+            return {"draft_answer": self._unsupported_answer()}
         if state.get("intent") != "composite_query":
             financial_result = self._tool_result(state, "financial_rag")
             if financial_result and financial_result.get("success"):
+                guidance = self._report_period_guidance(state.get("query", ""))
+                if guidance:
+                    return {"draft_answer": guidance}
                 return {"draft_answer": financial_result["answer"]}
             if state.get("market_results"):
-                return {"draft_answer": "\n".join(str(item.get("result")) for item in state["market_results"])}
+                return {"draft_answer": self._market_answer(state["market_results"])}
             if state.get("news_results"):
-                return {"draft_answer": "\n".join(str(item.get("result")) for item in state["news_results"])}
+                return {"draft_answer": self._news_answer(state["news_results"])}
             if state.get("calculation_result"):
-                return {"draft_answer": str(state["calculation_result"].get("result"))}
+                return {"draft_answer": self._calculator_answer(state["calculation_result"], state.get("query", ""))}
         return {"draft_answer": self._safe_summary(state)}
 
     def _synthesis(self, state):
@@ -332,6 +342,9 @@ class LangGraphFinancialAgent:
         financial_result = self._tool_result(state, "financial_rag")
         if financial_result and financial_result.get("success"):
             allowed = self._numbers(financial_result.get("answer", ""))
+            guidance = self._report_period_guidance(state.get("query", ""))
+            if guidance:
+                allowed.update(self._numbers(guidance))
             allowed.update(self._numbers(str(state.get("market_results", []))))
             allowed.update(self._numbers(str(state.get("news_results", []))))
             allowed.update(self._numbers(str(state.get("calculation_result", {}))))
@@ -343,6 +356,80 @@ class LangGraphFinancialAgent:
     @staticmethod
     def _tool_result(state, tool_name):
         return next((item for item in state.get("tool_results", []) if item.get("tool_name") == tool_name), None)
+
+    @staticmethod
+    def _greeting_answer(query: str) -> str:
+        if "什么" in query or "能做" in query:
+            return "我是 Financial Agent，目前支持 8 家 A 股公司的财报、实时行情、财经新闻和财务计算。"
+        return "你好，我是 Financial Agent，目前支持 8 家 A 股公司的财报、实时行情、财经新闻和财务计算。"
+
+    @staticmethod
+    def _unsupported_answer() -> str:
+        return "当前 Financial Agent 目前支持 8 家 A 股公司的财报、实时行情、财经新闻和确定性财务计算。例如：‘贵州茅台 2026H1 营业收入是多少？’"
+
+    @staticmethod
+    def _report_period_guidance(query: str) -> str | None:
+        if not any(term in query for term in ("财报", "报告")):
+            return None
+        if re.search(r"20\d{2}", query):
+            return None
+        if any(term in query for term in ("半年报", "半年度", "上半年")):
+            return "当前可用半年度报告：2025H1、2026H1。请指定希望查看的年份。"
+        if any(term in query for term in ("年度报告", "年报", "全年")):
+            return "当前可用年度报告：2025FY。该期间为全年口径。"
+        return "当前可用报告期间：2025H1、2025FY、2026H1。请指定希望查看的期间。"
+
+    @staticmethod
+    def _calculator_answer(result: dict[str, Any], query: str) -> str:
+        if not result.get("success"):
+            return "当前 Calculator 工具无法完成该计算，请提供明确的数值输入。"
+        value = result.get("result")
+        if value is None:
+            return "当前 Calculator 工具未返回可展示结果。"
+        operation = result.get("operation")
+        if operation == "growth_rate":
+            return f"增长率为 {value:.1f}%。"
+        if operation == "percentage_point_change":
+            direction = "下降" if value < 0 else "上升"
+            return f"百分点变化为 {abs(value):.1f} 个百分点（{direction}）。"
+        if operation == "absolute_change":
+            direction = "减少" if "减少" in query or "下降" in query else "增加"
+            return f"{direction}了 {abs(value):.1f}。"
+        if operation == "ratio":
+            return f"计算结果为 {value:.2f}。"
+        return f"计算结果为 {value}。"
+
+    @staticmethod
+    def _market_answer(results: list[dict[str, Any]]) -> str:
+        rows = []
+        for item in results:
+            payload = item.get("result") or {}
+            if not item.get("success"):
+                rows.append("当前 Market MCP 未返回可用行情，不提供价格结论。")
+                continue
+            lines = [f"{payload.get('company_name')}（{payload.get('ticker')}）"]
+            if payload.get("price") is not None:
+                lines.append(f"当前价格：¥{payload['price']}")
+            if payload.get("change_percent") is not None:
+                lines.append(f"涨跌幅：{payload['change_percent']}%")
+            if payload.get("high") is not None:
+                lines.append(f"今日最高：¥{payload['high']}")
+            if payload.get("low") is not None:
+                lines.append(f"今日最低：¥{payload['low']}")
+            if payload.get("market_time"):
+                lines.append(f"数据时间：{payload['market_time']}")
+            if payload.get("source"):
+                lines.append(f"数据源：{payload['source']}")
+            rows.append("\n".join(lines))
+        return "\n\n".join(rows) or "当前未返回行情数据。"
+
+    @staticmethod
+    def _news_answer(results: list[dict[str, Any]]) -> str:
+        rows = []
+        for tool_result in results:
+            for item in (tool_result.get("result") or {}).get("results", []):
+                rows.append(f"- {item.get('title')}（来源：{item.get('source')}；发布时间：{item.get('published_at')}）")
+        return "\n".join(rows) or "当前未检索到相关新闻。"
 
     @staticmethod
     def _failed_tool_results(results):
