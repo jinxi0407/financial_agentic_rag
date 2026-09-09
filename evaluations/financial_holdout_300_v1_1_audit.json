@@ -1,0 +1,213 @@
+{
+  "schema_version": "financial_holdout_300_v1",
+  "generated_from": {
+    "reports_dir": "financial_data/annual_reports",
+    "actual_report_count": 24,
+    "gold_60": "evaluations/financial_eval_60_gold_v2.json",
+    "gold_60_case_count": 60,
+    "generator_commit": "b50dbcd"
+  },
+  "total_cases": 300,
+  "category_counts": {
+    "complex_multi_target": 20,
+    "explanation_risk": 20,
+    "metric_alias_ambiguity": 30,
+    "multi_company_multi_period": 40,
+    "multi_company_single_period": 60,
+    "negative_oos_invalid": 30,
+    "single_company_multi_period": 40,
+    "single_company_single_period": 60
+  },
+  "company_target_counts": {
+    "600519": 72,
+    "000858": 70,
+    "002594": 70,
+    "300750": 70,
+    "600036": 69,
+    "000001": 66,
+    "688981": 68,
+    "002371": 67
+  },
+  "period_target_counts": {
+    "2025H1": 181,
+    "2025FY": 185,
+    "2026H1": 186
+  },
+  "document_reference_counts": {
+    "中芯国际_688981_2025FY.pdf": 22,
+    "中芯国际_688981_2025H1.pdf": 25,
+    "中芯国际_688981_2026H1.pdf": 21,
+    "五粮液_000858_2025FY.pdf": 22,
+    "五粮液_000858_2025H1.pdf": 23,
+    "五粮液_000858_2026H1.pdf": 25,
+    "北方华创_002371_2025FY.pdf": 24,
+    "北方华创_002371_2025H1.pdf": 21,
+    "北方华创_002371_2026H1.pdf": 22,
+    "宁德时代_300750_2025FY.pdf": 22,
+    "宁德时代_300750_2025H1.pdf": 24,
+    "宁德时代_300750_2026H1.pdf": 24,
+    "平安银行_000001_2025FY.pdf": 23,
+    "平安银行_000001_2025H1.pdf": 20,
+    "平安银行_000001_2026H1.pdf": 23,
+    "招商银行_600036_2025FY.pdf": 26,
+    "招商银行_600036_2025H1.pdf": 23,
+    "招商银行_600036_2026H1.pdf": 20,
+    "比亚迪_002594_2025FY.pdf": 21,
+    "比亚迪_002594_2025H1.pdf": 23,
+    "比亚迪_002594_2026H1.pdf": 26,
+    "贵州茅台_600519_2025FY.pdf": 25,
+    "贵州茅台_600519_2025H1.pdf": 22,
+    "贵州茅台_600519_2026H1.pdf": 25
+  },
+  "required_document_count_distribution": {
+    "1": 110,
+    "2": 100,
+    "3": 6,
+    "4+": 54
+  },
+  "required_evidence_cell_count_distribution": {
+    "1": 110,
+    "2": 100,
+    "3": 6,
+    "4+": 54
+  },
+  "negative_type_counts": {
+    "out_of_scope": 7,
+    "realtime_not_report_query": 8,
+    "unavailable_period": 7,
+    "unsupported_company": 8
+  },
+  "overlap_audit": {
+    "normalized_question_overlap_with_gold60": [],
+    "canonical_signature_overlap_with_gold60": [],
+    "company_period_metric_overlap_with_gold60": [],
+    "near_duplicate_threshold": 0.8,
+    "near_duplicate_matches": []
+  },
+  "baseline_protocol": {
+    "final": {
+      "commit": "b50dbcd",
+      "tag": "agent-freeze-v1"
+    },
+    "baseline_candidate": {
+      "commit": "bcf70ae",
+      "before_commit": "002efbf",
+      "rationale": "002efbf 引入 deterministic company×period multi-target planning；bcf70ae 为其直接父提交。",
+      "execution_status": "prepared_only_not_run",
+      "fairness_constraints": [
+        "same frozen 24-document Milvus collection",
+        "same BGE-M3 and reranker",
+        "RETRIEVAL_K=30",
+        "CANDIDATE_M=3",
+        "same retrieval-only evaluator"
+      ]
+    }
+  },
+  "validation": {
+    "passed": true,
+    "errors": [],
+    "warnings": []
+  },
+  "revision": {
+    "base_dataset": "financial_holdout_300_v1.json",
+    "revision": "v1.1",
+    "changed_case_count": 75,
+    "changed_case_ids": [
+      "holdout_001",
+      "holdout_005",
+      "holdout_006",
+      "holdout_016",
+      "holdout_020",
+      "holdout_031",
+      "holdout_036",
+      "holdout_042",
+      "holdout_045",
+      "holdout_050",
+      "holdout_055",
+      "holdout_056",
+      "holdout_201",
+      "holdout_202",
+      "holdout_203",
+      "holdout_204",
+      "holdout_205",
+      "holdout_206",
+      "holdout_207",
+      "holdout_208",
+      "holdout_209",
+      "holdout_210",
+      "holdout_211",
+      "holdout_212",
+      "holdout_213",
+      "holdout_214",
+      "holdout_215",
+      "holdout_216",
+      "holdout_217",
+      "holdout_218",
+      "holdout_219",
+      "holdout_220",
+      "holdout_221",
+      "holdout_222",
+      "holdout_223",
+      "holdout_224",
+      "holdout_225",
+      "holdout_226",
+      "holdout_227",
+      "holdout_228",
+      "holdout_229",
+      "holdout_230",
+      "holdout_231",
+      "holdout_232",
+      "holdout_233",
+      "holdout_234",
+      "holdout_235",
+      "holdout_236",
+      "holdout_237",
+      "holdout_238",
+      "holdout_239",
+      "holdout_240",
+      "holdout_241",
+      "holdout_242",
+      "holdout_243",
+      "holdout_244",
+      "holdout_245",
+      "holdout_246",
+      "holdout_247",
+      "holdout_248",
+      "holdout_249",
+      "holdout_250",
+      "holdout_273",
+      "holdout_274",
+      "holdout_275",
+      "holdout_279",
+      "holdout_287",
+      "holdout_291",
+      "holdout_292",
+      "holdout_294",
+      "holdout_295",
+      "holdout_296",
+      "holdout_297",
+      "holdout_298",
+      "holdout_300"
+    ],
+    "scope": "targeted question/label replacements only; no evaluator or RAG execution",
+    "complex_target_mix": {
+      "3_companies_x_1_period": 6,
+      "2_companies_x_2_periods": 8,
+      "3_companies_x_2_periods": 4,
+      "4_companies_x_1_period": 2
+    },
+    "ambiguity_mix": {
+      "company_gross_margin_vs_industry_gross_margin": 6,
+      "rd_investment_vs_rd_expense": 6,
+      "revenue_vs_total_operating_revenue": 6,
+      "net_interest_margin_vs_net_interest_income": 4,
+      "npl_ratio_vs_npl_balance": 4,
+      "other_conservative_accounting_distinctions": 4
+    },
+    "post_revision_question_correction": {
+      "case_id": "holdout_241",
+      "changed_field": "question",
+      "reason": "明确净息差与净利息收入金额的口径边界"
+    }
+  }
+}
