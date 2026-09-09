@@ -61,6 +61,10 @@ class CalculatorToolTests(unittest.TestCase):
             "10+20/5": 14,
             "1+9×3": 28,
             "100÷4+5": 30,
+            "1+1+4*4=多少": 18,
+            "1+1+4*4等于多少": 18,
+            "1+1+4*4=?": 18,
+            "1+1+4*4？": 18,
         }
         for expression, expected in cases.items():
             result = self.tool.run("expression", expression=expression)
@@ -68,7 +72,10 @@ class CalculatorToolTests(unittest.TestCase):
             self.assertEqual(expected, result.result, expression)
 
     def test_unsafe_expressions_are_rejected(self):
-        for expression in ("__import__('os').system('x')", "open('x')", "2**100"):
+        for expression in (
+            "__import__('os').system('x')", "open('x')", "2**100",
+            "x=1", "a=1+2", "1==1",
+        ):
             result = self.tool.run("expression", expression=expression)
             self.assertFalse(result.success, expression)
             self.assertIn("unsafe arithmetic expression", result.error)

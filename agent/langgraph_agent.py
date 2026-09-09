@@ -45,6 +45,7 @@ class AgentState(TypedDict, total=False):
     market_results: list[dict[str, Any]]
     news_results: list[dict[str, Any]]
     calculation_result: dict[str, Any]
+    period_clarification: str
     errors: list[str]
     previous_query: str
     last_query: str
@@ -206,6 +207,13 @@ class LangGraphFinancialAgent:
 
     def _financial_rag(self, state: AgentState):
         if "financial_rag" not in state.get("required_tools", []): return {}
+        if self._needs_broad_comparison_period_clarification(state):
+            return {
+                "period_clarification": (
+                    "比较多家公司经营表现时，请先指定同一报告期间，例如 "
+                    "2025H1、2025FY 或 2026H1，以避免混合不同财报口径。"
+                )
+            }
         self._emit("tool_start", tool="financial_rag")
         result = self.rag_tool.run(self._effective_financial_query(state))
         response = {"financial_result": result.answer, "tool_results": [*state.get("tool_results", []), result.to_dict()], "executed_tools": [*state.get("executed_tools", []), "financial_rag"], "errors": [*state.get("errors", []), *([result.error] if result.error else [])]}
@@ -257,6 +265,8 @@ class LangGraphFinancialAgent:
             return {"draft_answer": self._greeting_answer(state.get("query", ""))}
         if state.get("intent") == "unsupported":
             return {"draft_answer": self._unsupported_answer(state.get("query", ""))}
+        if state.get("period_clarification"):
+            return {"draft_answer": state["period_clarification"]}
         if state.get("intent") != "composite_query":
             financial_result = self._tool_result(state, "financial_rag")
             if financial_result and financial_result.get("success"):
@@ -296,7 +306,12 @@ class LangGraphFinancialAgent:
                 "final_answer": self._safe_summary(state, guardrail_notice=True),
                 "guardrail_status": ",".join(violations),
             }
-            self._emit("guardrail", status="degraded")
+            # A synthesis/numeric safeguard is not evidence that a successfully
+            # executed Market or News tool is unavailable.  The public banner is
+            # reserved for actual external-data degradation; the state still
+            # records every guardrail violation for traceability.
+            status = "degraded" if self._availability_violations(violations) else "passed"
+            self._emit("guardrail", status=status)
             return response
         self._emit("guardrail", status="passed")
         return {"final_answer": candidate, "guardrail_status": "passed"}
@@ -364,6 +379,13 @@ class LangGraphFinancialAgent:
         return violations
 
     @staticmethod
+    def _availability_violations(violations):
+        return any(
+            violation in {"market_unavailable", "news_unavailable", "news_provenance_missing"}
+            for violation in violations
+        )
+
+    @staticmethod
     def _tool_result(state, tool_name):
         return next((item for item in state.get("tool_results", []) if item.get("tool_name") == tool_name), None)
 
@@ -377,6 +399,18 @@ class LangGraphFinancialAgent:
             return query
         company_names = "、".join(company["company_name"] for company in companies)
         return f"{company_names} {self._period(query)} 财报"
+
+    @staticmethod
+    def _needs_broad_comparison_period_clarification(state: AgentState) -> bool:
+        return bool(
+            state.get("intent") == "financial_report_query"
+            and len(state.get("companies", [])) >= 2
+            and not state.get("report_periods", [])
+            and any(
+                term in state.get("query", "")
+                for term in ("经营表现", "经营情况", "经营状况", "财务表现", "整体表现", "业绩表现")
+            )
+        )
 
     @staticmethod
     def _greeting_answer(query: str) -> str:
@@ -462,12 +496,23 @@ class LangGraphFinancialAgent:
 
     @staticmethod
     def _usable_market_results(results):
-        return bool(results) and all(item.get("success") and bool(item.get("result")) for item in results)
+        return bool(results) and all(
+            item.get("success")
+            and isinstance(item.get("result"), dict)
+            and item["result"].get("price") is not None
+            and bool(item["result"].get("source"))
+            for item in results
+        )
 
     @staticmethod
     def _empty_or_failed_news(results):
         return not results or any(
-            not item.get("success") or not (item.get("result") or {}).get("results") for item in results
+            not item.get("success")
+            or not any(
+                news.get("title") and news.get("source") and news.get("published_at") and news.get("url")
+                for news in (item.get("result") or {}).get("results", [])
+            )
+            for item in results
         )
 
     @classmethod
@@ -487,7 +532,14 @@ class LangGraphFinancialAgent:
             "news": ("新闻", "近期事件", "消息"),
         }
         kept = []
-        for sentence in re.split(r"(?<=[。！？!?])", candidate):
+        required_external = {
+            "market": "market_mcp" in state.get("required_tools", []),
+            "news": "news_mcp" in state.get("required_tools", []),
+        }
+        all_external_available = any(required_external.values()) and all(
+            available[name] for name, required in required_external.items() if required
+        )
+        for sentence in re.split(r"(?<=[。！？!?；;])", candidate):
             normalized = sentence.strip()
             falsely_unavailable = any(
                 available[name]
@@ -495,6 +547,13 @@ class LangGraphFinancialAgent:
                 and any(marker in normalized for marker in markers)
                 for name, tool_terms in terms.items()
             )
+            # Financial RAG may correctly explain that its own corpus excludes
+            # real-time data.  Once both external tools succeeded, that local
+            # caveat must not become the composite conclusion.
+            if all_external_available and any(
+                phrase in normalized for phrase in ("无法综合分析", "无法结合行情", "无法结合新闻")
+            ):
+                falsely_unavailable = True
             if normalized and not falsely_unavailable:
                 kept.append(sentence)
         return "".join(kept).strip()
@@ -526,7 +585,11 @@ class LangGraphFinancialAgent:
         sections = []
         financial_result = self._tool_result(state, "financial_rag")
         if financial_result and financial_result.get("success"):
-            sections.append("财务表现\n" + financial_result["answer"])
+            financial_answer = self._remove_false_tool_unavailability(
+                state, financial_result["answer"]
+            )
+            if financial_answer:
+                sections.append("财务表现\n" + financial_answer)
         elif "financial_rag" in state.get("required_tools", []):
             sections.append("财务表现\nFinancial RAG 未能返回可验证结果。")
         if state.get("market_results"):

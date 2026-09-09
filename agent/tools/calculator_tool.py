@@ -14,6 +14,9 @@ class CalculatorTool:
     tool_name = "calculator"
     _MAX_EXPRESSION_LENGTH = 96
     _MAX_EXPRESSION_OPERATORS = 16
+    _EXPRESSION_SUFFIX_PATTERN = re.compile(
+        r"\s*(?:(?:=+\s*)?(?:(?:是|等于)\s*)?(?:多少|算一下)|=+\s*[?？]|[?？])\s*[！!。]*\s*$"
+    )
     _OPERATIONS = {
         "absolute_change": ("current", "previous"),
         "growth_rate": ("current", "previous"),
@@ -29,7 +32,9 @@ class CalculatorTool:
     def parse_safe_expression(cls, query: str) -> str | None:
         """Return a normalized, whitelisted arithmetic expression or ``None``."""
         expression = query.strip()
-        expression = re.sub(r"\s*(?:(?:是|等于)\s*)?(?:多少|算一下)\s*[？?！!。]*\s*$", "", expression)
+        # Strip only a question suffix.  An equals sign elsewhere remains in
+        # the expression and is rejected by the character and AST allowlists.
+        expression = cls._EXPRESSION_SUFFIX_PATTERN.sub("", expression)
         expression = expression.replace("×", "*").replace("÷", "/")
         expression = expression.replace("除以", "/").replace("乘以", "*")
         expression = re.sub(r"(?<=[\d)])\s*加\s*(?=[\d(+\-])", "+", expression)

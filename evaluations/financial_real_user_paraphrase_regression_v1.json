@@ -104,6 +104,10 @@
     {"id":"real_090","category":"compound_arithmetic","session_id":"single-090","turn_index":1,"question":"100÷4+5","expected_intent":"calculation_query","expected_tools":["calculator"],"expected_arithmetic_result":30,"checks":["arithmetic_exact"]},
     {"id":"real_091","category":"calculator_rejection","session_id":"single-091","turn_index":1,"question":"__import__('os').system('x')","expected_intent":"unsupported","expected_tools":[]},
     {"id":"real_092","category":"calculator_rejection","session_id":"single-092","turn_index":1,"question":"open('x')","expected_intent":"unsupported","expected_tools":[]},
-    {"id":"real_093","category":"calculator_rejection","session_id":"single-093","turn_index":1,"question":"2**100","expected_intent":"unsupported","expected_tools":[]}
+    {"id":"real_093","category":"calculator_rejection","session_id":"single-093","turn_index":1,"question":"2**100","expected_intent":"unsupported","expected_tools":[]},
+    {"id":"real_094","category":"compound_arithmetic","session_id":"single-094","turn_index":1,"question":"1+1+4*4=多少","expected_intent":"calculation_query","expected_tools":["calculator"],"expected_arithmetic_result":18,"checks":["arithmetic_exact"]},
+    {"id":"real_095","category":"compound_arithmetic","session_id":"single-095","turn_index":1,"question":"1+1+4*4等于多少","expected_intent":"calculation_query","expected_tools":["calculator"],"expected_arithmetic_result":18,"checks":["arithmetic_exact"]},
+    {"id":"real_096","category":"compound_arithmetic","session_id":"single-096","turn_index":1,"question":"1+1+4*4=?","expected_intent":"calculation_query","expected_tools":["calculator"],"expected_arithmetic_result":18,"checks":["arithmetic_exact"]},
+    {"id":"real_097","category":"compound_arithmetic","session_id":"single-097","turn_index":1,"question":"1+1+4*4？","expected_intent":"calculation_query","expected_tools":["calculator"],"expected_arithmetic_result":18,"checks":["arithmetic_exact"]}
   ]
 }

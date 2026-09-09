@@ -5,6 +5,7 @@ from agent.langgraph_agent import LangGraphFinancialAgent
 from agent.planner import FinancialPlanner
 from agent.schemas import MCPToolResult
 from agent.skills import get_skill
+from agent.streaming import AgentStreamingAdapter
 
 
 class FakeQA:
@@ -24,10 +25,15 @@ class FakeSynthesizer:
 
 
 class FakeMCP:
-    def __init__(self, market_success=True, news_results=None):
+    def __init__(self, market_success=True, news_results=None, news_success=True):
         self.market_success = market_success
+        self.news_success = news_success
         self.news_results = news_results if news_results is not None else [
-            {"title": "测试新闻", "source": "测试来源", "published_at": "2026-01-01T00:00:00+00:00"}
+            {
+                "title": "测试新闻", "source": "测试来源",
+                "published_at": "2026-01-01T00:00:00+00:00",
+                "url": "https://example.test/news", "provider": "test",
+            }
         ]
 
     def call_tool(self, server_name, tool_name, arguments):
@@ -40,7 +46,9 @@ class FakeMCP:
             }
         else:
             payload = {
-                "results": self.news_results, "success": True, "error": None,
+                "results": self.news_results,
+                "success": self.news_success,
+                "error": None if self.news_success else "news unavailable",
             }
         return MCPToolResult(tool_name, server_name, arguments, payload, payload["success"], payload["error"], 0.01)
 
@@ -70,7 +78,7 @@ class FakePreferenceStore:
 class AgentFinalTests(unittest.TestCase):
     def make_agent(self, answer="财务表现：营业收入为 100 元。市场表现：价格为 20 CNY。近期事件：测试新闻（测试来源，2026-01-01T00:00:00+00:00）。", **kwargs):
         return LangGraphFinancialAgent(
-            qa_system=FakeQA(),
+            qa_system=kwargs.pop("qa_system", FakeQA()),
             mcp_client=kwargs.pop("mcp_client", FakeMCP()),
             synthesizer=kwargs.pop("synthesizer", FakeSynthesizer(answer)),
             preference_store=kwargs.pop("preference_store", FakePreferenceStore()),
@@ -135,6 +143,55 @@ class AgentFinalTests(unittest.TestCase):
         self.assertIn("市场表现", state["final_answer"])
         self.assertIn("News MCP 未返回可用新闻", state["final_answer"])
         self.assertNotIn("凭空新闻", state["final_answer"])
+
+    def test_real_shape_failed_news_payload_still_emits_degradation(self):
+        agent = self.make_agent(
+            mcp_client=FakeMCP(news_results=[], news_success=False),
+            answer="市场表现：价格为 20 CNY。近期事件：凭空新闻。",
+        )
+        events = list(AgentStreamingAdapter(agent).iter_events({
+            "query": "结合贵州茅台2026H1财报、当前行情和近期新闻分析",
+            "thread_id": "real-shape-news-failure", "user_id": "test-user",
+        }))
+
+        self.assertEqual(
+            "degraded",
+            next(event["data"]["status"] for event in events if event["type"] == "guardrail"),
+        )
+        answer = "".join(event["data"]["content"] for event in events if event["type"] == "token")
+        self.assertIn("News MCP 未返回可用新闻", answer)
+        self.assertNotIn("凭空新闻", answer)
+
+    def test_real_shape_successful_tools_do_not_emit_external_degradation(self):
+        class LocalDisclaimerQA:
+            def query(self, _query):
+                yield "财报上下文没有当前行情和近期新闻。营业收入为 100 元。", False
+                yield "", True
+
+        # This mirrors the real GPU failure mode: synthesis adds an unsupported
+        # number, so the guardrail falls back even though all tool payloads are
+        # real-shape, successful, and provenance-complete.
+        agent = self.make_agent(
+            qa_system=LocalDisclaimerQA(),
+            answer="财务表现：营业收入为 999 元。市场表现：价格为 20 CNY。近期事件：测试新闻（测试来源，2026-01-01T00:00:00+00:00）。",
+        )
+        events = list(AgentStreamingAdapter(agent).iter_events({
+            "query": "结合比亚迪2026H1财报、当前行情和近期新闻分析其经营表现",
+            "thread_id": "real-shape-success", "user_id": "test-user",
+        }))
+        state = agent.run(
+            "结合比亚迪2026H1财报、当前行情和近期新闻分析其经营表现",
+            "real-shape-state", "test-user",
+        )
+
+        self.assertEqual("unsupported_numeric_claim", state["guardrail_status"])
+        self.assertIn("市场表现", state["final_answer"])
+        self.assertIn("近期事件", state["final_answer"])
+        self.assertNotIn("没有当前行情", state["final_answer"])
+        self.assertEqual(
+            "passed",
+            next(event["data"]["status"] for event in events if event["type"] == "guardrail"),
+        )
 
     def test_unverified_calculation_falls_back(self):
         state = self.make_agent(

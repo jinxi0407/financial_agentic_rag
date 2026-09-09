@@ -110,7 +110,7 @@ class RAGSystem:
         """Keep simple requests at M; expand only explicit multi-target/metric requests."""
         if query_metadata is None:
             return config.CANDIDATE_M
-        target_count = max(1, len(query_metadata.subquery_targets))
+        target_count = max(1, len(cls._target_bindings(query_metadata)))
         metric_count = max(1, len(query_metadata.requested_metrics))
         if target_count == 1 and metric_count == 1:
             return config.CANDIDATE_M
@@ -136,11 +136,12 @@ class RAGSystem:
     def _target_bindings(query_metadata):
         if query_metadata is None:
             return ()
-        return tuple(
-            (target.company_code, target.report_period)
-            for target in query_metadata.subquery_targets
-            if target.company_code or target.report_period
-        )
+        bindings = []
+        for target in query_metadata.subquery_targets:
+            binding = (target.company_code, target.report_period)
+            if (target.company_code or target.report_period) and binding not in bindings:
+                bindings.append(binding)
+        return tuple(bindings)
 
     @classmethod
     def _required_evidence_cells(cls, query_metadata):

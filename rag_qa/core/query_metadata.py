@@ -54,6 +54,12 @@ _REPORT_NOUN_TERMS = ("财报", "报告", "年报", "半年报", "半年度报�
 _H1_LOOKUP_TERMS = ("上半年", "半年度", "半年报")
 _FY_LOOKUP_TERMS = ("年度报告", "年报", "年度", "全年")
 _COMPARISON_TERMS = ("比较", "相比", "分别", "同比", "变化多少")
+_BROAD_COMPARISON_TERMS = (
+    "经营表现", "经营情况", "经营状况", "财务表现", "整体表现", "业绩表现",
+)
+_BROAD_COMPARISON_METRICS = (
+    "revenue", "net_profit", "operating_cash_flow",
+)
 _CALCULATION_TERMS = (
     "相比", "增加", "减少", "同比", "增长率", "差值", "变化多少", "百分点变化",
 )
@@ -178,9 +184,31 @@ def _target_query(query, company, report_period):
     return f"{query}（检索目标：{'，'.join(labels)}）" if labels else query
 
 
-def _build_subquery_targets(query, companies, periods):
+def _is_broad_multi_company_comparison(query, companies, periods, requested_metrics):
+    return bool(
+        len(companies) >= 2
+        and len(periods) == 1
+        and not requested_metrics
+        and any(term in query for term in _BROAD_COMPARISON_TERMS)
+    )
+
+
+def _build_subquery_targets(query, companies, periods, requested_metrics=(), *, expand_broad=False):
     if not companies and not periods:
         return ()
+
+    if expand_broad:
+        report_period = periods[0]
+        return tuple(
+            SubQueryTarget(
+                query=f"{company.company_name} {report_period} {METRIC_DEFINITIONS[metric][0]}",
+                company_name=company.company_name,
+                company_code=company.company_code,
+                report_period=report_period,
+            )
+            for company in companies
+            for metric in _BROAD_COMPARISON_METRICS
+        )
 
     return tuple(
         SubQueryTarget(
@@ -223,6 +251,13 @@ def extract_query_metadata(query):
         report_year = None
         period_type = None
 
+    requested_metrics = _extract_requested_metrics(query)
+    broad_comparison = _is_broad_multi_company_comparison(
+        query, companies, periods, requested_metrics
+    )
+    if broad_comparison:
+        requested_metrics = _BROAD_COMPARISON_METRICS
+
     intent = "REPORT_LOOKUP" if is_report_lookup_query(query) else "RAG"
     if intent == "REPORT_LOOKUP" and period_type is None:
         period_type = _extract_lookup_period_type(query)
@@ -237,8 +272,10 @@ def extract_query_metadata(query):
         report_periods=periods,
         company_names=tuple(company.company_name for company in companies),
         company_codes=tuple(company.company_code for company in companies),
-        subquery_targets=_build_subquery_targets(query, companies, periods),
-        requested_metrics=_extract_requested_metrics(query),
+        subquery_targets=_build_subquery_targets(
+            query, companies, periods, requested_metrics, expand_broad=broad_comparison
+        ),
+        requested_metrics=requested_metrics,
         intent=intent,
     )
 

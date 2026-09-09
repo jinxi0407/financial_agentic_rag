@@ -75,6 +75,33 @@ class TargetPlanningTests(unittest.TestCase):
             metadata.to_metadata_filter(),
         )
 
+    def test_broad_multi_company_comparison_expands_core_metric_targets(self):
+        metadata = extract_query_metadata("比较贵州茅台和五粮液2026H1的经营表现")
+
+        self.assertEqual(
+            ("revenue", "net_profit", "operating_cash_flow"),
+            metadata.requested_metrics,
+        )
+        self.assertTrue(metadata.requires_deterministic_subqueries())
+        self.assertEqual(6, len(metadata.subquery_targets))
+        self.assertEqual(
+            ["600519", "600519", "600519", "000858", "000858", "000858"],
+            [target.company_code for target in metadata.subquery_targets],
+        )
+        self.assertTrue(all(target.report_period == "2026H1" for target in metadata.subquery_targets))
+        self.assertEqual(
+            ["营业收入", "归属于上市公司股东的净利润", "经营活动产生的现金流量净额"],
+            [target.query.rsplit(" ", 1)[-1] for target in metadata.subquery_targets[:3]],
+        )
+
+    def test_exact_metric_and_missing_period_do_not_trigger_broad_expansion(self):
+        exact = extract_query_metadata("比较贵州茅台和五粮液2026H1营业收入")
+        missing_period = extract_query_metadata("比较贵州茅台和五粮液的经营表现")
+
+        self.assertEqual(("revenue",), exact.requested_metrics)
+        self.assertEqual(2, len(exact.subquery_targets))
+        self.assertEqual(2, len(missing_period.subquery_targets))
+
 
 class _RecordingStore:
     def __init__(self):

@@ -33,6 +33,26 @@ def make_document(parent_id, company_code, report_period, text, rerank_score=Non
 
 
 class DynamicContextSelectionTests(unittest.TestCase):
+    def test_broad_comparison_uses_existing_six_context_budget_for_six_cells(self):
+        metadata = extract_query_metadata("比较贵州茅台和五粮液2026H1的经营表现")
+
+        self.assertEqual(2, len(RAGSystem._target_bindings(metadata)))
+        self.assertEqual(6, len(RAGSystem._required_evidence_cells(metadata)))
+        self.assertEqual(6, RAGSystem._context_limit(metadata))
+
+        documents = [
+            make_document("mt-revenue", "600519", "2026H1", "营业收入 100 元", 0.9),
+            make_document("mt-profit", "600519", "2026H1", "归属于上市公司股东的净利润 10 元", 0.8),
+            make_document("mt-cash", "600519", "2026H1", "经营活动产生的现金流量净额 8 元", 0.7),
+            make_document("wl-revenue", "000858", "2026H1", "营业收入 80 元", 0.9),
+            make_document("wl-profit", "000858", "2026H1", "归属于上市公司股东的净利润 8 元", 0.8),
+            make_document("wl-cash", "000858", "2026H1", "经营活动产生的现金流量净额 6 元", 0.7),
+        ]
+        selected = RAGSystem._select_context_docs(
+            documents, RAGSystem._context_limit(metadata), metadata
+        )
+        self.assertTrue(all(cell["parent_id"] for cell in RAGSystem._evidence_cell_status(selected, metadata)))
+
     def test_simple_single_metric_request_keeps_existing_top_three_order(self):
         metadata = extract_query_metadata("贵州茅台2026年上半年营业收入是多少？")
         docs = [

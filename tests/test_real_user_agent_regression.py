@@ -9,7 +9,7 @@ class RealUserAgentRegressionTests(unittest.TestCase):
     def test_dataset_audit_and_size(self):
         audit = audit_dataset(load_dataset())
         self.assertTrue(audit["passed"])
-        self.assertEqual(92, audit["case_count"])
+        self.assertEqual(96, audit["case_count"])
 
     def test_greeting_and_definition_do_not_become_calculations(self):
         planner = FinancialPlanner()
@@ -46,13 +46,23 @@ class RealUserAgentRegressionTests(unittest.TestCase):
             "10+20/5": 14,
             "1+9×3": 28,
             "100÷4+5": 30,
+            "1+1+4*4=多少": 18,
+            "1+1+4*4等于多少": 18,
+            "1+1+4*4=?": 18,
+            "1+1+4*4？": 18,
         }.items():
             request = planner.simple_calculation_request(query)
             self.assertEqual("expression", request["operation"])
             result = make_agent().calculator.run(**request)
             self.assertEqual(expected, result.result)
-        for query in ("__import__('os').system('x')", "open('x')", "2**100"):
+        for query in ("__import__('os').system('x')", "open('x')", "2**100", "x=1", "a=1+2", "1==1"):
             self.assertIsNone(planner.simple_calculation_request(query))
+
+    def test_broad_multi_company_comparison_requires_period_before_rag(self):
+        response = make_agent().run("比较贵州茅台和五粮液的经营表现", "broad-no-period")
+        self.assertEqual("financial_report_query", response["intent"])
+        self.assertEqual([], response["executed_tools"])
+        self.assertIn("请先指定同一报告期间", response["final_answer"])
 
     def test_market_news_paraphrases_and_thread_context(self):
         planner = FinancialPlanner()
