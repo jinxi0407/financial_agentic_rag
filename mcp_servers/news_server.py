@@ -1,7 +1,7 @@
 """Expose the public news provider through the official MCP stdio protocol."""
 
 from mcp.server.mcpserver import MCPServer
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from .providers.news_provider import NewsProvider
 
@@ -19,6 +19,7 @@ class NewsItem(BaseModel):
     source: str | None = None
     published_at: str | None = None
     url: str
+    provider: str | None = None
 
 
 class NewsSearchResult(BaseModel):
@@ -28,6 +29,8 @@ class NewsSearchResult(BaseModel):
     source: str
     success: bool
     error: str | None = None
+    providers_attempted: list[str] = Field(default_factory=list)
+    provider_trace: list[dict] = Field(default_factory=list)
 
 
 @server.tool(name="search_financial_news", structured_output=True)
