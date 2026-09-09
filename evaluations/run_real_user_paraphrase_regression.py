@@ -98,7 +98,7 @@ def audit_dataset(dataset: dict[str, Any]) -> dict[str, Any]:
     questions = [case["question"] for case in cases]
     categories = Counter(case["category"] for case in cases)
     failures = []
-    if not 40 <= len(cases) <= 50:
+    if not 40 <= len(cases) <= 60:
         failures.append("case_count_out_of_range")
     if len(identifiers) != len(set(identifiers)):
         failures.append("duplicate_ids")
@@ -112,7 +112,7 @@ def audit_dataset(dataset: dict[str, Any]) -> dict[str, Any]:
         "passed": not failures,
         "case_count": len(cases),
         "categories": dict(sorted(categories.items())),
-        "memory_sessions": len({case["session_id"] for case in cases if case["category"] == "memory_pronoun"}),
+        "memory_sessions": len({case["session_id"] for case in cases if case["category"] in {"memory_pronoun", "memory_period_carryover"}}),
         "failures": failures,
     }
 
@@ -151,6 +151,19 @@ def _check_answer(case: dict[str, Any], state: dict[str, Any]) -> dict[str, bool
             expected = set(case.get("expected_company_codes", []))
             actual = set(state.get("tickers", []))
             checks[check] = expected == actual
+        elif check == "period_company_carryover":
+            expected_companies = {company["company_name"] for company in state.get("companies", [])}
+            expected_periods = set(case.get("expected_report_periods", []))
+            rag_query = next(
+                (result.get("query", "") for result in state.get("tool_results", []) if result.get("tool_name") == "financial_rag"),
+                "",
+            )
+            checks[check] = (
+                expected_companies
+                and expected_periods == set(state.get("report_periods", []))
+                and all(company in rag_query for company in expected_companies)
+                and all(period in rag_query for period in expected_periods)
+            )
         elif check == "period_clarity":
             checks[check] = all(period in answer for period in case.get("expected_period_options", []))
         elif check == "friendly_unsupported":
@@ -167,6 +180,10 @@ def run(dataset: dict[str, Any]) -> dict[str, Any]:
         actual_tools = set(state.get("required_tools", []))
         expected_companies = set(case.get("expected_company_codes", []))
         answer_checks = _check_answer(case, state)
+        effective_financial_query = next(
+            (result.get("query") for result in state.get("tool_results", []) if result.get("tool_name") == "financial_rag"),
+            None,
+        )
         rows.append({
             "id": case["id"],
             "category": case["category"],
@@ -180,6 +197,7 @@ def run(dataset: dict[str, Any]) -> dict[str, Any]:
             "actual_company_codes": state.get("tickers", []),
             "expected_report_periods": case.get("expected_report_periods", []),
             "actual_report_periods": state.get("report_periods", []),
+            "effective_financial_query": effective_financial_query,
             "answer": state.get("final_answer", ""),
             "intent_pass": state.get("intent") == case["expected_intent"],
             "tools_pass": actual_tools == expected_tools,
@@ -198,6 +216,7 @@ def _rate(rows: list[dict[str, Any]], predicate) -> dict[str, Any]:
 
 def _metrics(rows: list[dict[str, Any]]) -> dict[str, Any]:
     memory = [row for row in rows if row["category"] == "memory_pronoun" and "memory_company" in row["answer_checks"]]
+    period_carryover = [row for row in rows if row["category"] == "memory_period_carryover" and "period_company_carryover" in row["answer_checks"]]
     definitions = [row for row in rows if row["category"] == "definition_faq"]
     unsupported = [row for row in rows if row["category"] == "unsupported"]
     format_rows = [row for row in rows if row["answer_checks"]]
@@ -206,6 +225,7 @@ def _metrics(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "required_tool_accuracy": _rate(rows, lambda row: row["tools_pass"]),
         "company_context_accuracy": _rate([row for row in rows if row["expected_company_codes"]], lambda row: row["company_pass"]),
         "memory_pronoun_recovery": _rate(memory, lambda row: row["answer_checks"].get("memory_company")),
+        "period_company_carryover": _rate(period_carryover, lambda row: row["answer_checks"].get("period_company_carryover")),
         "definition_faq_routing": _rate(definitions, lambda row: row["intent_pass"] and row["tools_pass"] and row["format_pass"]),
         "unsupported_handling": _rate(unsupported, lambda row: row["intent_pass"] and row["format_pass"]),
         "final_formatting_checks": _rate(format_rows, lambda row: row["format_pass"]),

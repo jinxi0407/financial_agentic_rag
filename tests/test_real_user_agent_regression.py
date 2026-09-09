@@ -9,7 +9,7 @@ class RealUserAgentRegressionTests(unittest.TestCase):
     def test_dataset_audit_and_size(self):
         audit = audit_dataset(load_dataset())
         self.assertTrue(audit["passed"])
-        self.assertEqual(48, audit["case_count"])
+        self.assertEqual(55, audit["case_count"])
 
     def test_greeting_and_definition_do_not_become_calculations(self):
         planner = FinancialPlanner()
@@ -45,6 +45,23 @@ class RealUserAgentRegressionTests(unittest.TestCase):
         report = agent.run("中芯国际的半年度报告能看吗？", "report")
         self.assertIn("2025H1", report["final_answer"])
         self.assertIn("2026H1", report["final_answer"])
+
+    def test_period_only_follow_up_binds_the_remembered_company_to_rag(self):
+        agent = make_agent()
+        agent.run("茅台的财报看看", "period-slot")
+        follow_up = agent.run("2025H1就是上半年啊", "period-slot")
+        rag_result = next(item for item in follow_up["tool_results"] if item["tool_name"] == "financial_rag")
+        self.assertEqual(["600519"], follow_up["tickers"])
+        self.assertEqual(["2025H1"], follow_up["report_periods"])
+        self.assertEqual("贵州茅台 2025H1 财报", rag_result["query"])
+
+    def test_explicit_company_replaces_inherited_company(self):
+        agent = make_agent()
+        agent.run("茅台的财报看看", "company-slot")
+        follow_up = agent.run("比亚迪2025H1营业收入", "company-slot")
+        rag_result = next(item for item in follow_up["tool_results"] if item["tool_name"] == "financial_rag")
+        self.assertEqual(["002594"], follow_up["tickers"])
+        self.assertEqual("比亚迪2025H1营业收入", rag_result["query"])
 
 
 if __name__ == "__main__":

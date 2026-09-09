@@ -204,7 +204,7 @@ class LangGraphFinancialAgent:
     def _financial_rag(self, state: AgentState):
         if "financial_rag" not in state.get("required_tools", []): return {}
         self._emit("tool_start", tool="financial_rag")
-        result = self.rag_tool.run(state["query"])
+        result = self.rag_tool.run(self._effective_financial_query(state))
         response = {"financial_result": result.answer, "tool_results": [*state.get("tool_results", []), result.to_dict()], "executed_tools": [*state.get("executed_tools", []), "financial_rag"], "errors": [*state.get("errors", []), *([result.error] if result.error else [])]}
         self._emit("tool_end", tool="financial_rag", results=[result.to_dict()])
         return response
@@ -356,6 +356,17 @@ class LangGraphFinancialAgent:
     @staticmethod
     def _tool_result(state, tool_name):
         return next((item for item in state.get("tool_results", []) if item.get("tool_name") == tool_name), None)
+
+    def _effective_financial_query(self, state: AgentState) -> str:
+        """Bind an explicit follow-up period to remembered companies for RAG."""
+        query = state["query"]
+        if extract_securities_from_query(query) or not self._period(query):
+            return query
+        companies = state.get("companies") or []
+        if not companies:
+            return query
+        company_names = "、".join(company["company_name"] for company in companies)
+        return f"{company_names} {self._period(query)} 财报"
 
     @staticmethod
     def _greeting_answer(query: str) -> str:
