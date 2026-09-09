@@ -28,6 +28,10 @@ htmlcov/
 .ruff_cache/
 .cache/
 
+# Frontend build artifacts
+frontend/node_modules/
+frontend/dist/
+
 # Old EduRAG datasets / evaluation artifacts
 mysql_qa/data/JP学科知识问答.csv
 rag_qa/data/ai_data/
