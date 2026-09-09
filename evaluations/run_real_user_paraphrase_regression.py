@@ -98,7 +98,7 @@ def audit_dataset(dataset: dict[str, Any]) -> dict[str, Any]:
     questions = [case["question"] for case in cases]
     categories = Counter(case["category"] for case in cases)
     failures = []
-    if not 40 <= len(cases) <= 60:
+    if not 40 <= len(cases) <= 75:
         failures.append("case_count_out_of_range")
     if len(identifiers) != len(set(identifiers)):
         failures.append("duplicate_ids")
@@ -112,7 +112,7 @@ def audit_dataset(dataset: dict[str, Any]) -> dict[str, Any]:
         "passed": not failures,
         "case_count": len(cases),
         "categories": dict(sorted(categories.items())),
-        "memory_sessions": len({case["session_id"] for case in cases if case["category"] in {"memory_pronoun", "memory_period_carryover"}}),
+        "memory_sessions": len({case["session_id"] for case in cases if case["category"] in {"memory_pronoun", "memory_period_carryover", "memory_market_carryover"}}),
         "failures": failures,
     }
 
@@ -164,10 +164,18 @@ def _check_answer(case: dict[str, Any], state: dict[str, Any]) -> dict[str, bool
                 and all(company in rag_query for company in expected_companies)
                 and all(period in rag_query for period in expected_periods)
             )
+        elif check == "market_pronoun_carryover":
+            checks[check] = (
+                state.get("intent") == "market_query"
+                and state.get("required_tools") == ["market_mcp"]
+                and state.get("executed_tools") == ["market_mcp"]
+            )
         elif check == "period_clarity":
             checks[check] = all(period in answer for period in case.get("expected_period_options", []))
         elif check == "friendly_unsupported":
             checks[check] = "支持" in answer and "例如" in answer and "缺少足够上下文" not in answer
+        elif check == "friendly_missing_company_for_market":
+            checks[check] = "请先说明" in answer and "公司" in answer
     return checks
 
 
@@ -217,6 +225,7 @@ def _rate(rows: list[dict[str, Any]], predicate) -> dict[str, Any]:
 def _metrics(rows: list[dict[str, Any]]) -> dict[str, Any]:
     memory = [row for row in rows if row["category"] == "memory_pronoun" and "memory_company" in row["answer_checks"]]
     period_carryover = [row for row in rows if row["category"] == "memory_period_carryover" and "period_company_carryover" in row["answer_checks"]]
+    market_carryover = [row for row in rows if row["category"] == "memory_market_carryover" and "market_pronoun_carryover" in row["answer_checks"]]
     definitions = [row for row in rows if row["category"] == "definition_faq"]
     unsupported = [row for row in rows if row["category"] == "unsupported"]
     format_rows = [row for row in rows if row["answer_checks"]]
@@ -226,6 +235,7 @@ def _metrics(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "company_context_accuracy": _rate([row for row in rows if row["expected_company_codes"]], lambda row: row["company_pass"]),
         "memory_pronoun_recovery": _rate(memory, lambda row: row["answer_checks"].get("memory_company")),
         "period_company_carryover": _rate(period_carryover, lambda row: row["answer_checks"].get("period_company_carryover")),
+        "market_pronoun_carryover": _rate(market_carryover, lambda row: row["answer_checks"].get("market_pronoun_carryover")),
         "definition_faq_routing": _rate(definitions, lambda row: row["intent_pass"] and row["tools_pass"] and row["format_pass"]),
         "unsupported_handling": _rate(unsupported, lambda row: row["intent_pass"] and row["format_pass"]),
         "final_formatting_checks": _rate(format_rows, lambda row: row["format_pass"]),

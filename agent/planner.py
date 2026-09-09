@@ -16,6 +16,9 @@ _FINANCIAL_REPORT_TERMS = (
 _DEFINITION_TERMS = ("流动比率", "速动比率", "市盈率", "roe", "归母净利润", "营业收入和净利润")
 _GREETING_PATTERN = re.compile(r"^(?:hi|hello|你好|您好|嗨)[!！。,.\s]*$", re.I)
 _IDENTITY_PATTERN = re.compile(r"^(?:你是什么|你能做什么)[？?！!。\s]*$")
+_CONTEXTUAL_MARKET_FOLLOW_UP_PATTERN = re.compile(
+    r"(?:它|这家公司|这个票).*?(?:股票|股价|行情|市场表现|涨跌)"
+)
 _SIMPLE_GROWTH_PATTERN = re.compile(
     r"从\s*(?P<previous>-?\d+(?:\.\d+)?)\s*(?:增长(?:到)?|增加(?:到)?|变为|到)\s*"
     r"(?P<current>-?\d+(?:\.\d+)?)(?=[，,。！？?\s]|$)"
@@ -35,10 +38,10 @@ _PERCENTAGE_POINT_PATTERN = re.compile(
 class FinancialPlanner:
     """Route only frozen-corpus financial questions in the MVP."""
 
-    def plan(self, query: str) -> PlannerDecision:
-        return self._attach_skill(self._plan(query), query)
+    def plan(self, query: str, *, has_company_context: bool = False) -> PlannerDecision:
+        return self._attach_skill(self._plan(query, has_company_context=has_company_context), query)
 
-    def _plan(self, query: str) -> PlannerDecision:
+    def _plan(self, query: str, *, has_company_context: bool = False) -> PlannerDecision:
         normalized = query.strip()
         lowered = normalized.lower()
         if not normalized:
@@ -53,7 +56,9 @@ class FinancialPlanner:
                 tools=(),
                 reason="用户正在问候或询问 Agent 能力范围。",
             )
-        has_market = any(term in lowered for term in _MARKET_TERMS)
+        has_market = any(term in lowered for term in _MARKET_TERMS) or (
+            has_company_context and bool(_CONTEXTUAL_MARKET_FOLLOW_UP_PATTERN.search(normalized))
+        )
         has_news = any(term in lowered for term in _NEWS_TERMS)
         has_report = any(term in lowered for term in _FINANCIAL_REPORT_TERMS)
         if any(term in lowered for term in _DEFINITION_TERMS):
@@ -102,6 +107,10 @@ class FinancialPlanner:
             tools=(),
             reason="当前 Agent MVP 仅支持已入库财报和金融知识库问题。",
         )
+
+    @staticmethod
+    def is_market_pronoun_follow_up(query: str) -> bool:
+        return bool(_CONTEXTUAL_MARKET_FOLLOW_UP_PATTERN.search(query.strip()))
 
     @staticmethod
     def _attach_skill(decision: PlannerDecision, query: str) -> PlannerDecision:

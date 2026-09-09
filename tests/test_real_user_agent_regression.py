@@ -9,7 +9,7 @@ class RealUserAgentRegressionTests(unittest.TestCase):
     def test_dataset_audit_and_size(self):
         audit = audit_dataset(load_dataset())
         self.assertTrue(audit["passed"])
-        self.assertEqual(55, audit["case_count"])
+        self.assertEqual(65, audit["case_count"])
 
     def test_greeting_and_definition_do_not_become_calculations(self):
         planner = FinancialPlanner()
@@ -62,6 +62,23 @@ class RealUserAgentRegressionTests(unittest.TestCase):
         rag_result = next(item for item in follow_up["tool_results"] if item["tool_name"] == "financial_rag")
         self.assertEqual(["002594"], follow_up["tickers"])
         self.assertEqual("比亚迪2025H1营业收入", rag_result["query"])
+
+    def test_market_pronoun_follow_up_uses_session_company_only(self):
+        agent = make_agent()
+        agent.run("五粮液财报看看", "market-slot")
+        agent.run("2025H1", "market-slot")
+        follow_up = agent.run("帮我看一下它的股票", "market-slot")
+        self.assertEqual("market_query", follow_up["intent"])
+        self.assertEqual(["market_mcp"], follow_up["required_tools"])
+        self.assertEqual(["000858"], follow_up["tickers"])
+        self.assertEqual(["market_mcp"], follow_up["executed_tools"])
+
+    def test_market_pronoun_without_company_context_is_safe(self):
+        response = make_agent().run("帮我看一下它的股票", "no-market-context")
+        self.assertEqual("unsupported", response["intent"])
+        self.assertEqual([], response["required_tools"])
+        self.assertEqual([], response["tickers"])
+        self.assertIn("请先说明要查询的公司", response["final_answer"])
 
 
 if __name__ == "__main__":

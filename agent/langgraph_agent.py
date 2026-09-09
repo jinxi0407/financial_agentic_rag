@@ -174,8 +174,8 @@ class LangGraphFinancialAgent:
         return graph
 
     def _plan(self, state: AgentState):
-        decision = self.planner.plan(state["query"])
         companies = extract_securities_from_query(state["query"]) or state.get("companies", [])
+        decision = self.planner.plan(state["query"], has_company_context=bool(companies))
         period = self._period(state["query"])
         preferences, preference_error = self._preferences(state.get("user_id", state["thread_id"]))
         preference_written = False
@@ -253,7 +253,7 @@ class LangGraphFinancialAgent:
         if state.get("intent") == "greeting":
             return {"draft_answer": self._greeting_answer(state.get("query", ""))}
         if state.get("intent") == "unsupported":
-            return {"draft_answer": self._unsupported_answer()}
+            return {"draft_answer": self._unsupported_answer(state.get("query", ""))}
         if state.get("intent") != "composite_query":
             financial_result = self._tool_result(state, "financial_rag")
             if financial_result and financial_result.get("success"):
@@ -375,7 +375,9 @@ class LangGraphFinancialAgent:
         return "你好，我是 Financial Agent，目前支持 8 家 A 股公司的财报、实时行情、财经新闻和财务计算。"
 
     @staticmethod
-    def _unsupported_answer() -> str:
+    def _unsupported_answer(query: str = "") -> str:
+        if FinancialPlanner.is_market_pronoun_follow_up(query):
+            return "请先说明要查询的公司，例如：‘贵州茅台现在股价怎么样？’"
         return "当前 Financial Agent 目前支持 8 家 A 股公司的财报、实时行情、财经新闻和确定性财务计算。例如：‘贵州茅台 2026H1 营业收入是多少？’"
 
     @staticmethod
