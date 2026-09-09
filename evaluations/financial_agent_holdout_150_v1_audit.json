@@ -1,0 +1,184 @@
+{
+  "schema_version": "financial_agent_holdout_150_v1",
+  "generated_from": {
+    "generator_commit": "4dbb304",
+    "references": [
+      "financial_eval_60_gold_v2.json",
+      "financial_holdout_300_v1.json",
+      "financial_holdout_300_v1_1.json"
+    ]
+  },
+  "total_turns": 150,
+  "category_counts": {
+    "calculator_only": 8,
+    "composite": 20,
+    "financial_rag_only": 15,
+    "guardrail": 8,
+    "market_only": 12,
+    "multi_turn_memory": 60,
+    "negative_failure": 15,
+    "news_only": 12
+  },
+  "multi_turn": {
+    "turns": 60,
+    "sessions": 20,
+    "sessions_with_three_ordered_turns": 20,
+    "session_subtype_coverage": {
+      "context_pronoun_recovery": 20,
+      "cross_thread_preference_recovery": 1,
+      "explicit_preference_companies": 1,
+      "explicit_preference_metrics": 1,
+      "implicit_preference_negative": 1,
+      "report_period_carryover": 11,
+      "thread_isolation": 4
+    },
+    "sessions_by_subtype": {
+      "context_pronoun_recovery": [
+        "memory-isolation-16",
+        "memory-isolation-17",
+        "memory-no-preference",
+        "memory-pair-01",
+        "memory-pair-02",
+        "memory-pair-03",
+        "memory-pair-04",
+        "memory-pair-05",
+        "memory-pair-06",
+        "memory-pair-07",
+        "memory-pair-08",
+        "memory-period-13",
+        "memory-period-14",
+        "memory-period-15",
+        "memory-preference-recover",
+        "memory-preference-write",
+        "memory-single-09",
+        "memory-single-10",
+        "memory-single-11",
+        "memory-single-12"
+      ],
+      "cross_thread_preference_recovery": [
+        "memory-preference-recover"
+      ],
+      "explicit_preference_companies": [
+        "memory-preference-write"
+      ],
+      "explicit_preference_metrics": [
+        "memory-preference-write"
+      ],
+      "implicit_preference_negative": [
+        "memory-no-preference"
+      ],
+      "report_period_carryover": [
+        "memory-pair-01",
+        "memory-pair-02",
+        "memory-pair-03",
+        "memory-pair-04",
+        "memory-pair-05",
+        "memory-pair-06",
+        "memory-pair-07",
+        "memory-pair-08",
+        "memory-period-13",
+        "memory-period-14",
+        "memory-period-15"
+      ],
+      "thread_isolation": [
+        "memory-isolation-16",
+        "memory-isolation-17",
+        "memory-single-09",
+        "memory-single-10"
+      ]
+    }
+  },
+  "expected_tool_distribution": {
+    "calculator": 13,
+    "financial_rag": 70,
+    "market_mcp": 42,
+    "news_mcp": 45
+  },
+  "company_context_counts": {
+    "600519": 31,
+    "000858": 27,
+    "002594": 24,
+    "300750": 17,
+    "600036": 22,
+    "000001": 19,
+    "688981": 19,
+    "002371": 19
+  },
+  "report_period_counts": {
+    "2025H1": 18,
+    "2025FY": 24,
+    "2026H1": 57
+  },
+  "memory_behavior_counts": {
+    "establish_companies_and_period": 8,
+    "establish_company_and_period": 7,
+    "new_thread_no_session_inheritance": 1,
+    "none": 91,
+    "recover_companies_and_period": 18,
+    "recover_company_and_period": 13,
+    "thread_isolation_establish": 4,
+    "thread_isolation_recover": 8
+  },
+  "preference_behavior_counts": {
+    "must_not_write_implicit": 3,
+    "none": 141,
+    "recover_explicit": 3,
+    "retain_explicit": 1,
+    "write_explicit_companies": 1,
+    "write_explicit_metrics": 1
+  },
+  "guardrail_behavior_counts": {
+    "news_provenance_required": 1,
+    "no_deterministic_investment_advice": 1,
+    "no_fabricated_market": 2,
+    "no_fabricated_news": 1,
+    "no_unsupported_financial_number": 2,
+    "no_unverified_calculation": 1,
+    "none": 127,
+    "safe_response_required": 15
+  },
+  "dedicated_guardrail_subtype_counts": {
+    "news_provenance_required": 1,
+    "no_deterministic_investment_advice": 1,
+    "no_fabricated_market": 2,
+    "no_fabricated_news": 1,
+    "no_unsupported_financial_number": 2,
+    "no_unverified_calculation": 1
+  },
+  "guardrail_evaluation_limits": [
+    "现有 Agent guardrail_status 没有投资建议专用 flag；该 subtype 在正式结果中保留为 unevaluable，不以回答关键词推断安全性。",
+    "Market/News provider 正常成功时，fabrication guardrail 不进入 guardrail_correctness 分母；仅真实失败且有状态 flag 时确定性评分。"
+  ],
+  "external_tool_failure_allowed_turns": 87,
+  "metric_protocol": {
+    "intent_accuracy": "仅 completed 且 expected_intent 非空的 turn；actual intent 必须完全相等。",
+    "tool_selection_accuracy": "仅 completed 且有 expected_tools 标签的 turn；planned_tools 与 expected_tools 用集合完全相等比较，忽略顺序。",
+    "required_tool_coverage": "仅 completed 且 expected_tools 非空的 turn；主指标要求每个 expected tool 实际执行。结果同时保留 planned/executed coverage 供诊断。",
+    "unnecessary_tool_call_rate": "所有实际执行 tool label 中，expected_tools 与 optional_tools 之外或命中 forbidden_tools 的 label 占比。",
+    "tool_execution_success_rate": "所有实际 tool_results 的 raw success 比例；不与 planner 正确性混合。",
+    "company_context_accuracy": "仅 expected_company_codes 非空的 turn；actual 与 expected 公司代码集合必须完全相等，额外公司同样为错。",
+    "period_context_accuracy": "仅 expected_report_periods 非空的 turn；actual 与 expected 期间集合必须完全相等，额外期间同样为错。",
+    "session_memory_recovery_accuracy": "仅明确 recovery turn（非 establish/new-thread）；公司与有标签期间均须精确恢复。",
+    "thread_isolation_accuracy": "仅 scenario_tags 含 thread_isolation 且 behavior=thread_isolation_recover 的 turn。",
+    "preference_recovery_accuracy": "仅 expected_preference_behavior=recover_explicit 的 turn；检查已定义 preferred_metrics 与 preferred_companies。",
+    "guardrail_correctness": "仅 expected_guardrail_behavior 非 none 且现有 guardrail_status/flags 能确定映射的 turn；不以回答关键词猜测。",
+    "safe_degradation_rate": "仅 allow_external_tool_failure=true 且实际 Market/News tool result 失败/超时的 turn；需 guardrail 状态明确降级。",
+    "composite_completion_rate": "仅 composite；required tools 均被计划并尝试、final_answer 非空、无 unsupported fabrication flag，若 provider 失败则 safe degradation 成功。"
+  },
+  "run_namespace_protocol": {
+    "run_id": "每个新 checkpoint 生成 UUID；resume 复用 checkpoint 中的 run_id",
+    "effective_thread_id": "financial_agent_holdout_v1:{run_id}:{dataset_session_id}",
+    "effective_user_id": "financial_agent_holdout_v1:{run_id}:{dataset_user_id}",
+    "isolation": "不删除 production Redis key；benchmark 仅写入上述 run_id namespace。"
+  },
+  "overlap_audit": {
+    "exact_question_overlap": [],
+    "near_duplicate_threshold": 0.88,
+    "near_duplicate_matches": []
+  },
+  "validation": {
+    "passed": true,
+    "errors": [],
+    "warnings": []
+  }
+}
