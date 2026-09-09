@@ -1,0 +1,2030 @@
+{
+  "schema_version": "financial_agent_holdout_150_v1_1_news_comparison",
+  "mode": "offline_rescoring_only",
+  "comparison_protocol": {
+    "baseline": "Agent v1 (Google News), reconstructed from its saved raw result with v1.1 scoring.",
+    "candidate": "Agent News v1.1 (Domestic Provider), reconstructed from its saved raw result with the identical v1.1 scoring.",
+    "gold_label_corrections": {
+      "agent_holdout_077": {
+        "expected_report_periods": [
+          "2024H1"
+        ]
+      },
+      "agent_holdout_090": {
+        "expected_report_periods": [
+          "2024H1"
+        ]
+      }
+    },
+    "safe_degradation": "null / N/A when no eligible external provider failure exists, rather than 0%."
+  },
+  "baseline_source": {
+    "path": "evaluations/financial_agent_holdout_150_v1_results.json",
+    "runtime_config": {
+      "git_commit": "a68f1db",
+      "execution": "agent_e2e",
+      "dataset_schema_version": "financial_agent_holdout_150_v1",
+      "dataset_fingerprint": "821ac64ddbe58083677e274c1977d7508b5770d743ffab3756f07b5a443ed109",
+      "run_id": "193e365582da4de49b22fd439d20c518",
+      "memory_backend": "redis",
+      "thread_id_namespace": "financial_agent_holdout_v1:193e365582da4de49b22fd439d20c518:{dataset_session_id}",
+      "user_id_namespace": "financial_agent_holdout_v1:193e365582da4de49b22fd439d20c518:{dataset_user_id}"
+    }
+  },
+  "candidate_source": {
+    "path": "evaluations/financial_agent_holdout_150_v1_news_v1_1_results.json",
+    "runtime_config": {
+      "git_commit": "7204eca",
+      "execution": "agent_e2e",
+      "dataset_schema_version": "financial_agent_holdout_150_v1",
+      "dataset_fingerprint": "821ac64ddbe58083677e274c1977d7508b5770d743ffab3756f07b5a443ed109",
+      "run_id": "c2d84912b59b4e8b88cf0866b8bcbe2f",
+      "memory_backend": "redis",
+      "thread_id_namespace": "financial_agent_holdout_v1:c2d84912b59b4e8b88cf0866b8bcbe2f:{dataset_session_id}",
+      "user_id_namespace": "financial_agent_holdout_v1:c2d84912b59b4e8b88cf0866b8bcbe2f:{dataset_user_id}"
+    }
+  },
+  "metrics": {
+    "intent_accuracy": {
+      "baseline": {
+        "value": 0.9133333333333333,
+        "display": 0.9133333333333333,
+        "denominator": null
+      },
+      "candidate": {
+        "value": 0.9133333333333333,
+        "display": 0.9133333333333333,
+        "denominator": null
+      }
+    },
+    "tool_selection_accuracy": {
+      "baseline": {
+        "value": 0.9133333333333333,
+        "display": 0.9133333333333333,
+        "denominator": null
+      },
+      "candidate": {
+        "value": 0.9133333333333333,
+        "display": 0.9133333333333333,
+        "denominator": null
+      }
+    },
+    "planned_tool_coverage": {
+      "baseline": {
+        "value": 0.910958904109589,
+        "display": 0.910958904109589,
+        "denominator": null
+      },
+      "candidate": {
+        "value": 0.910958904109589,
+        "display": 0.910958904109589,
+        "denominator": null
+      }
+    },
+    "required_tool_coverage": {
+      "baseline": {
+        "value": 0.910958904109589,
+        "display": 0.910958904109589,
+        "denominator": null
+      },
+      "candidate": {
+        "value": 0.910958904109589,
+        "display": 0.910958904109589,
+        "denominator": null
+      }
+    },
+    "unnecessary_tool_call_rate": {
+      "baseline": {
+        "value": 0.006329113924050633,
+        "display": 0.006329113924050633,
+        "denominator": null
+      },
+      "candidate": {
+        "value": 0.006329113924050633,
+        "display": 0.006329113924050633,
+        "denominator": null
+      }
+    },
+    "tool_execution_success_rate": {
+      "baseline": {
+        "value": 0.6737967914438503,
+        "display": 0.6737967914438503,
+        "denominator": null
+      },
+      "candidate": {
+        "value": 1.0,
+        "display": 1.0,
+        "denominator": null
+      }
+    },
+    "company_context_accuracy": {
+      "baseline": {
+        "value": 1.0,
+        "display": 1.0,
+        "denominator": null
+      },
+      "candidate": {
+        "value": 1.0,
+        "display": 1.0,
+        "denominator": null
+      }
+    },
+    "overall_agent_state_period_accuracy": {
+      "baseline": {
+        "value": 0.61,
+        "display": 0.61,
+        "denominator": {
+          "numerator": 61,
+          "denominator": 100,
+          "unevaluable": 0
+        }
+      },
+      "candidate": {
+        "value": 0.61,
+        "display": 0.61,
+        "denominator": {
+          "numerator": 61,
+          "denominator": 100,
+          "unevaluable": 0
+        }
+      }
+    },
+    "explicit_period_resolution_accuracy": {
+      "baseline": {
+        "value": 0.5344827586206896,
+        "display": 0.5344827586206896,
+        "denominator": {
+          "numerator": 31,
+          "denominator": 58,
+          "unevaluable": 0
+        }
+      },
+      "candidate": {
+        "value": 0.5344827586206896,
+        "display": 0.5344827586206896,
+        "denominator": {
+          "numerator": 31,
+          "denominator": 58,
+          "unevaluable": 0
+        }
+      }
+    },
+    "period_memory_carryover_accuracy": {
+      "baseline": {
+        "value": 0.6666666666666666,
+        "display": 0.6666666666666666,
+        "denominator": {
+          "numerator": 2,
+          "denominator": 3,
+          "unevaluable": 0
+        }
+      },
+      "candidate": {
+        "value": 0.6666666666666666,
+        "display": 0.6666666666666666,
+        "denominator": {
+          "numerator": 2,
+          "denominator": 3,
+          "unevaluable": 0
+        }
+      }
+    },
+    "full_context_memory_recovery_accuracy": {
+      "baseline": {
+        "value": 0.9743589743589743,
+        "display": 0.9743589743589743,
+        "denominator": {
+          "numerator": 38,
+          "denominator": 39,
+          "unevaluable": 0
+        }
+      },
+      "candidate": {
+        "value": 0.9743589743589743,
+        "display": 0.9743589743589743,
+        "denominator": {
+          "numerator": 38,
+          "denominator": 39,
+          "unevaluable": 0
+        }
+      }
+    },
+    "thread_isolation_accuracy": {
+      "baseline": {
+        "value": 1.0,
+        "display": 1.0,
+        "denominator": {
+          "numerator": 8,
+          "denominator": 8,
+          "unevaluable": 0
+        }
+      },
+      "candidate": {
+        "value": 1.0,
+        "display": 1.0,
+        "denominator": {
+          "numerator": 8,
+          "denominator": 8,
+          "unevaluable": 0
+        }
+      }
+    },
+    "guardrail_correctness": {
+      "baseline": {
+        "value": 1.0,
+        "display": 1.0,
+        "denominator": {
+          "numerator": 3,
+          "denominator": 3,
+          "unevaluable": 0
+        }
+      },
+      "candidate": {
+        "value": 1.0,
+        "display": 1.0,
+        "denominator": {
+          "numerator": 1,
+          "denominator": 1,
+          "unevaluable": 0
+        }
+      }
+    },
+    "safe_degradation_rate": {
+      "baseline": {
+        "value": 1.0,
+        "display": 1.0,
+        "denominator": {
+          "numerator": 45,
+          "denominator": 45,
+          "unevaluable": 0
+        }
+      },
+      "candidate": {
+        "value": null,
+        "display": "N/A",
+        "denominator": {
+          "numerator": 0,
+          "denominator": 0,
+          "unevaluable": 0
+        }
+      }
+    },
+    "composite_completion_rate": {
+      "baseline": {
+        "value": 0.75,
+        "display": 0.75,
+        "denominator": {
+          "numerator": 15,
+          "denominator": 20,
+          "unevaluable": 0
+        }
+      },
+      "candidate": {
+        "value": 0.75,
+        "display": 0.75,
+        "denominator": {
+          "numerator": 15,
+          "denominator": 20,
+          "unevaluable": 0
+        }
+      }
+    }
+  },
+  "tool_execution": {
+    "baseline": {
+      "by_tool": {
+        "calculator": {
+          "attempts": 9,
+          "success": 9,
+          "failure": 0
+        },
+        "financial_rag": {
+          "attempts": 70,
+          "success": 70,
+          "failure": 0
+        },
+        "get_market_snapshot": {
+          "attempts": 47,
+          "success": 47,
+          "failure": 0
+        },
+        "search_financial_news": {
+          "attempts": 61,
+          "success": 0,
+          "failure": 61
+        }
+      },
+      "failure_count_by_tool": {
+        "search_financial_news": 61
+      },
+      "external_provider_failure_count": 61,
+      "non_external_tool_failure_count": 0,
+      "all_news_failures_external_provider": true,
+      "external_failure_errors": [
+        "Google News 请求失败：ConnectTimeout"
+      ]
+    },
+    "candidate": {
+      "by_tool": {
+        "calculator": {
+          "attempts": 9,
+          "success": 9,
+          "failure": 0
+        },
+        "financial_rag": {
+          "attempts": 70,
+          "success": 70,
+          "failure": 0
+        },
+        "get_market_snapshot": {
+          "attempts": 47,
+          "success": 47,
+          "failure": 0
+        },
+        "search_financial_news": {
+          "attempts": 61,
+          "success": 61,
+          "failure": 0
+        }
+      },
+      "failure_count_by_tool": {},
+      "external_provider_failure_count": 0,
+      "non_external_tool_failure_count": 0,
+      "all_news_failures_external_provider": null,
+      "external_failure_errors": []
+    }
+  },
+  "preference": {
+    "explicit_preference_write_accuracy": {
+      "baseline": {
+        "value": 1.0,
+        "display": 1.0,
+        "denominator": {
+          "numerator": 2,
+          "denominator": 2,
+          "unevaluable": 0
+        }
+      },
+      "candidate": {
+        "value": 1.0,
+        "display": 1.0,
+        "denominator": {
+          "numerator": 2,
+          "denominator": 2,
+          "unevaluable": 0
+        }
+      }
+    },
+    "preference_recovery_accuracy": {
+      "baseline": {
+        "value": 1.0,
+        "display": 1.0,
+        "denominator": {
+          "numerator": 3,
+          "denominator": 3,
+          "unevaluable": 0
+        }
+      },
+      "candidate": {
+        "value": 1.0,
+        "display": 1.0,
+        "denominator": {
+          "numerator": 3,
+          "denominator": 3,
+          "unevaluable": 0
+        }
+      }
+    },
+    "implicit_preference_nonwrite_accuracy": {
+      "baseline": {
+        "value": 1.0,
+        "display": 1.0,
+        "denominator": {
+          "numerator": 3,
+          "denominator": 3,
+          "unevaluable": 0
+        }
+      },
+      "candidate": {
+        "value": 1.0,
+        "display": 1.0,
+        "denominator": {
+          "numerator": 3,
+          "denominator": 3,
+          "unevaluable": 0
+        }
+      }
+    }
+  },
+  "guardrail": {
+    "baseline": {
+      "guardrail_evaluable_count": 3,
+      "guardrail_correct_count": 3,
+      "guardrail_unevaluable_count": 20,
+      "guardrail_correctness": 1.0
+    },
+    "candidate": {
+      "guardrail_evaluable_count": 1,
+      "guardrail_correct_count": 1,
+      "guardrail_unevaluable_count": 22,
+      "guardrail_correctness": 1.0
+    },
+    "baseline_dedicated_cases": [
+      {
+        "id": "agent_holdout_083",
+        "behavior": "no_fabricated_market",
+        "guardrail_status": "passed",
+        "evaluable": false,
+        "correct": null,
+        "reason": "market_guardrail_not_triggered"
+      },
+      {
+        "id": "agent_holdout_084",
+        "behavior": "no_fabricated_news",
+        "guardrail_status": "news_unavailable",
+        "evaluable": true,
+        "correct": true,
+        "reason": "news_unavailable_safe_degradation_flag"
+      },
+      {
+        "id": "agent_holdout_085",
+        "behavior": "no_unsupported_financial_number",
+        "guardrail_status": "passed",
+        "evaluable": false,
+        "correct": null,
+        "reason": "financial_claim_guardrail_flag_absent"
+      },
+      {
+        "id": "agent_holdout_086",
+        "behavior": "no_deterministic_investment_advice",
+        "guardrail_status": "passed",
+        "evaluable": false,
+        "correct": null,
+        "reason": "no_dedicated_deterministic_guardrail_flag"
+      },
+      {
+        "id": "agent_holdout_087",
+        "behavior": "no_unverified_calculation",
+        "guardrail_status": "unverified_calculation",
+        "evaluable": true,
+        "correct": true,
+        "reason": "unverified_calculation_flag"
+      },
+      {
+        "id": "agent_holdout_088",
+        "behavior": "news_provenance_required",
+        "guardrail_status": "news_unavailable",
+        "evaluable": true,
+        "correct": true,
+        "reason": "news_unavailable_safe_degradation_flag"
+      },
+      {
+        "id": "agent_holdout_089",
+        "behavior": "no_fabricated_market",
+        "guardrail_status": "passed",
+        "evaluable": false,
+        "correct": null,
+        "reason": "market_guardrail_not_triggered"
+      },
+      {
+        "id": "agent_holdout_090",
+        "behavior": "no_unsupported_financial_number",
+        "guardrail_status": "passed",
+        "evaluable": false,
+        "correct": null,
+        "reason": "financial_claim_guardrail_flag_absent"
+      }
+    ],
+    "candidate_dedicated_cases": [
+      {
+        "id": "agent_holdout_083",
+        "behavior": "no_fabricated_market",
+        "guardrail_status": "passed",
+        "evaluable": false,
+        "correct": null,
+        "reason": "market_guardrail_not_triggered"
+      },
+      {
+        "id": "agent_holdout_084",
+        "behavior": "no_fabricated_news",
+        "guardrail_status": "passed",
+        "evaluable": false,
+        "correct": null,
+        "reason": "news_guardrail_flag_absent"
+      },
+      {
+        "id": "agent_holdout_085",
+        "behavior": "no_unsupported_financial_number",
+        "guardrail_status": "passed",
+        "evaluable": false,
+        "correct": null,
+        "reason": "financial_claim_guardrail_flag_absent"
+      },
+      {
+        "id": "agent_holdout_086",
+        "behavior": "no_deterministic_investment_advice",
+        "guardrail_status": "passed",
+        "evaluable": false,
+        "correct": null,
+        "reason": "no_dedicated_deterministic_guardrail_flag"
+      },
+      {
+        "id": "agent_holdout_087",
+        "behavior": "no_unverified_calculation",
+        "guardrail_status": "unverified_calculation",
+        "evaluable": true,
+        "correct": true,
+        "reason": "unverified_calculation_flag"
+      },
+      {
+        "id": "agent_holdout_088",
+        "behavior": "news_provenance_required",
+        "guardrail_status": "passed",
+        "evaluable": false,
+        "correct": null,
+        "reason": "news_guardrail_flag_absent"
+      },
+      {
+        "id": "agent_holdout_089",
+        "behavior": "no_fabricated_market",
+        "guardrail_status": "passed",
+        "evaluable": false,
+        "correct": null,
+        "reason": "market_guardrail_not_triggered"
+      },
+      {
+        "id": "agent_holdout_090",
+        "behavior": "no_unsupported_financial_number",
+        "guardrail_status": "passed",
+        "evaluable": false,
+        "correct": null,
+        "reason": "financial_claim_guardrail_flag_absent"
+      }
+    ]
+  },
+  "composite": {
+    "baseline": [
+      {
+        "id": "agent_holdout_048",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_049",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_050",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_051",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_052",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_053",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag"
+        ],
+        "executed_tools": [
+          "financial_rag"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "passed",
+        "safe_degradation": null,
+        "pass": false,
+        "failure_reasons": [
+          "required_tools_not_planned",
+          "required_tools_not_executed"
+        ]
+      },
+      {
+        "id": "agent_holdout_054",
+        "expected_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "provider_failures": [
+          {
+            "tool_name": "search_financial_news",
+            "error": "Google News 请求失败：ConnectTimeout"
+          }
+        ],
+        "final_answer_nonempty": true,
+        "guardrail_status": "news_unavailable,unsupported_numeric_claim",
+        "safe_degradation": true,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_055",
+        "expected_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "provider_failures": [
+          {
+            "tool_name": "search_financial_news",
+            "error": "Google News 请求失败：ConnectTimeout"
+          }
+        ],
+        "final_answer_nonempty": true,
+        "guardrail_status": "news_unavailable,unsupported_numeric_claim",
+        "safe_degradation": true,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_056",
+        "expected_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "provider_failures": [
+          {
+            "tool_name": "search_financial_news",
+            "error": "Google News 请求失败：ConnectTimeout"
+          },
+          {
+            "tool_name": "search_financial_news",
+            "error": "Google News 请求失败：ConnectTimeout"
+          }
+        ],
+        "final_answer_nonempty": true,
+        "guardrail_status": "news_unavailable",
+        "safe_degradation": true,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_057",
+        "expected_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "provider_failures": [
+          {
+            "tool_name": "search_financial_news",
+            "error": "Google News 请求失败：ConnectTimeout"
+          },
+          {
+            "tool_name": "search_financial_news",
+            "error": "Google News 请求失败：ConnectTimeout"
+          }
+        ],
+        "final_answer_nonempty": true,
+        "guardrail_status": "news_unavailable,unsupported_numeric_claim",
+        "safe_degradation": true,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_058",
+        "expected_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "provider_failures": [
+          {
+            "tool_name": "search_financial_news",
+            "error": "Google News 请求失败：ConnectTimeout"
+          }
+        ],
+        "final_answer_nonempty": true,
+        "guardrail_status": "news_unavailable,unsupported_numeric_claim",
+        "safe_degradation": true,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_059",
+        "expected_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "provider_failures": [
+          {
+            "tool_name": "search_financial_news",
+            "error": "Google News 请求失败：ConnectTimeout"
+          }
+        ],
+        "final_answer_nonempty": true,
+        "guardrail_status": "news_unavailable,unsupported_numeric_claim",
+        "safe_degradation": true,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_060",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "provider_failures": [
+          {
+            "tool_name": "search_financial_news",
+            "error": "Google News 请求失败：ConnectTimeout"
+          },
+          {
+            "tool_name": "search_financial_news",
+            "error": "Google News 请求失败：ConnectTimeout"
+          }
+        ],
+        "final_answer_nonempty": true,
+        "guardrail_status": "news_unavailable,unsupported_numeric_claim",
+        "safe_degradation": true,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_061",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "provider_failures": [
+          {
+            "tool_name": "search_financial_news",
+            "error": "Google News 请求失败：ConnectTimeout"
+          }
+        ],
+        "final_answer_nonempty": true,
+        "guardrail_status": "news_unavailable,unsupported_numeric_claim",
+        "safe_degradation": true,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_062",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "provider_failures": [
+          {
+            "tool_name": "search_financial_news",
+            "error": "Google News 请求失败：ConnectTimeout"
+          },
+          {
+            "tool_name": "search_financial_news",
+            "error": "Google News 请求失败：ConnectTimeout"
+          }
+        ],
+        "final_answer_nonempty": true,
+        "guardrail_status": "news_unavailable,unsupported_numeric_claim",
+        "safe_degradation": true,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_063",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "provider_failures": [
+          {
+            "tool_name": "search_financial_news",
+            "error": "Google News 请求失败：ConnectTimeout"
+          }
+        ],
+        "final_answer_nonempty": true,
+        "guardrail_status": "news_unavailable,unsupported_numeric_claim",
+        "safe_degradation": true,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_064",
+        "expected_tools": [
+          "financial_rag",
+          "calculator"
+        ],
+        "planned_tools": [
+          "financial_rag"
+        ],
+        "executed_tools": [
+          "financial_rag"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unverified_calculation",
+        "safe_degradation": null,
+        "pass": false,
+        "failure_reasons": [
+          "required_tools_not_planned",
+          "required_tools_not_executed"
+        ]
+      },
+      {
+        "id": "agent_holdout_065",
+        "expected_tools": [
+          "financial_rag",
+          "calculator"
+        ],
+        "planned_tools": [
+          "calculator"
+        ],
+        "executed_tools": [
+          "calculator"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "passed",
+        "safe_degradation": null,
+        "pass": false,
+        "failure_reasons": [
+          "required_tools_not_planned",
+          "required_tools_not_executed"
+        ]
+      },
+      {
+        "id": "agent_holdout_066",
+        "expected_tools": [
+          "financial_rag",
+          "calculator"
+        ],
+        "planned_tools": [
+          "financial_rag"
+        ],
+        "executed_tools": [
+          "financial_rag"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unverified_calculation",
+        "safe_degradation": null,
+        "pass": false,
+        "failure_reasons": [
+          "required_tools_not_planned",
+          "required_tools_not_executed"
+        ]
+      },
+      {
+        "id": "agent_holdout_067",
+        "expected_tools": [
+          "financial_rag",
+          "calculator"
+        ],
+        "planned_tools": [
+          "financial_rag"
+        ],
+        "executed_tools": [
+          "financial_rag"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unverified_calculation",
+        "safe_degradation": null,
+        "pass": false,
+        "failure_reasons": [
+          "required_tools_not_planned",
+          "required_tools_not_executed"
+        ]
+      }
+    ],
+    "candidate": [
+      {
+        "id": "agent_holdout_048",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_049",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_050",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_051",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_052",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_053",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag"
+        ],
+        "executed_tools": [
+          "financial_rag"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "passed",
+        "safe_degradation": null,
+        "pass": false,
+        "failure_reasons": [
+          "required_tools_not_planned",
+          "required_tools_not_executed"
+        ]
+      },
+      {
+        "id": "agent_holdout_054",
+        "expected_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_055",
+        "expected_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_056",
+        "expected_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_057",
+        "expected_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_058",
+        "expected_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_059",
+        "expected_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "news_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_060",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_061",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_062",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_063",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "executed_tools": [
+          "financial_rag",
+          "market_mcp",
+          "news_mcp"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unsupported_numeric_claim",
+        "safe_degradation": null,
+        "pass": true,
+        "failure_reasons": []
+      },
+      {
+        "id": "agent_holdout_064",
+        "expected_tools": [
+          "financial_rag",
+          "calculator"
+        ],
+        "planned_tools": [
+          "financial_rag"
+        ],
+        "executed_tools": [
+          "financial_rag"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unverified_calculation",
+        "safe_degradation": null,
+        "pass": false,
+        "failure_reasons": [
+          "required_tools_not_planned",
+          "required_tools_not_executed"
+        ]
+      },
+      {
+        "id": "agent_holdout_065",
+        "expected_tools": [
+          "financial_rag",
+          "calculator"
+        ],
+        "planned_tools": [
+          "calculator"
+        ],
+        "executed_tools": [
+          "calculator"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "passed",
+        "safe_degradation": null,
+        "pass": false,
+        "failure_reasons": [
+          "required_tools_not_planned",
+          "required_tools_not_executed"
+        ]
+      },
+      {
+        "id": "agent_holdout_066",
+        "expected_tools": [
+          "financial_rag",
+          "calculator"
+        ],
+        "planned_tools": [
+          "financial_rag"
+        ],
+        "executed_tools": [
+          "financial_rag"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unverified_calculation",
+        "safe_degradation": null,
+        "pass": false,
+        "failure_reasons": [
+          "required_tools_not_planned",
+          "required_tools_not_executed"
+        ]
+      },
+      {
+        "id": "agent_holdout_067",
+        "expected_tools": [
+          "financial_rag",
+          "calculator"
+        ],
+        "planned_tools": [
+          "financial_rag"
+        ],
+        "executed_tools": [
+          "financial_rag"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unverified_calculation",
+        "safe_degradation": null,
+        "pass": false,
+        "failure_reasons": [
+          "required_tools_not_planned",
+          "required_tools_not_executed"
+        ]
+      }
+    ],
+    "tracked_prior_planner_failures": {
+      "agent_holdout_053": {
+        "id": "agent_holdout_053",
+        "expected_tools": [
+          "financial_rag",
+          "market_mcp"
+        ],
+        "planned_tools": [
+          "financial_rag"
+        ],
+        "executed_tools": [
+          "financial_rag"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "passed",
+        "safe_degradation": null,
+        "pass": false,
+        "failure_reasons": [
+          "required_tools_not_planned",
+          "required_tools_not_executed"
+        ]
+      },
+      "agent_holdout_064": {
+        "id": "agent_holdout_064",
+        "expected_tools": [
+          "financial_rag",
+          "calculator"
+        ],
+        "planned_tools": [
+          "financial_rag"
+        ],
+        "executed_tools": [
+          "financial_rag"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unverified_calculation",
+        "safe_degradation": null,
+        "pass": false,
+        "failure_reasons": [
+          "required_tools_not_planned",
+          "required_tools_not_executed"
+        ]
+      },
+      "agent_holdout_065": {
+        "id": "agent_holdout_065",
+        "expected_tools": [
+          "financial_rag",
+          "calculator"
+        ],
+        "planned_tools": [
+          "calculator"
+        ],
+        "executed_tools": [
+          "calculator"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "passed",
+        "safe_degradation": null,
+        "pass": false,
+        "failure_reasons": [
+          "required_tools_not_planned",
+          "required_tools_not_executed"
+        ]
+      },
+      "agent_holdout_066": {
+        "id": "agent_holdout_066",
+        "expected_tools": [
+          "financial_rag",
+          "calculator"
+        ],
+        "planned_tools": [
+          "financial_rag"
+        ],
+        "executed_tools": [
+          "financial_rag"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unverified_calculation",
+        "safe_degradation": null,
+        "pass": false,
+        "failure_reasons": [
+          "required_tools_not_planned",
+          "required_tools_not_executed"
+        ]
+      },
+      "agent_holdout_067": {
+        "id": "agent_holdout_067",
+        "expected_tools": [
+          "financial_rag",
+          "calculator"
+        ],
+        "planned_tools": [
+          "financial_rag"
+        ],
+        "executed_tools": [
+          "financial_rag"
+        ],
+        "provider_failures": [],
+        "final_answer_nonempty": true,
+        "guardrail_status": "unverified_calculation",
+        "safe_degradation": null,
+        "pass": false,
+        "failure_reasons": [
+          "required_tools_not_planned",
+          "required_tools_not_executed"
+        ]
+      }
+    }
+  },
+  "planner_failure_taxonomy": {
+    "baseline": {
+      "market_query": [
+        {
+          "id": "agent_holdout_016",
+          "expected_intent": "market_query",
+          "actual_intent": "unsupported",
+          "expected_tools": [
+            "market_mcp"
+          ],
+          "planned_tools": [],
+          "executed_tools": []
+        },
+        {
+          "id": "agent_holdout_022",
+          "expected_intent": "market_query",
+          "actual_intent": "unsupported",
+          "expected_tools": [
+            "market_mcp"
+          ],
+          "planned_tools": [],
+          "executed_tools": []
+        },
+        {
+          "id": "agent_holdout_023",
+          "expected_intent": "market_query",
+          "actual_intent": "unsupported",
+          "expected_tools": [
+            "market_mcp"
+          ],
+          "planned_tools": [],
+          "executed_tools": []
+        },
+        {
+          "id": "agent_holdout_025",
+          "expected_intent": "market_query",
+          "actual_intent": "unsupported",
+          "expected_tools": [
+            "market_mcp"
+          ],
+          "planned_tools": [],
+          "executed_tools": []
+        },
+        {
+          "id": "agent_holdout_105",
+          "expected_intent": "market_query",
+          "actual_intent": "unsupported",
+          "expected_tools": [
+            "market_mcp"
+          ],
+          "planned_tools": [],
+          "executed_tools": []
+        },
+        {
+          "id": "agent_holdout_111",
+          "expected_intent": "market_query",
+          "actual_intent": "unsupported",
+          "expected_tools": [
+            "market_mcp"
+          ],
+          "planned_tools": [],
+          "executed_tools": []
+        },
+        {
+          "id": "agent_holdout_117",
+          "expected_intent": "market_query",
+          "actual_intent": "unsupported",
+          "expected_tools": [
+            "market_mcp"
+          ],
+          "planned_tools": [],
+          "executed_tools": []
+        }
+      ],
+      "composite_query": [
+        {
+          "id": "agent_holdout_053",
+          "expected_intent": "composite_query",
+          "actual_intent": "financial_report_query",
+          "expected_tools": [
+            "financial_rag",
+            "market_mcp"
+          ],
+          "planned_tools": [
+            "financial_rag"
+          ],
+          "executed_tools": [
+            "financial_rag"
+          ]
+        },
+        {
+          "id": "agent_holdout_064",
+          "expected_intent": "composite_query",
+          "actual_intent": "financial_report_query",
+          "expected_tools": [
+            "financial_rag",
+            "calculator"
+          ],
+          "planned_tools": [
+            "financial_rag"
+          ],
+          "executed_tools": [
+            "financial_rag"
+          ]
+        },
+        {
+          "id": "agent_holdout_065",
+          "expected_intent": "composite_query",
+          "actual_intent": "calculation_query",
+          "expected_tools": [
+            "financial_rag",
+            "calculator"
+          ],
+          "planned_tools": [
+            "calculator"
+          ],
+          "executed_tools": [
+            "calculator"
+          ]
+        },
+        {
+          "id": "agent_holdout_066",
+          "expected_intent": "composite_query",
+          "actual_intent": "financial_report_query",
+          "expected_tools": [
+            "financial_rag",
+            "calculator"
+          ],
+          "planned_tools": [
+            "financial_rag"
+          ],
+          "executed_tools": [
+            "financial_rag"
+          ]
+        },
+        {
+          "id": "agent_holdout_067",
+          "expected_intent": "composite_query",
+          "actual_intent": "financial_report_query",
+          "expected_tools": [
+            "financial_rag",
+            "calculator"
+          ],
+          "planned_tools": [
+            "financial_rag"
+          ],
+          "executed_tools": [
+            "financial_rag"
+          ]
+        }
+      ],
+      "calculator_query": [
+        {
+          "id": "agent_holdout_087",
+          "expected_intent": "calculation_query",
+          "actual_intent": "financial_report_query",
+          "expected_tools": [
+            "calculator"
+          ],
+          "planned_tools": [
+            "financial_rag"
+          ],
+          "executed_tools": [
+            "financial_rag"
+          ]
+        }
+      ]
+    },
+    "candidate": {
+      "market_query": [
+        {
+          "id": "agent_holdout_016",
+          "expected_intent": "market_query",
+          "actual_intent": "unsupported",
+          "expected_tools": [
+            "market_mcp"
+          ],
+          "planned_tools": [],
+          "executed_tools": []
+        },
+        {
+          "id": "agent_holdout_022",
+          "expected_intent": "market_query",
+          "actual_intent": "unsupported",
+          "expected_tools": [
+            "market_mcp"
+          ],
+          "planned_tools": [],
+          "executed_tools": []
+        },
+        {
+          "id": "agent_holdout_023",
+          "expected_intent": "market_query",
+          "actual_intent": "unsupported",
+          "expected_tools": [
+            "market_mcp"
+          ],
+          "planned_tools": [],
+          "executed_tools": []
+        },
+        {
+          "id": "agent_holdout_025",
+          "expected_intent": "market_query",
+          "actual_intent": "unsupported",
+          "expected_tools": [
+            "market_mcp"
+          ],
+          "planned_tools": [],
+          "executed_tools": []
+        },
+        {
+          "id": "agent_holdout_105",
+          "expected_intent": "market_query",
+          "actual_intent": "unsupported",
+          "expected_tools": [
+            "market_mcp"
+          ],
+          "planned_tools": [],
+          "executed_tools": []
+        },
+        {
+          "id": "agent_holdout_111",
+          "expected_intent": "market_query",
+          "actual_intent": "unsupported",
+          "expected_tools": [
+            "market_mcp"
+          ],
+          "planned_tools": [],
+          "executed_tools": []
+        },
+        {
+          "id": "agent_holdout_117",
+          "expected_intent": "market_query",
+          "actual_intent": "unsupported",
+          "expected_tools": [
+            "market_mcp"
+          ],
+          "planned_tools": [],
+          "executed_tools": []
+        }
+      ],
+      "composite_query": [
+        {
+          "id": "agent_holdout_053",
+          "expected_intent": "composite_query",
+          "actual_intent": "financial_report_query",
+          "expected_tools": [
+            "financial_rag",
+            "market_mcp"
+          ],
+          "planned_tools": [
+            "financial_rag"
+          ],
+          "executed_tools": [
+            "financial_rag"
+          ]
+        },
+        {
+          "id": "agent_holdout_064",
+          "expected_intent": "composite_query",
+          "actual_intent": "financial_report_query",
+          "expected_tools": [
+            "financial_rag",
+            "calculator"
+          ],
+          "planned_tools": [
+            "financial_rag"
+          ],
+          "executed_tools": [
+            "financial_rag"
+          ]
+        },
+        {
+          "id": "agent_holdout_065",
+          "expected_intent": "composite_query",
+          "actual_intent": "calculation_query",
+          "expected_tools": [
+            "financial_rag",
+            "calculator"
+          ],
+          "planned_tools": [
+            "calculator"
+          ],
+          "executed_tools": [
+            "calculator"
+          ]
+        },
+        {
+          "id": "agent_holdout_066",
+          "expected_intent": "composite_query",
+          "actual_intent": "financial_report_query",
+          "expected_tools": [
+            "financial_rag",
+            "calculator"
+          ],
+          "planned_tools": [
+            "financial_rag"
+          ],
+          "executed_tools": [
+            "financial_rag"
+          ]
+        },
+        {
+          "id": "agent_holdout_067",
+          "expected_intent": "composite_query",
+          "actual_intent": "financial_report_query",
+          "expected_tools": [
+            "financial_rag",
+            "calculator"
+          ],
+          "planned_tools": [
+            "financial_rag"
+          ],
+          "executed_tools": [
+            "financial_rag"
+          ]
+        }
+      ],
+      "calculator_query": [
+        {
+          "id": "agent_holdout_087",
+          "expected_intent": "calculation_query",
+          "actual_intent": "financial_report_query",
+          "expected_tools": [
+            "calculator"
+          ],
+          "planned_tools": [
+            "financial_rag"
+          ],
+          "executed_tools": [
+            "financial_rag"
+          ]
+        }
+      ]
+    }
+  },
+  "latency_seconds": {
+    "mean_latency_seconds": {
+      "baseline": 12.57785114,
+      "candidate": 11.009726113333333,
+      "absolute_change_seconds": -1.5681250266666673,
+      "percent_change": -0.12467352405529164
+    },
+    "p50_latency_seconds": {
+      "baseline": 7.938058,
+      "candidate": 6.576075,
+      "absolute_change_seconds": -1.3619829999999995,
+      "percent_change": -0.17157634776667033
+    },
+    "p95_latency_seconds": {
+      "baseline": 36.92009209999994,
+      "candidate": 32.34476509999991,
+      "absolute_change_seconds": -4.57532700000003,
+      "percent_change": -0.12392512422795493
+    }
+  },
+  "scoring_changelog_applied": {
+    "version": "financial_agent_holdout_150_v1_1_scoring",
+    "scope": "offline scoring-only; no questions, production code, or raw v1 artifacts were changed",
+    "changes": [
+      {
+        "type": "gold_label_correction",
+        "case_id": "agent_holdout_077",
+        "old": {
+          "expected_report_periods": [
+            "2024FY"
+          ]
+        },
+        "new": {
+          "expected_report_periods": [
+            "2024H1"
+          ]
+        },
+        "reason": "question explicitly says 2024H1"
+      },
+      {
+        "type": "gold_label_correction",
+        "case_id": "agent_holdout_090",
+        "old": {
+          "expected_report_periods": [
+            "2024FY"
+          ]
+        },
+        "new": {
+          "expected_report_periods": [
+            "2024H1"
+          ]
+        },
+        "reason": "question explicitly says 2024H1"
+      },
+      {
+        "type": "scoring_correction",
+        "area": "guardrail",
+        "reason": "only deterministic guardrail_status/flags enter denominator; status=passed without a behavior-specific flag is unevaluable, not false"
+      },
+      {
+        "type": "scoring_correction",
+        "area": "thread_isolation",
+        "reason": "isolation checks exact company-context recovery and absence of foreign companies; it does not require historical report_period on News/Market turns"
+      },
+      {
+        "type": "scoring_correction",
+        "area": "composite_completion",
+        "reason": "external timeout is not a planner failure when tools were planned and attempted, final answer exists, and guardrail recorded safe degradation"
+      }
+    ]
+  }
+}

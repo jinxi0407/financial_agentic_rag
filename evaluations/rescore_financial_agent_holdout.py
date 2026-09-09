@@ -293,7 +293,7 @@ def _tool_failure_diagnostics(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "failure_count_by_tool": dict(sorted(by_tool.items())),
         "external_provider_failure_count": len(external),
         "non_external_tool_failure_count": len(non_external),
-        "all_news_failures_external_provider": all(tool.get("tool_name") == "search_financial_news" for tool in external),
+        "all_news_failures_external_provider": all(tool.get("tool_name") == "search_financial_news" for tool in external) if external else None,
         "external_failure_errors": sorted({str(tool.get("error")) for tool in external}),
     }
 
@@ -332,14 +332,42 @@ def _changelog() -> dict[str, Any]:
     }
 
 
-def rescore(raw: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+def _preference_diagnostics(raw: dict[str, Any]) -> dict[str, Any]:
+    """Preserve the frozen evaluator's saved preference verdicts as diagnostics."""
+    completed = [row for row in raw["results"] if row.get("status") == "completed"]
+    explicit_write = [row.get("preference", {}).get("correct") for row in completed if row["case"].get("expected_preference_behavior") in {"write_explicit_metrics", "write_explicit_companies"}]
+    recovery = [row.get("preference", {}).get("correct") for row in completed if row["case"].get("expected_preference_behavior") == "recover_explicit"]
+    implicit_nonwrite = [row.get("preference", {}).get("correct") for row in completed if row["case"].get("expected_preference_behavior") == "must_not_write_implicit"]
+    return {
+        "explicit_preference_write_accuracy": _rate(explicit_write),
+        "preference_recovery_accuracy": _rate(recovery),
+        "implicit_preference_nonwrite_accuracy": _rate(implicit_nonwrite),
+        "denominators": {
+            "explicit_preference_write_accuracy": _denominator(explicit_write),
+            "preference_recovery_accuracy": _denominator(recovery),
+            "implicit_preference_nonwrite_accuracy": _denominator(implicit_nonwrite),
+        },
+    }
+
+
+def _tool_execution_detail(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    by_tool: dict[str, dict[str, int]] = {}
+    for tool in (tool for row in rows for tool in row["tool_results"]):
+        name = str(tool.get("tool_name"))
+        stats = by_tool.setdefault(name, {"attempts": 0, "success": 0, "failure": 0})
+        stats["attempts"] += 1
+        stats["success" if tool.get("success") else "failure"] += 1
+    return {"by_tool": dict(sorted(by_tool.items())), **_tool_failure_diagnostics(rows)}
+
+
+def rescore(raw: dict[str, Any], source_path: Path = DEFAULT_RESULTS) -> tuple[dict[str, Any], dict[str, Any]]:
     rows = [_corrected_row(row) for row in raw["results"] if row.get("status") == "completed"]
     composites = [_composite_detail(row) for row in rows if row["case"]["category"] == "composite"]
     guardrails = [{"id": row["id"], "behavior": row["case"].get("expected_guardrail_behavior"), "guardrail_status": row["guardrail_status"], "evaluable": row["guardrail_evaluable"], "correct": row["guardrail_correct"], "reason": row["guardrail_reason"]} for row in rows if row["case"]["category"] == "guardrail"]
     scoring = {
         "schema_version": "financial_agent_holdout_150_v1_1_scoring",
         "mode": "offline_rescoring_only",
-        "source_results": {"path": str(DEFAULT_RESULTS.relative_to(ROOT)), "runtime_config": raw.get("runtime_config", {})},
+        "source_results": {"path": str(source_path.relative_to(ROOT)), "runtime_config": raw.get("runtime_config", {})},
         "raw_v1_metrics": raw.get("metrics", {}),
         "v1_1_scoring_protocol": SCORING_PROTOCOL,
         "v1_1_corrected_metrics": _metrics(rows),
@@ -347,9 +375,98 @@ def rescore(raw: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
         "guardrail_dedicated_cases": guardrails,
         "composite_cases": composites,
         "tool_execution_diagnostics": _tool_failure_diagnostics(rows),
+        "tool_execution_detail": _tool_execution_detail(rows),
+        "preference_diagnostics": _preference_diagnostics(raw),
         "planner_failure_taxonomy": _planner_failure_taxonomy(rows),
     }
     return scoring, _changelog()
+
+
+def _comparison_value(value: Any, denominator: dict[str, int] | None = None) -> dict[str, Any]:
+    return {"value": value, "display": "N/A" if value is None else value, "denominator": denominator}
+
+
+def _latency_delta(baseline: float | None, candidate: float | None) -> dict[str, float | None]:
+    absolute = candidate - baseline if baseline is not None and candidate is not None else None
+    return {
+        "baseline": baseline,
+        "candidate": candidate,
+        "absolute_change_seconds": absolute,
+        "percent_change": absolute / baseline if absolute is not None and baseline else None,
+    }
+
+
+def comparison(baseline_raw: dict[str, Any], candidate_raw: dict[str, Any], baseline_path: Path, candidate_path: Path) -> dict[str, Any]:
+    """Compare two saved raw runs by recomputing both with the same v1.1 protocol."""
+    baseline, _ = rescore(baseline_raw, baseline_path)
+    candidate, _ = rescore(candidate_raw, candidate_path)
+    base_metrics = baseline["v1_1_corrected_metrics"]
+    candidate_metrics = candidate["v1_1_corrected_metrics"]
+    base_preferences = baseline["preference_diagnostics"]
+    candidate_preferences = candidate["preference_diagnostics"]
+    metric_names = (
+        "intent_accuracy", "tool_selection_accuracy", "planned_tool_coverage", "required_tool_coverage",
+        "unnecessary_tool_call_rate", "tool_execution_success_rate", "company_context_accuracy",
+        "overall_agent_state_period_accuracy", "explicit_period_resolution_accuracy",
+        "period_memory_carryover_accuracy", "full_context_memory_recovery_accuracy",
+        "thread_isolation_accuracy", "guardrail_correctness", "safe_degradation_rate",
+        "composite_completion_rate",
+    )
+    metrics = {
+        name: {
+            "baseline": _comparison_value(base_metrics[name], base_metrics.get("denominators", {}).get(name)),
+            "candidate": _comparison_value(candidate_metrics[name], candidate_metrics.get("denominators", {}).get(name)),
+        }
+        for name in metric_names
+    }
+    preference_metrics = {
+        name: {
+            "baseline": _comparison_value(base_preferences[name], base_preferences["denominators"][name]),
+            "candidate": _comparison_value(candidate_preferences[name], candidate_preferences["denominators"][name]),
+        }
+        for name in ("explicit_preference_write_accuracy", "preference_recovery_accuracy", "implicit_preference_nonwrite_accuracy")
+    }
+    return {
+        "schema_version": "financial_agent_holdout_150_v1_1_news_comparison",
+        "mode": "offline_rescoring_only",
+        "comparison_protocol": {
+            "baseline": "Agent v1 (Google News), reconstructed from its saved raw result with v1.1 scoring.",
+            "candidate": "Agent News v1.1 (Domestic Provider), reconstructed from its saved raw result with the identical v1.1 scoring.",
+            "gold_label_corrections": LABEL_CORRECTIONS,
+            "safe_degradation": "null / N/A when no eligible external provider failure exists, rather than 0%.",
+        },
+        "baseline_source": {"path": str(baseline_path.relative_to(ROOT)), "runtime_config": baseline_raw.get("runtime_config", {})},
+        "candidate_source": {"path": str(candidate_path.relative_to(ROOT)), "runtime_config": candidate_raw.get("runtime_config", {})},
+        "metrics": metrics,
+        "tool_execution": {
+            "baseline": baseline["tool_execution_detail"],
+            "candidate": candidate["tool_execution_detail"],
+        },
+        "preference": preference_metrics,
+        "guardrail": {
+            "baseline": {name: base_metrics[name] for name in ("guardrail_evaluable_count", "guardrail_correct_count", "guardrail_unevaluable_count", "guardrail_correctness")},
+            "candidate": {name: candidate_metrics[name] for name in ("guardrail_evaluable_count", "guardrail_correct_count", "guardrail_unevaluable_count", "guardrail_correctness")},
+            "baseline_dedicated_cases": baseline["guardrail_dedicated_cases"],
+            "candidate_dedicated_cases": candidate["guardrail_dedicated_cases"],
+        },
+        "composite": {
+            "baseline": baseline["composite_cases"],
+            "candidate": candidate["composite_cases"],
+            "tracked_prior_planner_failures": {
+                case_id: next(item for item in candidate["composite_cases"] if item["id"] == case_id)
+                for case_id in ("agent_holdout_053", "agent_holdout_064", "agent_holdout_065", "agent_holdout_066", "agent_holdout_067")
+            },
+        },
+        "planner_failure_taxonomy": {
+            "baseline": baseline["planner_failure_taxonomy"],
+            "candidate": candidate["planner_failure_taxonomy"],
+        },
+        "latency_seconds": {
+            name: _latency_delta(base_metrics[name], candidate_metrics[name])
+            for name in ("mean_latency_seconds", "p50_latency_seconds", "p95_latency_seconds")
+        },
+        "scoring_changelog_applied": _changelog(),
+    }
 
 
 def main() -> None:
@@ -357,11 +474,18 @@ def main() -> None:
     parser.add_argument("--results", type=Path, default=DEFAULT_RESULTS)
     parser.add_argument("--scoring", type=Path, default=DEFAULT_SCORING)
     parser.add_argument("--changelog", type=Path, default=DEFAULT_CHANGELOG)
+    parser.add_argument("--baseline-results", type=Path, help="Optional raw v1 result for identical-protocol comparison.")
+    parser.add_argument("--comparison", type=Path, help="Optional comparison artifact path; requires --baseline-results.")
     args = parser.parse_args()
     raw = _load(args.results)
-    scoring, changelog = rescore(raw)
+    scoring, changelog = rescore(raw, args.results)
     _dump(args.scoring, scoring)
     _dump(args.changelog, changelog)
+    if args.comparison:
+        if not args.baseline_results:
+            raise SystemExit("--comparison requires --baseline-results")
+        baseline_raw = _load(args.baseline_results)
+        _dump(args.comparison, comparison(baseline_raw, raw, args.baseline_results, args.results))
     print(json.dumps({"completed": scoring["v1_1_corrected_metrics"]["completed"], "scoring": str(args.scoring), "changelog": str(args.changelog)}, ensure_ascii=False))
 
 
