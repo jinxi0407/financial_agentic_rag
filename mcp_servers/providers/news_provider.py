@@ -32,6 +32,24 @@ class EastmoneyNewsProvider:
 
     name = "东方财富搜索"
     url = "https://search-api-web.eastmoney.com/search/jsonp"
+    _GENERIC_MARKET_TITLE_TERMS = (
+        "主力资金",
+        "资金净流",
+        "资金流",
+        "概念",
+        "板块",
+        "大宗交易",
+        "杠杆资金",
+        "净买入",
+        "净流出",
+        "排行榜",
+    )
+    _COMPANY_EVENT_TITLE_TERMS = (
+        "公告", "披露", "发布", "中报", "年报", "财报", "业绩", "净利润", "营业收入", "营收",
+        "项目", "产品", "技术", "工艺", "投资", "融资", "回购", "股东", "董事", "经营", "合作",
+        "签约", "订单", "销量", "诉讼", "处罚",
+    )
+    _MIN_RELEVANCE_SCORE = 4
 
     def __init__(self, session: requests.Session | None = None, timeout_seconds: float = 3.0):
         self.session = session or requests.Session()
@@ -39,10 +57,11 @@ class EastmoneyNewsProvider:
 
     def search(self, query: str, company_name: str | None, ticker: str | None, max_results: int) -> dict[str, Any]:
         keyword = ticker or company_name or query
+        candidate_limit = min(max(max_results * 5, 20), 50)
         payload = {
             "uid": "", "keyword": keyword, "type": ["cmsArticleWebOld"],
             "client": "web", "clientType": "web", "clientVersion": "curr",
-            "param": {"cmsArticleWebOld": {"searchScope": "default", "sort": "default", "pageIndex": 1, "pageSize": max_results, "preTag": "", "postTag": ""}},
+            "param": {"cmsArticleWebOld": {"searchScope": "default", "sort": "default", "pageIndex": 1, "pageSize": candidate_limit, "preTag": "", "postTag": ""}},
         }
         try:
             response = self.session.get(self.url, params={"cb": "financialNews", "param": json.dumps(payload, separators=(",", ":"))}, headers=_HEADERS, timeout=self.timeout_seconds)
@@ -54,7 +73,16 @@ class EastmoneyNewsProvider:
             articles = (data.get("result") or {}).get("cmsArticleWebOld") or []
             if isinstance(articles, dict):
                 articles = articles.get("list") or []
-            results = [item for article in articles if (item := self._item(article))]
+            scored = []
+            for index, article in enumerate(articles):
+                item = self._item(article)
+                if not item:
+                    continue
+                score = self._relevance_score(item, company_name, ticker)
+                if score >= self._MIN_RELEVANCE_SCORE:
+                    scored.append((score, index, item))
+            scored.sort(key=lambda entry: (-entry[0], entry[1]))
+            results = [item for _, _, item in scored[:max_results]]
             return {"success": True, "results": results, "error": None}
         except (requests.RequestException, ValueError, TypeError) as exc:
             return self._failure(type(exc).__name__)
@@ -65,6 +93,38 @@ class EastmoneyNewsProvider:
         if not title or not url:
             return None
         return {"title": title, "snippet": _clean(article.get("content")) or None, "source": _clean(article.get("mediaName")) or self.name, "published_at": str(article.get("date") or "").strip() or None, "url": url, "provider": self.name}
+
+    @classmethod
+    def _relevance_score(cls, item: dict[str, str | None], company_name: str | None, ticker: str | None) -> int:
+        """Favor company-subject coverage over ticker-only market lists."""
+        title = item["title"] or ""
+        snippet = item["snippet"] or ""
+        if cls._is_generic_market_headline(title) and not any(term in title for term in cls._COMPANY_EVENT_TITLE_TERMS):
+            return -100
+        score = 0
+        company_in_title = bool(company_name and company_name in title)
+        if company_in_title:
+            score += 12
+        elif company_name and company_name in snippet:
+            score += 6
+            if cls._snippet_has_company_subject(snippet, company_name):
+                score += 3
+        if ticker and ticker in title:
+            score += 4
+        elif ticker and ticker in snippet:
+            score += 1
+        if not company_in_title and cls._is_generic_market_headline(title):
+            score -= 5
+        return score
+
+    @classmethod
+    def _is_generic_market_headline(cls, title: str) -> bool:
+        return any(term in title for term in cls._GENERIC_MARKET_TITLE_TERMS)
+
+    @staticmethod
+    def _snippet_has_company_subject(snippet: str, company_name: str) -> bool:
+        leading_text = snippet[:100].lstrip()
+        return leading_text.startswith(company_name) or bool(re.search(rf"(?:^|[。；])[^。；]{{0,20}}{re.escape(company_name)}(?:[（(：,，]|$)", leading_text))
 
     @staticmethod
     def _failure(reason: str) -> dict[str, Any]:

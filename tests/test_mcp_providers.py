@@ -5,7 +5,7 @@ import unittest
 import requests
 
 from mcp_servers.providers.market_provider import MarketProvider, extract_security_from_query, normalize_security
-from mcp_servers.providers.news_provider import GoogleNewsProvider, NewsProvider
+from mcp_servers.providers.news_provider import EastmoneyNewsProvider, GoogleNewsProvider, NewsProvider
 
 
 class FakeResponse:
@@ -90,6 +90,38 @@ class NewsProviderTests(unittest.TestCase):
         self.assertEqual([], result["results"])
         self.assertEqual(["东方财富搜索", "新浪财经7x24"], result["providers_attempted"])
 
+    def test_eastmoney_filters_ticker_only_generic_market_lists(self):
+        articles = [
+            _eastmoney_article("9月7日科创板主力资金净流入84.42亿元", "688981 位列资金流榜单", "https://example.com/generic-1"),
+            _eastmoney_article("中国AI 50概念下跌1.49%，主力资金净流出40股", "成分股包括 688981 等", "https://example.com/generic-2"),
+            _eastmoney_article("中芯国际概念下跌3.12%，22股主力资金净流出超亿元", "688981 位列概念股名单", "https://example.com/generic-3"),
+            _eastmoney_article("中芯国际发布最新工艺进展", "中芯国际（688981）披露最新研发进展。", "https://example.com/smic"),
+            _eastmoney_article("公司公告：重要事项", "中芯国际（688981）就项目进展发布公告。", "https://example.com/smic-snippet"),
+        ]
+        provider = EastmoneyNewsProvider(session=FakeSession(FakeResponse(content=_eastmoney_jsonp(articles))))
+        result = provider.search("中芯国际最近新闻", "中芯国际", "688981", 3)
+        self.assertTrue(result["success"])
+        self.assertEqual(["中芯国际发布最新工艺进展", "公司公告：重要事项"], [item["title"] for item in result["results"]])
+
+    def test_eastmoney_preserves_company_subject_results_for_byd_and_cmb(self):
+        byd = EastmoneyNewsProvider(session=FakeSession(FakeResponse(content=_eastmoney_jsonp([
+            _eastmoney_article("比亚迪：海外销量持续增长", "比亚迪（002594）发布销量数据。", "https://example.com/byd"),
+        ]))))
+        cmb = EastmoneyNewsProvider(session=FakeSession(FakeResponse(content=_eastmoney_jsonp([
+            _eastmoney_article("招商银行发布中期业绩", "招商银行（600036）公布经营数据。", "https://example.com/cmb"),
+        ]))))
+        self.assertEqual("比亚迪：海外销量持续增长", byd.search("比亚迪最近新闻", "比亚迪", "002594", 3)["results"][0]["title"])
+        self.assertEqual("招商银行发布中期业绩", cmb.search("招商银行近期新闻", "招商银行", "600036", 3)["results"][0]["title"])
+
+    def test_empty_eastmoney_after_relevance_filter_uses_sina_fallback(self):
+        articles = [_eastmoney_article("国家大基金持股概念下跌", "688981 位列成分股", "https://example.com/generic")]
+        primary = EastmoneyNewsProvider(session=FakeSession(FakeResponse(content=_eastmoney_jsonp(articles))))
+        fallback = StubNewsProvider("新浪财经7x24", {"success": True, "results": [{"title": "中芯国际相关新闻", "snippet": "中芯国际公告", "source": "新浪财经", "published_at": None, "url": "https://example.com/sina", "provider": "新浪财经7x24"}], "error": None})
+        result = NewsProvider(providers=[primary, fallback]).search_news("中芯国际最近新闻", company_name="中芯国际", ticker="688981")
+        self.assertTrue(result["success"])
+        self.assertEqual("新浪财经7x24", result["source"])
+        self.assertEqual(["东方财富搜索", "新浪财经7x24"], result["providers_attempted"])
+
 
 class StubNewsProvider:
     def __init__(self, name, payload):
@@ -98,3 +130,13 @@ class StubNewsProvider:
 
     def search(self, query, company_name, ticker, max_results):
         return self.payload
+
+
+def _eastmoney_article(title, content, url):
+    return {"title": title, "content": content, "url": url, "mediaName": "东方财富", "date": "2026-09-09"}
+
+
+def _eastmoney_jsonp(articles):
+    import json
+
+    return f"financialNews({json.dumps({'result': {'cmsArticleWebOld': articles}}, ensure_ascii=False)})".encode("utf-8")
