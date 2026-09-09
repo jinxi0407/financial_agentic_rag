@@ -1,0 +1,35 @@
+flowchart TB
+    U[User Query] --> P[Planner]
+    P --> G[LangGraph StateGraph]
+    G <--> RS[RedisSaver / Redis Stack]
+
+    G --> FR[FinancialRAGTool]
+    G --> MT[Market MCP]
+    G --> NT[News MCP]
+    G --> CT[CalculatorTool]
+    FR --> AG[Aggregation]
+    MT --> AG
+    NT --> AG
+    CT --> AG
+    AG --> SY[Qwen Synthesis<br/>Composite only]
+    SY --> GR[Deterministic Guardrail]
+    GR --> A[Final Answer + Trace]
+
+    subgraph RAG[Financial RAG]
+        FAQ[MySQL FAQ + BM25 cache] --> QM[Query Metadata]
+        QM --> TP[Company × Period Planning]
+        TP --> EM[BGE-M3]
+        EM --> MV[Milvus Hybrid Retrieval]
+        MV --> PD[Parent Dedup]
+        PD --> RR[Cross-Encoder Reranker]
+        RR --> FE[Structured Financial Evidence]
+        FE --> FA[Financial Answer]
+    end
+    FR --> FAQ
+
+    subgraph NEWS[News MCP Provider Chain]
+        NT --> NS[News MCP Server]
+        NS --> EMN[Eastmoney]
+        EMN -. no reliable result .-> SN[Sina Finance]
+        SN -. optional .-> GN[Google News]
+    end
