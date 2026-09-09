@@ -28,6 +28,20 @@ _STREAM_OBSERVER: ContextVar[Callable[[dict[str, Any]], None] | None] = ContextV
     "agent_stream_observer", default=None
 )
 
+_COMPARISON_METRIC_ALIASES = {
+    "营业收入": ("营业收入", "营收"),
+    "归母净利润": (
+        "归母净利润",
+        "归属于上市公司股东的净利润",
+        "归属于母公司所有者的净利润",
+    ),
+    "经营活动现金流量净额": ("经营活动现金流量净额", "经营现金流"),
+    "EPS": ("每股收益", "EPS"),
+    "ROE": ("净资产收益率", "ROE"),
+}
+_METRIC_EVIDENCE_GAP_MARKERS = ("未直接披露", "未披露", "未提供", "证据不足", "缺少", "无法确认")
+_COMPARISON_CLAIM_MARKERS = ("高于", "低于", "大于", "小于", "更高", "更低", "领先", "落后", "优于", "弱于", "显著", "规模上")
+
 
 class AgentState(TypedDict, total=False):
     query: str
@@ -297,8 +311,11 @@ class LangGraphFinancialAgent:
             }
 
     def _guardrail(self, state):
-        candidate = self._remove_false_tool_unavailability(
-            state, state.get("synthesis_answer") or state.get("draft_answer")
+        candidate = self._enforce_comparison_evidence(
+            state,
+            self._remove_false_tool_unavailability(
+                state, state.get("synthesis_answer") or state.get("draft_answer")
+            ),
         )
         violations = self._guardrail_violations(state, candidate)
         if violations:
@@ -339,7 +356,8 @@ class LangGraphFinancialAgent:
                 "previous_query": state.get("previous_query", ""),
                 "preferences": state.get("long_term_preferences", {}),
             },
-            "financial_result": state.get("financial_result", ""),
+            "financial_result": self._normalized_composite_financial_result(state),
+            "financial_evidence_constraints": self._financial_evidence_constraints(state),
             "market_results": state.get("market_results", []),
             "news_results": state.get("news_results", []),
             "verified_calculation": state.get("calculation_result", {}),
@@ -559,6 +577,76 @@ class LangGraphFinancialAgent:
         return "".join(kept).strip()
 
     @staticmethod
+    def _contains_financial_evidence(answer):
+        return bool(answer and re.search(r"\d", answer) and any(
+            alias in answer
+            for aliases in _COMPARISON_METRIC_ALIASES.values()
+            for alias in aliases
+        ))
+
+    def _normalized_composite_financial_result(self, state):
+        """Remove only tool-local generic prefaces before composite synthesis."""
+        financial_result = self._tool_result(state, "financial_rag")
+        if not financial_result or not financial_result.get("success"):
+            return state.get("financial_result", "")
+
+        answer = self._remove_false_tool_unavailability(
+            state, financial_result.get("answer", "")
+        )
+        if state.get("intent") != "composite_query" or not self._contains_financial_evidence(answer):
+            return answer
+
+        for pattern in (
+            r"当前知识库中缺少足够的可靠信息，无法基于现有资料回答[。！？]?",
+            r"若仅依据当前知识库[^。！？\n]*[。！？]?",
+        ):
+            answer = re.sub(pattern, "", answer)
+        return answer.strip()
+
+    def _financial_evidence_constraints(self, state):
+        if len(state.get("companies", [])) < 2:
+            return []
+        financial_result = self._tool_result(state, "financial_rag") or {}
+        answer = financial_result.get("answer", "")
+        constraints = []
+        for metric, aliases in _COMPARISON_METRIC_ALIASES.items():
+            if any(
+                any(alias in sentence for alias in aliases)
+                and any(marker in sentence for marker in _METRIC_EVIDENCE_GAP_MARKERS)
+                for sentence in re.split(r"(?<=[。！？!?])|\n+", answer)
+            ):
+                constraints.append({
+                    "metric": metric,
+                    "instruction": f"当前证据不足以直接比较两家公司{metric}的绝对规模。",
+                })
+        return constraints
+
+    def _enforce_comparison_evidence(self, state, candidate):
+        constraints = self._financial_evidence_constraints(state)
+        if not candidate or not constraints:
+            return candidate
+
+        blocked_metrics = {
+            constraint["metric"]: _COMPARISON_METRIC_ALIASES[constraint["metric"]]
+            for constraint in constraints
+        }
+        kept = []
+        for sentence in re.split(r"(?<=[。！？!?；;])", candidate):
+            normalized = sentence.strip()
+            unsupported_claim = any(
+                any(alias in normalized for alias in aliases)
+                and any(marker in normalized for marker in _COMPARISON_CLAIM_MARKERS)
+                for aliases in blocked_metrics.values()
+            )
+            if normalized and not unsupported_claim:
+                kept.append(sentence)
+        answer = "".join(kept).strip()
+        for constraint in constraints:
+            if constraint["instruction"] not in answer:
+                answer = f"{answer}\n\n{constraint['instruction']}".strip()
+        return answer
+
+    @staticmethod
     def _missing_news_provenance(results, candidate):
         for tool_result in results:
             for item in (tool_result.get("result") or {}).get("results", []):
@@ -585,8 +673,8 @@ class LangGraphFinancialAgent:
         sections = []
         financial_result = self._tool_result(state, "financial_rag")
         if financial_result and financial_result.get("success"):
-            financial_answer = self._remove_false_tool_unavailability(
-                state, financial_result["answer"]
+            financial_answer = self._enforce_comparison_evidence(
+                state, self._normalized_composite_financial_result(state)
             )
             if financial_answer:
                 sections.append("财务表现\n" + financial_answer)

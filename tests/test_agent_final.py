@@ -165,7 +165,7 @@ class AgentFinalTests(unittest.TestCase):
     def test_real_shape_successful_tools_do_not_emit_external_degradation(self):
         class LocalDisclaimerQA:
             def query(self, _query):
-                yield "财报上下文没有当前行情和近期新闻。营业收入为 100 元。", False
+                yield "当前知识库中缺少足够的可靠信息，无法基于现有资料回答。财报上下文没有当前行情和近期新闻。营业收入为 100 元。", False
                 yield "", True
 
         # This mirrors the real GPU failure mode: synthesis adds an unsupported
@@ -188,10 +188,57 @@ class AgentFinalTests(unittest.TestCase):
         self.assertIn("市场表现", state["final_answer"])
         self.assertIn("近期事件", state["final_answer"])
         self.assertNotIn("没有当前行情", state["final_answer"])
+        self.assertNotIn("当前知识库中缺少足够的可靠信息", state["final_answer"])
         self.assertEqual(
             "passed",
             next(event["data"]["status"] for event in events if event["type"] == "guardrail"),
         )
+
+    def test_missing_metric_evidence_blocks_unsupported_comparison(self):
+        class PartialEvidenceQA:
+            def query(self, _query):
+                yield (
+                    "贵州茅台2026H1归属于上市公司股东的净利润为 10 元。"
+                    "五粮液当前检索上下文未直接披露2026H1归属于上市公司股东的净利润绝对金额。"
+                ), False
+                yield "", True
+
+        synthesizer = FakeSynthesizer(
+            "综合判断：贵州茅台在归属于上市公司股东的净利润规模上显著高于五粮液。"
+        )
+        state = self.make_agent(
+            qa_system=PartialEvidenceQA(), synthesizer=synthesizer
+        ).run(
+            "比较贵州茅台和五粮液2026H1归属于上市公司股东的净利润，并结合当前行情和近期新闻分析",
+            "partial-profit",
+        )
+
+        self.assertNotIn("显著高于", state["final_answer"])
+        self.assertIn(
+            "当前证据不足以直接比较两家公司归母净利润的绝对规模。",
+            state["final_answer"],
+        )
+        self.assertEqual(
+            "归母净利润",
+            synthesizer.calls[0]["financial_evidence_constraints"][0]["metric"],
+        )
+
+    def test_complete_metric_evidence_allows_comparison(self):
+        class CompleteEvidenceQA:
+            def query(self, _query):
+                yield "贵州茅台2026H1归属于上市公司股东的净利润为 10 元，五粮液2026H1归属于上市公司股东的净利润为 8 元。", False
+                yield "", True
+
+        state = self.make_agent(
+            qa_system=CompleteEvidenceQA(),
+            answer="综合判断：贵州茅台归属于上市公司股东的净利润规模高于五粮液。",
+        ).run(
+            "比较贵州茅台和五粮液2026H1归属于上市公司股东的净利润，并结合当前行情和近期新闻分析",
+            "complete-profit",
+        )
+
+        self.assertIn("归属于上市公司股东的净利润规模高于五粮液", state["final_answer"])
+        self.assertNotIn("当前证据不足以直接比较", state["final_answer"])
 
     def test_unverified_calculation_falls_back(self):
         state = self.make_agent(
