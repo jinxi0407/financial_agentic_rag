@@ -42,6 +42,16 @@ class CalculatorToolTests(unittest.TestCase):
         self.assertTrue(result.success)
         self.assertAlmostEqual(0.11, result.result)
 
+    def test_basic_arithmetic_operations(self):
+        for operation, left, right, expected in (
+            ("addition", 100, 30, 130),
+            ("subtraction", 100, 30, 70),
+            ("multiplication", 100, 1.2, 120),
+        ):
+            result = self.tool.run(operation, left=left, right=right)
+            self.assertTrue(result.success)
+            self.assertEqual(expected, result.result)
+
     def test_division_by_zero_is_safe(self):
         result = self.tool.run("growth_rate", current=120, previous=0)
         self.assertFalse(result.success)

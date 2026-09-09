@@ -66,8 +66,16 @@ class RegressionMCP:
 
 
 class RegressionSynthesizer:
-    def synthesize(self, _payload: dict[str, Any]) -> tuple[str, float]:
-        return "本回答为开发回归中的组合工具输出摘要。", 0.001
+    def synthesize(self, payload: dict[str, Any]) -> tuple[str, float]:
+        sections = [f"财务表现：{payload.get('financial_result', '')}"]
+        for market in payload.get("market_results", []):
+            result = market.get("result") or {}
+            if market.get("success"):
+                sections.append(f"市场表现：{result.get('company_name')}当前价格 {result.get('price')}，来源 {result.get('source')}。")
+        for news in payload.get("news_results", []):
+            for item in (news.get("result") or {}).get("results", []):
+                sections.append(f"近期事件：{item.get('title')}（{item.get('source')}，{item.get('published_at')}）。")
+        return "\n".join(sections), 0.001
 
 
 class RegressionPreferenceStore:
@@ -98,7 +106,7 @@ def audit_dataset(dataset: dict[str, Any]) -> dict[str, Any]:
     questions = [case["question"] for case in cases]
     categories = Counter(case["category"] for case in cases)
     failures = []
-    if not 40 <= len(cases) <= 75:
+    if not 40 <= len(cases) <= 90:
         failures.append("case_count_out_of_range")
     if len(identifiers) != len(set(identifiers)):
         failures.append("duplicate_ids")
@@ -112,7 +120,7 @@ def audit_dataset(dataset: dict[str, Any]) -> dict[str, Any]:
         "passed": not failures,
         "case_count": len(cases),
         "categories": dict(sorted(categories.items())),
-        "memory_sessions": len({case["session_id"] for case in cases if case["category"] in {"memory_pronoun", "memory_period_carryover", "memory_market_carryover"}}),
+        "memory_sessions": len({case["session_id"] for case in cases if case["category"] in {"memory_pronoun", "memory_period_carryover", "memory_market_carryover", "memory_explicit_override"}}),
         "failures": failures,
     }
 
@@ -170,12 +178,30 @@ def _check_answer(case: dict[str, Any], state: dict[str, Any]) -> dict[str, bool
                 and state.get("required_tools") == ["market_mcp"]
                 and state.get("executed_tools") == ["market_mcp"]
             )
+        elif check == "arithmetic_exact":
+            result = state.get("calculation_result", {})
+            checks[check] = result.get("success") and result.get("result") == case.get("expected_arithmetic_result")
+        elif check == "no_company_pronoun":
+            checks[check] = (
+                not state.get("tickers")
+                and not state.get("required_tools")
+                and not state.get("executed_tools")
+                and not state.get("errors")
+                and state.get("guardrail_status") == "passed"
+                and "请先说明要查询的公司" in answer
+            )
+        elif check == "composite_all_success":
+            checks[check] = (
+                state.get("guardrail_status") == "passed"
+                and {"financial_rag", "market_mcp", "news_mcp"}.issubset(state.get("executed_tools", []))
+                and "行情不可用" not in answer
+                and "新闻不可用" not in answer
+                and all(section in answer for section in ("财务表现", "市场表现", "近期事件"))
+            )
         elif check == "period_clarity":
             checks[check] = all(period in answer for period in case.get("expected_period_options", []))
         elif check == "friendly_unsupported":
             checks[check] = "支持" in answer and "例如" in answer and "缺少足够上下文" not in answer
-        elif check == "friendly_missing_company_for_market":
-            checks[check] = "请先说明" in answer and "公司" in answer
     return checks
 
 
@@ -226,6 +252,8 @@ def _metrics(rows: list[dict[str, Any]]) -> dict[str, Any]:
     memory = [row for row in rows if row["category"] == "memory_pronoun" and "memory_company" in row["answer_checks"]]
     period_carryover = [row for row in rows if row["category"] == "memory_period_carryover" and "period_company_carryover" in row["answer_checks"]]
     market_carryover = [row for row in rows if row["category"] == "memory_market_carryover" and "market_pronoun_carryover" in row["answer_checks"]]
+    arithmetic = [row for row in rows if "arithmetic_exact" in row["answer_checks"]]
+    no_context_pronoun = [row for row in rows if "no_company_pronoun" in row["answer_checks"]]
     definitions = [row for row in rows if row["category"] == "definition_faq"]
     unsupported = [row for row in rows if row["category"] == "unsupported"]
     format_rows = [row for row in rows if row["answer_checks"]]
@@ -236,6 +264,8 @@ def _metrics(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "memory_pronoun_recovery": _rate(memory, lambda row: row["answer_checks"].get("memory_company")),
         "period_company_carryover": _rate(period_carryover, lambda row: row["answer_checks"].get("period_company_carryover")),
         "market_pronoun_carryover": _rate(market_carryover, lambda row: row["answer_checks"].get("market_pronoun_carryover")),
+        "simple_arithmetic": _rate(arithmetic, lambda row: row["answer_checks"].get("arithmetic_exact")),
+        "no_context_pronoun_safety": _rate(no_context_pronoun, lambda row: row["answer_checks"].get("no_company_pronoun")),
         "definition_faq_routing": _rate(definitions, lambda row: row["intent_pass"] and row["tools_pass"] and row["format_pass"]),
         "unsupported_handling": _rate(unsupported, lambda row: row["intent_pass"] and row["format_pass"]),
         "final_formatting_checks": _rate(format_rows, lambda row: row["format_pass"]),

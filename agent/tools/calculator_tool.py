@@ -14,6 +14,9 @@ class CalculatorTool:
         "growth_rate": ("current", "previous"),
         "percentage_point_change": ("current", "previous"),
         "ratio": ("numerator", "denominator"),
+        "addition": ("left", "right"),
+        "subtraction": ("left", "right"),
+        "multiplication": ("left", "right"),
     }
 
     @staticmethod
@@ -40,10 +43,16 @@ class CalculatorTool:
                 result = (values["current"] - values["previous"]) / values["previous"] * 100
             elif operation == "percentage_point_change":
                 result = values["current"] - values["previous"]
-            else:
+            elif operation == "ratio":
                 if values["denominator"] == 0:
                     raise ZeroDivisionError("denominator must not be zero for ratio")
                 result = values["numerator"] / values["denominator"]
+            elif operation == "addition":
+                result = values["left"] + values["right"]
+            elif operation == "subtraction":
+                result = values["left"] - values["right"]
+            else:
+                result = values["left"] * values["right"]
             return CalculatorToolResult(
                 tool_name=self.tool_name,
                 operation=operation,

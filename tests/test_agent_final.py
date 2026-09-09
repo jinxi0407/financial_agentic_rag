@@ -86,6 +86,24 @@ class AgentFinalTests(unittest.TestCase):
         self.assertIn("synthesis", state["trace"]["per_tool_latency"])
         self.assertEqual("company_comparison", state["skill"])
 
+    def test_successful_external_tools_override_financial_local_disclaimer(self):
+        synthesizer = FakeSynthesizer(
+            "财务表现：营业收入为 100 元。"
+            "上下文中未提供当前行情和近期新闻相关信息，因此无法展开分析。"
+            "市场表现：价格为 20 CNY。"
+            "近期事件：测试新闻（测试来源，2026-01-01T00:00:00+00:00）。"
+        )
+        state = self.make_agent(synthesizer=synthesizer).run(
+            "结合比亚迪2026H1财报、当前行情和近期新闻分析其经营表现", "all-success"
+        )
+        self.assertEqual("passed", state["guardrail_status"])
+        self.assertNotIn("未提供当前行情", state["final_answer"])
+        self.assertNotIn("近期新闻相关信息", state["final_answer"])
+        self.assertIn("市场表现", state["final_answer"])
+        self.assertIn("近期事件", state["final_answer"])
+        self.assertTrue(synthesizer.calls[0]["tool_availability"]["market_mcp"])
+        self.assertTrue(synthesizer.calls[0]["tool_availability"]["news_mcp"])
+
     def test_financial_only_skips_synthesis(self):
         synthesizer = FakeSynthesizer("不应调用")
         state = self.make_agent(synthesizer=synthesizer).run("贵州茅台2026H1营业收入是多少？", "a")
@@ -106,6 +124,16 @@ class AgentFinalTests(unittest.TestCase):
             mcp_client=FakeMCP(news_results=[]),
         ).run("比较贵州茅台和五粮液2026H1财务表现和最近新闻", "a")
         self.assertIn("news_unavailable", state["guardrail_status"])
+        self.assertNotIn("凭空新闻", state["final_answer"])
+
+    def test_actual_news_failure_keeps_market_and_safe_degradation(self):
+        state = self.make_agent(
+            answer="市场表现：价格为 20 CNY。近期事件：凭空新闻（虚构来源，2026-01-01）。",
+            mcp_client=FakeMCP(news_results=[]),
+        ).run("结合贵州茅台2026H1财报、当前行情和近期新闻分析", "news-failure")
+        self.assertIn("news_unavailable", state["guardrail_status"])
+        self.assertIn("市场表现", state["final_answer"])
+        self.assertIn("News MCP 未返回可用新闻", state["final_answer"])
         self.assertNotIn("凭空新闻", state["final_answer"])
 
     def test_unverified_calculation_falls_back(self):

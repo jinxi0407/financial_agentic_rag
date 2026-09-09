@@ -15,10 +15,11 @@ _FINANCIAL_REPORT_TERMS = (
 )
 _DEFINITION_TERMS = ("流动比率", "速动比率", "市盈率", "roe", "归母净利润", "营业收入和净利润")
 _GREETING_PATTERN = re.compile(r"^(?:hi|hello|你好|您好|嗨)[!！。,.\s]*$", re.I)
-_IDENTITY_PATTERN = re.compile(r"^(?:你是什么|你能做什么)[？?！!。\s]*$")
+_IDENTITY_PATTERN = re.compile(r"^(?:(?:你好|您好)[，,！!。\s]*)?(?:你是什么|你能做什么)[？?！!。\s]*$")
 _CONTEXTUAL_MARKET_FOLLOW_UP_PATTERN = re.compile(
     r"(?:它|这家公司|这个票).*?(?:股票|股价|行情|市场表现|涨跌)"
 )
+_COMPANY_PRONOUN_PATTERN = re.compile(r"(?:它(?:的|现在|最近)?|这家公司|该公司|这个票|那家公司)")
 _SIMPLE_GROWTH_PATTERN = re.compile(
     r"从\s*(?P<previous>-?\d+(?:\.\d+)?)\s*(?:增长(?:到)?|增加(?:到)?|变为|到)\s*"
     r"(?P<current>-?\d+(?:\.\d+)?)(?=[，,。！？?\s]|$)"
@@ -32,6 +33,10 @@ _ABSOLUTE_CHANGE_PATTERN = re.compile(
 _RATIO_PATTERN = re.compile(r"(?P<numerator>-?\d+(?:\.\d+)?)\s*(?:除以|/)\s*(?P<denominator>-?\d+(?:\.\d+)?)")
 _PERCENTAGE_POINT_PATTERN = re.compile(
     r"(?:从\s*)?(?P<previous>-?\d+(?:\.\d+)?)%\s*(?:降到|下降至|到|至|升到|上升至)\s*(?P<current>-?\d+(?:\.\d+)?)%.*百分点"
+)
+_SIMPLE_ARITHMETIC_PATTERN = re.compile(
+    r"^\s*(?P<left>-?\d+(?:\.\d+)?)\s*(?P<operator>[-+*/×÷]|加|减)\s*"
+    r"(?P<right>-?\d+(?:\.\d+)?)\s*(?:(?:是|等于)\s*)?(?:多少)?\s*[？?！!。.\s]*$"
 )
 
 
@@ -113,6 +118,18 @@ class FinancialPlanner:
         return bool(_CONTEXTUAL_MARKET_FOLLOW_UP_PATTERN.search(query.strip()))
 
     @staticmethod
+    def is_company_pronoun_query(query: str) -> bool:
+        return bool(_COMPANY_PRONOUN_PATTERN.search(query.strip()))
+
+    @staticmethod
+    def missing_company_context_decision() -> PlannerDecision:
+        return PlannerDecision(
+            intent="unsupported",
+            tools=(),
+            reason="该请求依赖公司上下文，但当前会话未提供可解析的公司。",
+        )
+
+    @staticmethod
     def _attach_skill(decision: PlannerDecision, query: str) -> PlannerDecision:
         lowered = query.lower()
         if decision.intent == "unsupported":
@@ -166,4 +183,16 @@ class FinancialPlanner:
                 "numerator": float(match.group("numerator")),
                 "denominator": float(match.group("denominator")),
             }
+        match = _SIMPLE_ARITHMETIC_PATTERN.fullmatch(query)
+        if match:
+            operation = {
+                "+": "addition", "加": "addition",
+                "-": "subtraction", "减": "subtraction",
+                "*": "multiplication", "×": "multiplication",
+                "/": "ratio", "÷": "ratio",
+            }[match.group("operator")]
+            left, right = float(match.group("left")), float(match.group("right"))
+            if operation == "ratio":
+                return {"operation": operation, "numerator": left, "denominator": right}
+            return {"operation": operation, "left": left, "right": right}
         return None

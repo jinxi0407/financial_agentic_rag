@@ -175,7 +175,10 @@ class LangGraphFinancialAgent:
 
     def _plan(self, state: AgentState):
         companies = extract_securities_from_query(state["query"]) or state.get("companies", [])
-        decision = self.planner.plan(state["query"], has_company_context=bool(companies))
+        if not companies and self.planner.is_company_pronoun_query(state["query"]):
+            decision = self.planner.missing_company_context_decision()
+        else:
+            decision = self.planner.plan(state["query"], has_company_context=bool(companies))
         period = self._period(state["query"])
         preferences, preference_error = self._preferences(state.get("user_id", state["thread_id"]))
         preference_written = False
@@ -284,7 +287,9 @@ class LangGraphFinancialAgent:
             }
 
     def _guardrail(self, state):
-        candidate = state.get("synthesis_answer") or state.get("draft_answer")
+        candidate = self._remove_false_tool_unavailability(
+            state, state.get("synthesis_answer") or state.get("draft_answer")
+        )
         violations = self._guardrail_violations(state, candidate)
         if violations:
             response = {
@@ -310,8 +315,7 @@ class LangGraphFinancialAgent:
         except Exception as exc:
             return {"preferred_companies": [], "preferred_metrics": []}, f"preference_store: {type(exc).__name__}"
 
-    @staticmethod
-    def _synthesis_payload(state):
+    def _synthesis_payload(self, state):
         return {
             "user_query": state["query"],
             "session_context": {
@@ -324,6 +328,12 @@ class LangGraphFinancialAgent:
             "market_results": state.get("market_results", []),
             "news_results": state.get("news_results", []),
             "verified_calculation": state.get("calculation_result", {}),
+            "tool_availability": {
+                "financial_rag": bool(self._tool_result(state, "financial_rag") and self._tool_result(state, "financial_rag").get("success")),
+                "market_mcp": self._usable_market_results(state.get("market_results", [])),
+                "news_mcp": self._usable_news_results(state.get("news_results", [])),
+                "calculator": bool(state.get("calculation_result", {}).get("success")),
+            },
             "errors": state.get("errors", []),
         }
 
@@ -376,8 +386,8 @@ class LangGraphFinancialAgent:
 
     @staticmethod
     def _unsupported_answer(query: str = "") -> str:
-        if FinancialPlanner.is_market_pronoun_follow_up(query):
-            return "请先说明要查询的公司，例如：‘贵州茅台现在股价怎么样？’"
+        if FinancialPlanner.is_company_pronoun_query(query):
+            return "请先说明要查询的公司，例如：‘贵州茅台最近有什么新闻？’"
         return "当前 Financial Agent 目前支持 8 家 A 股公司的财报、实时行情、财经新闻和确定性财务计算。例如：‘贵州茅台 2026H1 营业收入是多少？’"
 
     @staticmethod
@@ -410,6 +420,8 @@ class LangGraphFinancialAgent:
             return f"{direction}了 {abs(value):.1f}。"
         if operation == "ratio":
             return f"计算结果为 {value:.2f}。"
+        if operation in {"addition", "subtraction", "multiplication"}:
+            return f"计算结果为 {value:g}。"
         return f"计算结果为 {value}。"
 
     @staticmethod
@@ -449,10 +461,43 @@ class LangGraphFinancialAgent:
         return not results or any(not item.get("success") for item in results)
 
     @staticmethod
+    def _usable_market_results(results):
+        return bool(results) and all(item.get("success") and bool(item.get("result")) for item in results)
+
+    @staticmethod
     def _empty_or_failed_news(results):
         return not results or any(
             not item.get("success") or not (item.get("result") or {}).get("results") for item in results
         )
+
+    @classmethod
+    def _usable_news_results(cls, results):
+        return not cls._empty_or_failed_news(results)
+
+    def _remove_false_tool_unavailability(self, state, candidate):
+        available = {
+            "market": self._usable_market_results(state.get("market_results", [])),
+            "news": self._usable_news_results(state.get("news_results", [])),
+        }
+        if not any(available.values()):
+            return candidate
+        markers = ("未提供", "不可用", "无法", "没有", "缺少", "未返回", "未检索")
+        terms = {
+            "market": ("行情", "股价", "市场表现"),
+            "news": ("新闻", "近期事件", "消息"),
+        }
+        kept = []
+        for sentence in re.split(r"(?<=[。！？!?])", candidate):
+            normalized = sentence.strip()
+            falsely_unavailable = any(
+                available[name]
+                and any(term in normalized for term in tool_terms)
+                and any(marker in normalized for marker in markers)
+                for name, tool_terms in terms.items()
+            )
+            if normalized and not falsely_unavailable:
+                kept.append(sentence)
+        return "".join(kept).strip()
 
     @staticmethod
     def _missing_news_provenance(results, candidate):
