@@ -3,9 +3,12 @@ from __future__ import annotations
 
 import os
 import re
+from contextvars import ContextVar
 from decimal import Decimal, InvalidOperation
+from queue import Queue
+from threading import Thread
 from time import perf_counter
-from typing import Any, TypedDict
+from typing import Any, Callable, Iterator, TypedDict
 
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import END, START, StateGraph
@@ -19,6 +22,11 @@ from .preferences import RedisPreferenceStore
 from .synthesis import QwenSynthesizer
 from .tools.calculator_tool import CalculatorTool
 from .tools.financial_rag_tool import FinancialRAGTool
+
+
+_STREAM_OBSERVER: ContextVar[Callable[[dict[str, Any]], None] | None] = ContextVar(
+    "agent_stream_observer", default=None
+)
 
 
 class AgentState(TypedDict, total=False):
@@ -107,6 +115,43 @@ class LangGraphFinancialAgent:
         }
         return state
 
+    def stream(self, query: str, thread_id: str, user_id: str | None = None) -> Iterator[dict[str, Any]]:
+        """Yield lifecycle notifications while preserving ``run`` as the stable API.
+
+        Nodes remain synchronous because the frozen tools are synchronous.  A
+        request-local ContextVar carries an observer only for this invocation;
+        no callback is written into checkpointed LangGraph state.
+        """
+        events: Queue[object] = Queue()
+        finished = object()
+
+        def publish(event: dict[str, Any]) -> None:
+            events.put(event)
+
+        def invoke() -> None:
+            observer_token = _STREAM_OBSERVER.set(publish)
+            try:
+                state = self.run(query, thread_id, user_id)
+                publish({"kind": "complete", "state": state})
+            except Exception as exc:  # The public adapter deliberately redacts this.
+                publish({"kind": "error", "error_type": type(exc).__name__})
+            finally:
+                _STREAM_OBSERVER.reset(observer_token)
+                events.put(finished)
+
+        Thread(target=invoke, name="financial-agent-stream", daemon=True).start()
+        while True:
+            event = events.get()
+            if event is finished:
+                return
+            yield event  # type: ignore[misc]
+
+    @staticmethod
+    def _emit(kind: str, **data: Any) -> None:
+        observer = _STREAM_OBSERVER.get()
+        if observer is not None:
+            observer({"kind": kind, "data": data})
+
     def _build_graph(self):
         graph = StateGraph(AgentState)
         graph.add_node("plan", self._plan)
@@ -143,7 +188,9 @@ class LangGraphFinancialAgent:
                 preference_written = True
         except Exception as exc:
             preference_error = f"preference_store: {type(exc).__name__}"
-        return {"intent": decision.intent, "skill": decision.skill, "required_tools": list(decision.tools), "companies": companies, "tickers": [item["ticker"] for item in companies], "report_periods": [period] if period else state.get("report_periods", []), "previous_query": state.get("last_query", ""), "last_query": state["query"], "last_intent": decision.intent, "long_term_preferences": preferences, "executed_tools": [], "tool_results": [], "financial_result": "", "market_results": [], "news_results": [], "calculation_result": {}, "errors": [], "draft_answer": "", "synthesis_answer": "", "trace": {"plan": decision.to_dict(), "preference_written": preference_written, "preference_error": preference_error}}
+        response = {"intent": decision.intent, "skill": decision.skill, "required_tools": list(decision.tools), "companies": companies, "tickers": [item["ticker"] for item in companies], "report_periods": [period] if period else state.get("report_periods", []), "previous_query": state.get("last_query", ""), "last_query": state["query"], "last_intent": decision.intent, "long_term_preferences": preferences, "executed_tools": [], "tool_results": [], "financial_result": "", "market_results": [], "news_results": [], "calculation_result": {}, "errors": [], "draft_answer": "", "synthesis_answer": "", "trace": {"plan": decision.to_dict(), "preference_written": preference_written, "preference_error": preference_error}}
+        self._emit("plan", intent=decision.intent, required_tools=list(decision.tools), skill=decision.skill)
+        return response
 
     @staticmethod
     def _period(query: str) -> str | None:
@@ -153,16 +200,25 @@ class LangGraphFinancialAgent:
 
     def _financial_rag(self, state: AgentState):
         if "financial_rag" not in state.get("required_tools", []): return {}
+        self._emit("tool_start", tool="financial_rag")
         result = self.rag_tool.run(state["query"])
-        return {"financial_result": result.answer, "tool_results": [*state.get("tool_results", []), result.to_dict()], "executed_tools": [*state.get("executed_tools", []), "financial_rag"], "errors": [*state.get("errors", []), *([result.error] if result.error else [])]}
+        response = {"financial_result": result.answer, "tool_results": [*state.get("tool_results", []), result.to_dict()], "executed_tools": [*state.get("executed_tools", []), "financial_rag"], "errors": [*state.get("errors", []), *([result.error] if result.error else [])]}
+        self._emit("tool_end", tool="financial_rag", results=[result.to_dict()])
+        return response
 
     def _market(self, state: AgentState):
         if "market_mcp" not in state.get("required_tools", []): return {}
-        return self._mcp_many(state, "market", "get_market_snapshot", "market_mcp", "market_results")
+        self._emit("tool_start", tool="market_mcp")
+        response = self._mcp_many(state, "market", "get_market_snapshot", "market_mcp", "market_results")
+        self._emit("tool_end", tool="market_mcp", results=response.get("market_results", []))
+        return response
 
     def _news(self, state: AgentState):
         if "news_mcp" not in state.get("required_tools", []): return {}
-        return self._mcp_many(state, "news", "search_financial_news", "news_mcp", "news_results")
+        self._emit("tool_start", tool="news_mcp")
+        response = self._mcp_many(state, "news", "search_financial_news", "news_mcp", "news_results")
+        self._emit("tool_end", tool="news_mcp", results=response.get("news_results", []))
+        return response
 
     def _mcp_many(self, state, server, tool, label, target):
         companies = state.get("companies") or []
@@ -180,10 +236,15 @@ class LangGraphFinancialAgent:
 
     def _calculator(self, state):
         if "calculator" not in state.get("required_tools", []): return {}
+        self._emit("tool_start", tool="calculator")
         request = self.planner.simple_calculation_request(state["query"])
-        if not request: return {"errors": ["缺少可验证的计算输入。"]}
+        if not request:
+            self._emit("tool_end", tool="calculator", results=[])
+            return {"errors": ["缺少可验证的计算输入。"]}
         result = self.calculator.run(**request)
-        return {"calculation_result": result.to_dict(), "tool_results": [*state.get("tool_results", []), result.to_dict()], "executed_tools": [*state.get("executed_tools", []), "calculator"], "errors": [*state.get("errors", []), *([result.error] if result.error else [])]}
+        response = {"calculation_result": result.to_dict(), "tool_results": [*state.get("tool_results", []), result.to_dict()], "executed_tools": [*state.get("executed_tools", []), "calculator"], "errors": [*state.get("errors", []), *([result.error] if result.error else [])]}
+        self._emit("tool_end", tool="calculator", results=[result.to_dict()])
+        return response
 
     def _aggregation(self, state):
         if state.get("intent") != "composite_query":
@@ -201,6 +262,7 @@ class LangGraphFinancialAgent:
     def _synthesis(self, state):
         if state.get("intent") != "composite_query":
             return {"synthesis_answer": state.get("draft_answer", ""), "synthesis_latency": 0.0}
+        self._emit("synthesis_start")
         try:
             answer, latency = self._get_synthesizer().synthesize(self._synthesis_payload(state))
             return {"synthesis_answer": answer, "synthesis_latency": latency}
@@ -215,10 +277,13 @@ class LangGraphFinancialAgent:
         candidate = state.get("synthesis_answer") or state.get("draft_answer")
         violations = self._guardrail_violations(state, candidate)
         if violations:
-            return {
+            response = {
                 "final_answer": self._safe_summary(state, guardrail_notice=True),
                 "guardrail_status": ",".join(violations),
             }
+            self._emit("guardrail", status="degraded")
+            return response
+        self._emit("guardrail", status="passed")
         return {"final_answer": candidate, "guardrail_status": "passed"}
 
     def _get_synthesizer(self):

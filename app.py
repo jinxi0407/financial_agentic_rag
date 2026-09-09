@@ -15,6 +15,8 @@ from pydantic import BaseModel
 
 # 导入异步事件循环模块
 import asyncio
+import os
+import threading
 
 # 导入 JSON 处理模块
 import json
@@ -28,6 +30,8 @@ import time
 import re
 # 导入优化后的问答系统
 from new_main import IntegratedQASystem
+from agent.langgraph_agent import LangGraphFinancialAgent
+from agent.streaming import AgentStreamingAdapter, serve_agent_websocket
 
 from base.config import config
 from base.logger import logger
@@ -39,10 +43,24 @@ app = FastAPI(
 )
 
 # 配置 CORS 中间件，允许跨域请求
+def _allowed_origins() -> list[str]:
+    configured = os.getenv("ALLOWED_ORIGINS", "").strip()
+    if configured:
+        origins = [origin.strip() for origin in configured.split(",") if origin.strip() and origin.strip() != "*"]
+        if origins:
+            return origins
+    return [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ]
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # 允许所有来源（生产环境需限制）
-    allow_credentials=True,  # 允许凭证
+    allow_origins=_allowed_origins(),
+    allow_credentials=True,
     allow_methods=["*"],  # 允许所有 HTTP 方法
     allow_headers=["*"],  # 允许所有头部
 )
@@ -53,6 +71,21 @@ STATIC_DIR.mkdir(parents=True, exist_ok=True)
 
 # 创建全局问答系统实例
 qa_system = IntegratedQASystem()
+agent_stream_adapter: Optional[AgentStreamingAdapter] = None
+_agent_stream_lock = threading.Lock()
+
+
+def get_agent_stream_adapter() -> AgentStreamingAdapter:
+    """Create the persistent Agent only on the first Agent WebSocket request."""
+    global agent_stream_adapter
+    with _agent_stream_lock:
+        if agent_stream_adapter is None:
+            agent = LangGraphFinancialAgent(
+                qa_system=qa_system,
+                checkpointer=LangGraphFinancialAgent.redis_checkpointer(),
+            )
+            agent_stream_adapter = AgentStreamingAdapter(agent)
+    return agent_stream_adapter
 
 # 定义日常问候用语模式和回复
 GREETING_PATTERNS = [
@@ -273,10 +306,24 @@ async def websocket_endpoint(websocket: WebSocket):
             # 记录关闭连接时的错误
             logger.error(f"Error closing WebSocket: {str(e)}")
 
+
+@app.websocket("/api/agent/stream")
+async def agent_stream_endpoint(websocket: WebSocket):
+    """Streaming lifecycle events for the complete LangGraph Agent."""
+    await serve_agent_websocket(
+        websocket,
+        get_agent_stream_adapter,
+        log=lambda event: logger.info("agent_stream event=%s", event),
+    )
+
 # 健康检查接口
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy", "service": qa_system.config.PROJECT_NAME}
+    return {
+        "status": "healthy",
+        "service": qa_system.config.PROJECT_NAME,
+        "agent": "endpoint_available",
+    }
 
 
 # 获取有效金融知识库类别接口
