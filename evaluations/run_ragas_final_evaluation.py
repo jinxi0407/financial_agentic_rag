@@ -32,6 +32,8 @@ try:  # Supports both ``python -m evaluations...`` and capture-worker scripts.
     from evaluations.financial_rag_only import (
         ENTRYPOINT_NAME,
         EVIDENCE_CAPTURE_SCHEMA_VERSION,
+        build_capture_environment,
+        build_financial_rag_system_from_active_code,
         build_prompt_evidence_capture,
         generate_financial_rag_only,
         serialize_verified_evidence,
@@ -40,6 +42,8 @@ except ModuleNotFoundError:  # pragma: no cover - exercised by the worker proces
     from financial_rag_only import (  # type: ignore[no-redef]
         ENTRYPOINT_NAME,
         EVIDENCE_CAPTURE_SCHEMA_VERSION,
+        build_capture_environment,
+        build_financial_rag_system_from_active_code,
         build_prompt_evidence_capture,
         generate_financial_rag_only,
         serialize_verified_evidence,
@@ -379,7 +383,6 @@ def _instrument_prompt_evidence(active_trace: dict[str, Any]):
 def _capture_cases(code_root: Path, manifest: dict[str, Any], limit: int | None) -> dict[str, Any]:
     _activate_code_root(code_root)
     from base.config import config
-    from new_main import IntegratedQASystem
 
     # bcf70ae predates environment-based retrieval overrides. Mutating this
     # process-local Config instance preserves the historical orchestration
@@ -390,12 +393,12 @@ def _capture_cases(code_root: Path, manifest: dict[str, Any], limit: int | None)
     samples = list(manifest["samples"])
     if limit is not None:
         samples = _smoke_samples(samples, limit)
-    # Construction supplies the version's existing RAG dependencies, but the
-    # evaluation loop below calls only ``qa_system.rag.generate_answer``.  It
-    # never invokes ``IntegratedQASystem.query`` or the FAQ/BM25 fast path.
-    qa_system = IntegratedQASystem()
+    # Do not instantiate IntegratedQASystem: its constructor opens FAQ MySQL,
+    # FAQ Redis and conversation storage.  This direct factory constructs only
+    # OpenAI, FinancialQueryRouter, VectorStore and the versioned RAGSystem.
+    rag_system = build_financial_rag_system_from_active_code()
     active_trace: dict[str, Any] = {}
-    original_retrieve = qa_system.rag.retrieve_and_merge
+    original_retrieve = rag_system.retrieve_and_merge
 
     def retrieve_and_capture(*args: Any, **kwargs: Any):
         documents = original_retrieve(*args, **kwargs)
@@ -404,7 +407,7 @@ def _capture_cases(code_root: Path, manifest: dict[str, Any], limit: int | None)
         ]
         return documents
 
-    qa_system.rag.retrieve_and_merge = retrieve_and_capture
+    rag_system.retrieve_and_merge = retrieve_and_capture
     results = []
     restore_evidence_hooks = _instrument_prompt_evidence(active_trace)
     try:
@@ -420,7 +423,7 @@ def _capture_cases(code_root: Path, manifest: dict[str, Any], limit: int | None)
             }
             try:
                 rag_result, invocation_trace = generate_financial_rag_only(
-                    qa_system.rag, case["question"]
+                    rag_system, case["question"]
                 )
                 token_stream = (rag_result,) if isinstance(rag_result, str) else rag_result
                 for token in token_stream:
@@ -508,23 +511,18 @@ def _capture_subprocess(version: str, manifest_path: Path, output_path: Path, li
     ]
     if limit is not None:
         command.extend(["--limit", str(limit)])
-    environment = os.environ.copy()
+    # ``config`` loads the primary checkout's .env in the parent only.  The
+    # detached Baseline worktree receives the required values as process env;
+    # no .env is copied and this mapping is never stored in an artifact.
+    from base.config import config
+
+    environment = build_capture_environment(os.environ, config)
     environment.update(RUNTIME_ENV)
     environment["TOKENIZERS_PARALLELISM"] = "false"
     # Historical worktrees intentionally contain only source. Reuse the frozen
     # checkout's local model assets and runtime LLM settings without copying
     # either models or .env files into the baseline worktree. These values stay
     # in the child process environment and are never written to evaluation data.
-    from base.config import config
-
-    runtime_overrides = {
-        "BGE_M3_MODEL_PATH": config.BGE_M3_MODEL_PATH,
-        "RERANKER_MODEL_PATH": config.RERANKER_MODEL_PATH,
-        "DASHSCOPE_API_KEY": config.DASHSCOPE_API_KEY,
-        "DASHSCOPE_BASE_URL": config.DASHSCOPE_BASE_URL,
-        "LLM_MODEL": config.LLM_MODEL,
-    }
-    environment.update({key: value for key, value in runtime_overrides.items() if value})
     # The capture worker must use the target RAG's dependency set, not the
     # isolated RAGAS judge dependencies supplied through PYTHONPATH.
     environment.pop("PYTHONPATH", None)

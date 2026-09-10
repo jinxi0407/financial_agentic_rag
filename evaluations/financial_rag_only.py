@@ -14,6 +14,19 @@ from typing import Any
 
 ENTRYPOINT_NAME = "financial_rag_only"
 EVIDENCE_CAPTURE_SCHEMA_VERSION = "financial_rag_prompt_evidence_v1"
+RUNTIME_ENVIRONMENT_KEYS = (
+    "DASHSCOPE_API_KEY",
+    "DASHSCOPE_BASE_URL",
+    "LLM_MODEL",
+    "MILVUS_HOST",
+    "MILVUS_PORT",
+    "MILVUS_DATABASE",
+    "MILVUS_COLLECTION",
+    "BGE_M3_MODEL_PATH",
+    "RERANKER_MODEL_PATH",
+    "RETRIEVAL_K",
+    "CANDIDATE_M",
+)
 
 
 def _json_value(value: Any) -> Any:
@@ -114,3 +127,104 @@ def generate_financial_rag_only(rag: Any, query: str) -> tuple[Any, dict[str, An
         "faq_fast_path_bypassed": True,
         "rag_generate_kwargs": sorted(kwargs),
     }
+
+
+def build_capture_environment(parent_environment: dict[str, str], runtime_config: Any) -> dict[str, str]:
+    """Return the minimum child environment needed by a detached RAG worktree.
+
+    The parent process has already loaded the current project's ``.env`` via
+    ``base.config``.  Only RAG/LLM/Milvus settings are copied into the child;
+    FAQ MySQL and Redis variables are deliberately removed.  Callers must not
+    serialize this mapping because it contains the API key required by Qwen.
+    """
+    environment = dict(parent_environment)
+    for key in tuple(environment):
+        if key.startswith(("MYSQL_", "REDIS_")):
+            environment.pop(key, None)
+    values = {
+        "DASHSCOPE_API_KEY": runtime_config.DASHSCOPE_API_KEY,
+        "DASHSCOPE_BASE_URL": runtime_config.DASHSCOPE_BASE_URL,
+        "LLM_MODEL": runtime_config.LLM_MODEL,
+        "MILVUS_HOST": runtime_config.MILVUS_HOST,
+        "MILVUS_PORT": str(runtime_config.MILVUS_PORT),
+        "MILVUS_DATABASE": runtime_config.MILVUS_DATABASE_NAME,
+        "MILVUS_COLLECTION": runtime_config.MILVUS_COLLECTION_NAME,
+        "BGE_M3_MODEL_PATH": runtime_config.BGE_M3_MODEL_PATH,
+        "RERANKER_MODEL_PATH": runtime_config.RERANKER_MODEL_PATH,
+        "RETRIEVAL_K": str(runtime_config.RETRIEVAL_K),
+        "CANDIDATE_M": str(runtime_config.CANDIDATE_M),
+    }
+    environment.update({key: value for key, value in values.items() if value})
+    return environment
+
+
+def _streaming_llm(client: Any, model: str):
+    def call(prompt: str):
+        completion = client.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "system", "content": "你是严谨的金融分析助手，必须遵循用户消息中的资料边界。"},
+                {"role": "user", "content": prompt},
+            ],
+            timeout=30,
+            stream=True,
+            extra_body={"enable_thinking": False},
+        )
+        for chunk in completion:
+            if chunk.choices and chunk.choices[0].delta.content:
+                yield chunk.choices[0].delta.content
+
+    return call
+
+
+def build_financial_rag_system(
+    *,
+    runtime_config: Any,
+    openai_class: Any,
+    vector_store_class: Any,
+    query_router_class: Any,
+    rag_system_class: Any,
+) -> Any:
+    """Construct only the dependency graph needed by ``RAGSystem``.
+
+    This factory intentionally has no dependency on ``new_main``,
+    ``IntegratedQASystem``, ``MysqlClient``, FAQ, or Redis.  Dependency
+    injection keeps this invariant unit-testable without a live model or DB.
+    """
+    if not runtime_config.DASHSCOPE_API_KEY:
+        raise RuntimeError("financial_rag_only capture requires an LLM API key in the subprocess environment")
+    if not runtime_config.DASHSCOPE_BASE_URL or not runtime_config.LLM_MODEL:
+        raise RuntimeError("financial_rag_only capture requires LLM base URL and model configuration")
+    client = openai_class(
+        api_key=runtime_config.DASHSCOPE_API_KEY,
+        base_url=runtime_config.DASHSCOPE_BASE_URL,
+    )
+    vector_store = vector_store_class(
+        collection_name=runtime_config.MILVUS_COLLECTION_NAME,
+        host=runtime_config.MILVUS_HOST,
+        port=runtime_config.MILVUS_PORT,
+        database=runtime_config.MILVUS_DATABASE_NAME,
+    )
+    query_router = query_router_class(client=client, model=runtime_config.LLM_MODEL)
+    return rag_system_class(
+        vector_store=vector_store,
+        llm=_streaming_llm(client, runtime_config.LLM_MODEL),
+        query_router=query_router,
+    )
+
+
+def build_financial_rag_system_from_active_code() -> Any:
+    """Import RAG-only dependencies after a worker activates its code root."""
+    from base.config import config
+    from openai import OpenAI
+    from rag_qa.core.new_rag_system import RAGSystem
+    from rag_qa.core.query_router import FinancialQueryRouter
+    from rag_qa.core.vector_store import VectorStore
+
+    return build_financial_rag_system(
+        runtime_config=config,
+        openai_class=OpenAI,
+        vector_store_class=VectorStore,
+        query_router_class=FinancialQueryRouter,
+        rag_system_class=RAGSystem,
+    )

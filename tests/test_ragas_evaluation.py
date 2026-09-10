@@ -1,9 +1,12 @@
 import unittest
+import inspect
 from decimal import Decimal
 
 from evaluations.financial_rag_only import (
     ENTRYPOINT_NAME,
     build_prompt_evidence_capture,
+    build_capture_environment,
+    build_financial_rag_system,
     generate_financial_rag_only,
     serialize_verified_evidence,
 )
@@ -11,6 +14,7 @@ from evaluations.run_ragas_final_evaluation import (
     PILOT_CATEGORY_COUNTS,
     build_pilot_manifest,
     fairness_dry_run,
+    _capture_cases,
 )
 
 
@@ -29,6 +33,74 @@ class _Evidence:
 
 
 class RagasEvaluationTests(unittest.TestCase):
+    def test_capture_path_does_not_reference_integrated_qa(self):
+        source = inspect.getsource(_capture_cases)
+        self.assertNotIn("IntegratedQASystem()", source)
+        self.assertNotIn("from new_main", source)
+        self.assertNotIn("MysqlClient", source)
+        self.assertNotIn("BM25Search", source)
+        self.assertNotIn("DASHSCOPE_API_KEY", source)
+
+    def test_rag_factory_builds_only_direct_dependencies(self):
+        class Runtime:
+            DASHSCOPE_API_KEY = "test-key"
+            DASHSCOPE_BASE_URL = "https://example.invalid/v1"
+            LLM_MODEL = "qwen3.8-max"
+            MILVUS_COLLECTION_NAME = "financial_rag_v1"
+            MILVUS_HOST = "127.0.0.1"
+            MILVUS_PORT = "19530"
+            MILVUS_DATABASE_NAME = "financial"
+
+        calls = []
+
+        class OpenAI:
+            def __init__(self, **kwargs):
+                calls.append(("openai", kwargs))
+
+        class VectorStore:
+            def __init__(self, **kwargs):
+                calls.append(("vector_store", kwargs))
+
+        class Router:
+            def __init__(self, **kwargs):
+                calls.append(("router", kwargs))
+
+        class RAG:
+            def __init__(self, **kwargs):
+                calls.append(("rag", kwargs))
+
+        result = build_financial_rag_system(
+            runtime_config=Runtime(), openai_class=OpenAI,
+            vector_store_class=VectorStore, query_router_class=Router,
+            rag_system_class=RAG,
+        )
+        self.assertIsInstance(result, RAG)
+        self.assertEqual([name for name, _ in calls], ["openai", "vector_store", "router", "rag"])
+        self.assertEqual(calls[1][1]["database"], "financial")
+
+    def test_subprocess_environment_keeps_rag_values_without_faq_values(self):
+        class Runtime:
+            DASHSCOPE_API_KEY = "test-key"
+            DASHSCOPE_BASE_URL = "https://example.invalid/v1"
+            LLM_MODEL = "qwen3.8-max"
+            MILVUS_HOST = "127.0.0.1"
+            MILVUS_PORT = "19530"
+            MILVUS_DATABASE_NAME = "financial"
+            MILVUS_COLLECTION_NAME = "financial_rag_v1"
+            BGE_M3_MODEL_PATH = "/models/bge"
+            RERANKER_MODEL_PATH = "/models/reranker"
+            RETRIEVAL_K = 30
+            CANDIDATE_M = 3
+
+        environment = build_capture_environment(
+            {"MYSQL_HOST": "mysql", "REDIS_HOST": "redis", "PATH": "/bin"}, Runtime()
+        )
+        self.assertNotIn("MYSQL_HOST", environment)
+        self.assertNotIn("REDIS_HOST", environment)
+        self.assertEqual(environment["MILVUS_HOST"], "127.0.0.1")
+        self.assertEqual(environment["RETRIEVAL_K"], "30")
+        self.assertEqual(environment["DASHSCOPE_API_KEY"], "test-key")
+
     def test_historical_adapter_calls_rag_without_an_faq_object(self):
         class HistoricalRag:
             def __init__(self):
