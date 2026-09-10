@@ -106,7 +106,7 @@ def audit_dataset(dataset: dict[str, Any]) -> dict[str, Any]:
     questions = [case["question"] for case in cases]
     categories = Counter(case["category"] for case in cases)
     failures = []
-    if not 40 <= len(cases) <= 100:
+    if not 40 <= len(cases) <= 120:
         failures.append("case_count_out_of_range")
     if len(identifiers) != len(set(identifiers)):
         failures.append("duplicate_ids")

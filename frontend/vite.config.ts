@@ -4,6 +4,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
+    allowedHosts: ["jinxi-ai.com"],
     port: 5173,
   },
 });
