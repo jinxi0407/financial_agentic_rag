@@ -1,0 +1,998 @@
+{
+  "schema_version": "ragas_20_pilot_v1",
+  "source_manifest": "ragas_100_stratified_v1.json",
+  "source_manifest_sha256": "dc44cda9f040d0ecf3d761d5bb2afcd2644273ed7b8bee31e063a1d68f214c17",
+  "source_dataset": "financial_holdout_300_v1_1.json",
+  "source_dataset_sha256": "ed06f62ce41e257f75d003d0ce20a61dc13dff2e9e37ca23cf31da55f4a90203",
+  "sample_size": 20,
+  "seed": 42,
+  "sampling_strategy": "fixed category-stratified subset of ragas_100_stratified_v1; random.Random(seed=42)",
+  "sample_category_counts": {
+    "complex_multi_target": 1,
+    "explanation_risk": 1,
+    "metric_alias_ambiguity": 2,
+    "multi_company_multi_period": 3,
+    "multi_company_single_period": 4,
+    "negative_oos_invalid": 2,
+    "single_company_multi_period": 3,
+    "single_company_single_period": 4
+  },
+  "samples": [
+    {
+      "sample_id": "holdout_004",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "single_company_single_period",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_004",
+        "category": "single_company_single_period",
+        "question": "2025年上半年，宁德时代的净利率数据如何？",
+        "expected_rag": true,
+        "expected_route": "RAG",
+        "expected_company_codes": [
+          "300750"
+        ],
+        "expected_company_names": [
+          "宁德时代"
+        ],
+        "expected_report_periods": [
+          "2025H1"
+        ],
+        "required_documents": [
+          "宁德时代_300750_2025H1.pdf"
+        ],
+        "metric": "净利率",
+        "metrics": [
+          "net_margin"
+        ],
+        "targets": [
+          {
+            "company_name": "宁德时代",
+            "company_code": "300750",
+            "report_period": "2025H1",
+            "metrics": [
+              "net_margin"
+            ]
+          }
+        ],
+        "negative_type": null
+      }
+    },
+    {
+      "sample_id": "holdout_021",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "single_company_single_period",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_021",
+        "category": "single_company_single_period",
+        "question": "2026年上半年，平安银行的负债总额数据如何？",
+        "expected_rag": true,
+        "expected_route": "RAG",
+        "expected_company_codes": [
+          "000001"
+        ],
+        "expected_company_names": [
+          "平安银行"
+        ],
+        "expected_report_periods": [
+          "2026H1"
+        ],
+        "required_documents": [
+          "平安银行_000001_2026H1.pdf"
+        ],
+        "metric": "负债总额",
+        "metrics": [
+          "total_liabilities"
+        ],
+        "targets": [
+          {
+            "company_name": "平安银行",
+            "company_code": "000001",
+            "report_period": "2026H1",
+            "metrics": [
+              "total_liabilities"
+            ]
+          }
+        ],
+        "negative_type": null
+      }
+    },
+    {
+      "sample_id": "holdout_047",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "single_company_single_period",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_047",
+        "category": "single_company_single_period",
+        "question": "从财报里找招商银行2026年上半年负债总额。",
+        "expected_rag": true,
+        "expected_route": "RAG",
+        "expected_company_codes": [
+          "600036"
+        ],
+        "expected_company_names": [
+          "招商银行"
+        ],
+        "expected_report_periods": [
+          "2026H1"
+        ],
+        "required_documents": [
+          "招商银行_600036_2026H1.pdf"
+        ],
+        "metric": "负债总额",
+        "metrics": [
+          "total_liabilities"
+        ],
+        "targets": [
+          {
+            "company_name": "招商银行",
+            "company_code": "600036",
+            "report_period": "2026H1",
+            "metrics": [
+              "total_liabilities"
+            ]
+          }
+        ],
+        "negative_type": null
+      }
+    },
+    {
+      "sample_id": "holdout_053",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "single_company_single_period",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_053",
+        "category": "single_company_single_period",
+        "question": "从财报里找平安银行2025年度负债总额。",
+        "expected_rag": true,
+        "expected_route": "RAG",
+        "expected_company_codes": [
+          "000001"
+        ],
+        "expected_company_names": [
+          "平安银行"
+        ],
+        "expected_report_periods": [
+          "2025FY"
+        ],
+        "required_documents": [
+          "平安银行_000001_2025FY.pdf"
+        ],
+        "metric": "负债总额",
+        "metrics": [
+          "total_liabilities"
+        ],
+        "targets": [
+          {
+            "company_name": "平安银行",
+            "company_code": "000001",
+            "report_period": "2025FY",
+            "metrics": [
+              "total_liabilities"
+            ]
+          }
+        ],
+        "negative_type": null
+      }
+    },
+    {
+      "sample_id": "holdout_067",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "single_company_multi_period",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_067",
+        "category": "single_company_multi_period",
+        "question": "北方华创从2025年上半年到2025年度的归母净利润有什么变化？",
+        "expected_rag": true,
+        "expected_route": "RAG",
+        "expected_company_codes": [
+          "002371"
+        ],
+        "expected_company_names": [
+          "北方华创"
+        ],
+        "expected_report_periods": [
+          "2025FY",
+          "2025H1"
+        ],
+        "required_documents": [
+          "北方华创_002371_2025FY.pdf",
+          "北方华创_002371_2025H1.pdf"
+        ],
+        "metric": "归母净利润",
+        "metrics": [
+          "net_profit"
+        ],
+        "targets": [
+          {
+            "company_name": "北方华创",
+            "company_code": "002371",
+            "report_period": "2025H1",
+            "metrics": [
+              "net_profit"
+            ]
+          },
+          {
+            "company_name": "北方华创",
+            "company_code": "002371",
+            "report_period": "2025FY",
+            "metrics": [
+              "net_profit"
+            ]
+          }
+        ],
+        "negative_type": null
+      }
+    },
+    {
+      "sample_id": "holdout_072",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "single_company_multi_period",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_072",
+        "category": "single_company_multi_period",
+        "question": "想看贵州茅台在2025年度与2026年上半年的归母净利润差异。",
+        "expected_rag": true,
+        "expected_route": "RAG",
+        "expected_company_codes": [
+          "600519"
+        ],
+        "expected_company_names": [
+          "贵州茅台"
+        ],
+        "expected_report_periods": [
+          "2025FY",
+          "2026H1"
+        ],
+        "required_documents": [
+          "贵州茅台_600519_2025FY.pdf",
+          "贵州茅台_600519_2026H1.pdf"
+        ],
+        "metric": "归母净利润",
+        "metrics": [
+          "net_profit"
+        ],
+        "targets": [
+          {
+            "company_name": "贵州茅台",
+            "company_code": "600519",
+            "report_period": "2025FY",
+            "metrics": [
+              "net_profit"
+            ]
+          },
+          {
+            "company_name": "贵州茅台",
+            "company_code": "600519",
+            "report_period": "2026H1",
+            "metrics": [
+              "net_profit"
+            ]
+          }
+        ],
+        "negative_type": null
+      }
+    },
+    {
+      "sample_id": "holdout_091",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "single_company_multi_period",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_091",
+        "category": "single_company_multi_period",
+        "question": "北方华创从2025年上半年到2025年度的研发费用有什么变化？",
+        "expected_rag": true,
+        "expected_route": "RAG",
+        "expected_company_codes": [
+          "002371"
+        ],
+        "expected_company_names": [
+          "北方华创"
+        ],
+        "expected_report_periods": [
+          "2025FY",
+          "2025H1"
+        ],
+        "required_documents": [
+          "北方华创_002371_2025FY.pdf",
+          "北方华创_002371_2025H1.pdf"
+        ],
+        "metric": "研发费用",
+        "metrics": [
+          "rd_expense"
+        ],
+        "targets": [
+          {
+            "company_name": "北方华创",
+            "company_code": "002371",
+            "report_period": "2025H1",
+            "metrics": [
+              "rd_expense"
+            ]
+          },
+          {
+            "company_name": "北方华创",
+            "company_code": "002371",
+            "report_period": "2025FY",
+            "metrics": [
+              "rd_expense"
+            ]
+          }
+        ],
+        "negative_type": null
+      }
+    },
+    {
+      "sample_id": "holdout_107",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "multi_company_single_period",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_107",
+        "category": "multi_company_single_period",
+        "question": "中芯国际、北方华创在2026年上半年谁的净利率更高？",
+        "expected_rag": true,
+        "expected_route": "RAG",
+        "expected_company_codes": [
+          "002371",
+          "688981"
+        ],
+        "expected_company_names": [
+          "北方华创",
+          "中芯国际"
+        ],
+        "expected_report_periods": [
+          "2026H1"
+        ],
+        "required_documents": [
+          "中芯国际_688981_2026H1.pdf",
+          "北方华创_002371_2026H1.pdf"
+        ],
+        "metric": "净利率",
+        "metrics": [
+          "net_margin"
+        ],
+        "targets": [
+          {
+            "company_name": "中芯国际",
+            "company_code": "688981",
+            "report_period": "2026H1",
+            "metrics": [
+              "net_margin"
+            ]
+          },
+          {
+            "company_name": "北方华创",
+            "company_code": "002371",
+            "report_period": "2026H1",
+            "metrics": [
+              "net_margin"
+            ]
+          }
+        ],
+        "negative_type": null
+      }
+    },
+    {
+      "sample_id": "holdout_108",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "multi_company_single_period",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_108",
+        "category": "multi_company_single_period",
+        "question": "五粮液、宁德时代在2025年上半年谁的归母净利润更高？",
+        "expected_rag": true,
+        "expected_route": "RAG",
+        "expected_company_codes": [
+          "000858",
+          "300750"
+        ],
+        "expected_company_names": [
+          "五粮液",
+          "宁德时代"
+        ],
+        "expected_report_periods": [
+          "2025H1"
+        ],
+        "required_documents": [
+          "五粮液_000858_2025H1.pdf",
+          "宁德时代_300750_2025H1.pdf"
+        ],
+        "metric": "归母净利润",
+        "metrics": [
+          "net_profit"
+        ],
+        "targets": [
+          {
+            "company_name": "五粮液",
+            "company_code": "000858",
+            "report_period": "2025H1",
+            "metrics": [
+              "net_profit"
+            ]
+          },
+          {
+            "company_name": "宁德时代",
+            "company_code": "300750",
+            "report_period": "2025H1",
+            "metrics": [
+              "net_profit"
+            ]
+          }
+        ],
+        "negative_type": null
+      }
+    },
+    {
+      "sample_id": "holdout_141",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "multi_company_single_period",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_141",
+        "category": "multi_company_single_period",
+        "question": "对比一下比亚迪和平安银行的2025年上半年营业收入表现。",
+        "expected_rag": true,
+        "expected_route": "RAG",
+        "expected_company_codes": [
+          "000001",
+          "002594"
+        ],
+        "expected_company_names": [
+          "平安银行",
+          "比亚迪"
+        ],
+        "expected_report_periods": [
+          "2025H1"
+        ],
+        "required_documents": [
+          "平安银行_000001_2025H1.pdf",
+          "比亚迪_002594_2025H1.pdf"
+        ],
+        "metric": "营业收入",
+        "metrics": [
+          "revenue"
+        ],
+        "targets": [
+          {
+            "company_name": "比亚迪",
+            "company_code": "002594",
+            "report_period": "2025H1",
+            "metrics": [
+              "revenue"
+            ]
+          },
+          {
+            "company_name": "平安银行",
+            "company_code": "000001",
+            "report_period": "2025H1",
+            "metrics": [
+              "revenue"
+            ]
+          }
+        ],
+        "negative_type": null
+      }
+    },
+    {
+      "sample_id": "holdout_158",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "multi_company_single_period",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_158",
+        "category": "multi_company_single_period",
+        "question": "对比一下贵州茅台和平安银行的2026年上半年归母净利润表现。",
+        "expected_rag": true,
+        "expected_route": "RAG",
+        "expected_company_codes": [
+          "000001",
+          "600519"
+        ],
+        "expected_company_names": [
+          "平安银行",
+          "贵州茅台"
+        ],
+        "expected_report_periods": [
+          "2026H1"
+        ],
+        "required_documents": [
+          "平安银行_000001_2026H1.pdf",
+          "贵州茅台_600519_2026H1.pdf"
+        ],
+        "metric": "归母净利润",
+        "metrics": [
+          "net_profit"
+        ],
+        "targets": [
+          {
+            "company_name": "贵州茅台",
+            "company_code": "600519",
+            "report_period": "2026H1",
+            "metrics": [
+              "net_profit"
+            ]
+          },
+          {
+            "company_name": "平安银行",
+            "company_code": "000001",
+            "report_period": "2026H1",
+            "metrics": [
+              "net_profit"
+            ]
+          }
+        ],
+        "negative_type": null
+      }
+    },
+    {
+      "sample_id": "holdout_167",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "multi_company_multi_period",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_167",
+        "category": "multi_company_multi_period",
+        "question": "中芯国际与北方华创的归母净利润，从2025年度到2026年上半年分别如何？",
+        "expected_rag": true,
+        "expected_route": "RAG",
+        "expected_company_codes": [
+          "002371",
+          "688981"
+        ],
+        "expected_company_names": [
+          "北方华创",
+          "中芯国际"
+        ],
+        "expected_report_periods": [
+          "2025FY",
+          "2026H1"
+        ],
+        "required_documents": [
+          "中芯国际_688981_2025FY.pdf",
+          "中芯国际_688981_2026H1.pdf",
+          "北方华创_002371_2025FY.pdf",
+          "北方华创_002371_2026H1.pdf"
+        ],
+        "metric": "归母净利润",
+        "metrics": [
+          "net_profit"
+        ],
+        "targets": [
+          {
+            "company_name": "中芯国际",
+            "company_code": "688981",
+            "report_period": "2025FY",
+            "metrics": [
+              "net_profit"
+            ]
+          },
+          {
+            "company_name": "中芯国际",
+            "company_code": "688981",
+            "report_period": "2026H1",
+            "metrics": [
+              "net_profit"
+            ]
+          },
+          {
+            "company_name": "北方华创",
+            "company_code": "002371",
+            "report_period": "2025FY",
+            "metrics": [
+              "net_profit"
+            ]
+          },
+          {
+            "company_name": "北方华创",
+            "company_code": "002371",
+            "report_period": "2026H1",
+            "metrics": [
+              "net_profit"
+            ]
+          }
+        ],
+        "negative_type": null
+      }
+    },
+    {
+      "sample_id": "holdout_171",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "multi_company_multi_period",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_171",
+        "category": "multi_company_multi_period",
+        "question": "中芯国际与北方华创的研发费用，从2025年度到2026年上半年分别如何？",
+        "expected_rag": true,
+        "expected_route": "RAG",
+        "expected_company_codes": [
+          "002371",
+          "688981"
+        ],
+        "expected_company_names": [
+          "北方华创",
+          "中芯国际"
+        ],
+        "expected_report_periods": [
+          "2025FY",
+          "2026H1"
+        ],
+        "required_documents": [
+          "中芯国际_688981_2025FY.pdf",
+          "中芯国际_688981_2026H1.pdf",
+          "北方华创_002371_2025FY.pdf",
+          "北方华创_002371_2026H1.pdf"
+        ],
+        "metric": "研发费用",
+        "metrics": [
+          "rd_expense"
+        ],
+        "targets": [
+          {
+            "company_name": "中芯国际",
+            "company_code": "688981",
+            "report_period": "2025FY",
+            "metrics": [
+              "rd_expense"
+            ]
+          },
+          {
+            "company_name": "中芯国际",
+            "company_code": "688981",
+            "report_period": "2026H1",
+            "metrics": [
+              "rd_expense"
+            ]
+          },
+          {
+            "company_name": "北方华创",
+            "company_code": "002371",
+            "report_period": "2025FY",
+            "metrics": [
+              "rd_expense"
+            ]
+          },
+          {
+            "company_name": "北方华创",
+            "company_code": "002371",
+            "report_period": "2026H1",
+            "metrics": [
+              "rd_expense"
+            ]
+          }
+        ],
+        "negative_type": null
+      }
+    },
+    {
+      "sample_id": "holdout_197",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "multi_company_multi_period",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_197",
+        "category": "multi_company_multi_period",
+        "question": "帮我分析比亚迪和平安银行2025年上半年、2026年上半年的营业收入差异。",
+        "expected_rag": true,
+        "expected_route": "RAG",
+        "expected_company_codes": [
+          "000001",
+          "002594"
+        ],
+        "expected_company_names": [
+          "平安银行",
+          "比亚迪"
+        ],
+        "expected_report_periods": [
+          "2025H1",
+          "2026H1"
+        ],
+        "required_documents": [
+          "平安银行_000001_2025H1.pdf",
+          "平安银行_000001_2026H1.pdf",
+          "比亚迪_002594_2025H1.pdf",
+          "比亚迪_002594_2026H1.pdf"
+        ],
+        "metric": "营业收入",
+        "metrics": [
+          "revenue"
+        ],
+        "targets": [
+          {
+            "company_name": "比亚迪",
+            "company_code": "002594",
+            "report_period": "2025H1",
+            "metrics": [
+              "revenue"
+            ]
+          },
+          {
+            "company_name": "比亚迪",
+            "company_code": "002594",
+            "report_period": "2026H1",
+            "metrics": [
+              "revenue"
+            ]
+          },
+          {
+            "company_name": "平安银行",
+            "company_code": "000001",
+            "report_period": "2025H1",
+            "metrics": [
+              "revenue"
+            ]
+          },
+          {
+            "company_name": "平安银行",
+            "company_code": "000001",
+            "report_period": "2026H1",
+            "metrics": [
+              "revenue"
+            ]
+          }
+        ],
+        "negative_type": null
+      }
+    },
+    {
+      "sample_id": "holdout_212",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "complex_multi_target",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_212",
+        "category": "complex_multi_target",
+        "question": "贵州茅台、五粮液在2025年上半年与2025全年披露的经营现金流分别是多少？",
+        "expected_rag": true,
+        "expected_route": "RAG",
+        "expected_company_codes": [
+          "000858",
+          "600519"
+        ],
+        "expected_company_names": [
+          "五粮液",
+          "贵州茅台"
+        ],
+        "expected_report_periods": [
+          "2025FY",
+          "2025H1"
+        ],
+        "required_documents": [
+          "五粮液_000858_2025FY.pdf",
+          "五粮液_000858_2025H1.pdf",
+          "贵州茅台_600519_2025FY.pdf",
+          "贵州茅台_600519_2025H1.pdf"
+        ],
+        "metric": "经营现金流",
+        "metrics": [
+          "operating_cash_flow"
+        ],
+        "targets": [
+          {
+            "company_name": "贵州茅台",
+            "company_code": "600519",
+            "report_period": "2025H1",
+            "metrics": [
+              "operating_cash_flow"
+            ]
+          },
+          {
+            "company_name": "贵州茅台",
+            "company_code": "600519",
+            "report_period": "2025FY",
+            "metrics": [
+              "operating_cash_flow"
+            ]
+          },
+          {
+            "company_name": "五粮液",
+            "company_code": "000858",
+            "report_period": "2025H1",
+            "metrics": [
+              "operating_cash_flow"
+            ]
+          },
+          {
+            "company_name": "五粮液",
+            "company_code": "000858",
+            "report_period": "2025FY",
+            "metrics": [
+              "operating_cash_flow"
+            ]
+          }
+        ],
+        "negative_type": null
+      }
+    },
+    {
+      "sample_id": "holdout_221",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "metric_alias_ambiguity",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_221",
+        "category": "metric_alias_ambiguity",
+        "question": "比亚迪2025H1公司口径毛利率是多少？不需要行业毛利率。",
+        "expected_rag": true,
+        "expected_route": "RAG",
+        "expected_company_codes": [
+          "002594"
+        ],
+        "expected_company_names": [
+          "比亚迪"
+        ],
+        "expected_report_periods": [
+          "2025H1"
+        ],
+        "required_documents": [
+          "比亚迪_002594_2025H1.pdf"
+        ],
+        "metric": "毛利率",
+        "metrics": [
+          "gross_margin"
+        ],
+        "targets": [
+          {
+            "company_name": "比亚迪",
+            "company_code": "002594",
+            "report_period": "2025H1",
+            "metrics": [
+              "gross_margin"
+            ]
+          }
+        ],
+        "negative_type": null
+      }
+    },
+    {
+      "sample_id": "holdout_238",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "metric_alias_ambiguity",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_238",
+        "category": "metric_alias_ambiguity",
+        "question": "北方华创2026H1营业收入披露了多少？",
+        "expected_rag": true,
+        "expected_route": "RAG",
+        "expected_company_codes": [
+          "002371"
+        ],
+        "expected_company_names": [
+          "北方华创"
+        ],
+        "expected_report_periods": [
+          "2026H1"
+        ],
+        "required_documents": [
+          "北方华创_002371_2026H1.pdf"
+        ],
+        "metric": "营业收入",
+        "metrics": [
+          "revenue"
+        ],
+        "targets": [
+          {
+            "company_name": "北方华创",
+            "company_code": "002371",
+            "report_period": "2026H1",
+            "metrics": [
+              "revenue"
+            ]
+          }
+        ],
+        "negative_type": null
+      }
+    },
+    {
+      "sample_id": "holdout_251",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "explanation_risk",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_251",
+        "category": "explanation_risk",
+        "question": "平安银行2026年上半年有哪些值得关注的资产质量与经营风险？",
+        "expected_rag": true,
+        "expected_route": "RAG",
+        "expected_company_codes": [
+          "000001"
+        ],
+        "expected_company_names": [
+          "平安银行"
+        ],
+        "expected_report_periods": [
+          "2026H1"
+        ],
+        "required_documents": [
+          "平安银行_000001_2026H1.pdf"
+        ],
+        "metric": "经营风险",
+        "metrics": [
+          "business_risk"
+        ],
+        "targets": [
+          {
+            "company_name": "平安银行",
+            "company_code": "000001",
+            "report_period": "2026H1",
+            "metrics": [
+              "business_risk"
+            ]
+          }
+        ],
+        "negative_type": null
+      }
+    },
+    {
+      "sample_id": "holdout_272",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "negative_oos_invalid",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_272",
+        "category": "negative_oos_invalid",
+        "question": "东京有哪些旅游景点？",
+        "expected_rag": false,
+        "expected_route": "OUT_OF_SCOPE",
+        "expected_company_codes": [],
+        "expected_company_names": [],
+        "expected_report_periods": [],
+        "required_documents": [],
+        "metric": null,
+        "metrics": [],
+        "targets": [],
+        "negative_type": "out_of_scope"
+      }
+    },
+    {
+      "sample_id": "holdout_299",
+      "source_dataset": "financial_holdout_300_v1_1.json",
+      "original_category": "negative_oos_invalid",
+      "seed": 42,
+      "sampling_strategy": "category-stratified",
+      "case": {
+        "id": "holdout_299",
+        "category": "negative_oos_invalid",
+        "question": "贵州茅台今天的股价是多少？",
+        "expected_rag": false,
+        "expected_route": "OUT_OF_SCOPE",
+        "expected_company_codes": [],
+        "expected_company_names": [],
+        "expected_report_periods": [],
+        "required_documents": [],
+        "metric": null,
+        "metrics": [],
+        "targets": [],
+        "negative_type": "realtime_not_report_query"
+      }
+    }
+  ]
+}
