@@ -9,7 +9,7 @@ class RealUserAgentRegressionTests(unittest.TestCase):
     def test_dataset_audit_and_size(self):
         audit = audit_dataset(load_dataset())
         self.assertTrue(audit["passed"])
-        self.assertEqual(96, audit["case_count"])
+        self.assertEqual(105, audit["case_count"])
 
     def test_greeting_and_definition_do_not_become_calculations(self):
         planner = FinancialPlanner()
@@ -141,6 +141,50 @@ class RealUserAgentRegressionTests(unittest.TestCase):
         self.assertEqual("news_query", response["intent"])
         self.assertEqual(["600519"], response["tickers"])
         self.assertEqual(["news_mcp"], response["executed_tools"])
+
+    def test_stock_requests_and_compound_calculator_market_route(self):
+        agent = make_agent()
+        for query in ("茅台的股票", "茅台今天的股票怎么样", "茅台的股票看看"):
+            state = agent.run(query, f"direct-stock:{query}")
+            self.assertEqual("market_query", state["intent"])
+            self.assertEqual(["market_mcp"], state["required_tools"])
+            self.assertEqual(["600519"], state["tickers"])
+
+        composite = agent.run(
+            "贵州茅台2026H1营业收入是多少？然后他的股票怎么样，他的新闻呢",
+            "financial-market-news",
+        )
+        self.assertEqual("composite_query", composite["intent"])
+        self.assertEqual(
+            ["financial_rag", "market_mcp", "news_mcp"], composite["required_tools"]
+        )
+        self.assertEqual(["600519"], composite["tickers"])
+
+        calculation_market = agent.run("3+4=多少，还有茅台的股票看看", "calculation-market")
+        self.assertEqual("composite_query", calculation_market["intent"])
+        self.assertEqual(["market_mcp", "calculator"], calculation_market["required_tools"])
+        self.assertEqual(7, calculation_market["calculation_result"]["result"])
+
+    def test_bare_stock_requires_context_and_financial_query_is_not_hijacked(self):
+        agent = make_agent()
+        fresh = agent.run("它的股票", "fresh-stock-pronoun")
+        self.assertEqual("unsupported", fresh["intent"])
+        self.assertEqual([], fresh["required_tools"])
+        self.assertEqual([], fresh["executed_tools"])
+
+        agent.run("五粮液2025H1财报", "wuliangye-stock-follow-up")
+        follow_up = agent.run("它的股票", "wuliangye-stock-follow-up")
+        self.assertEqual("market_query", follow_up["intent"])
+        self.assertEqual(["000858"], follow_up["tickers"])
+        self.assertEqual(["market_mcp"], follow_up["required_tools"])
+
+        report = agent.run("贵州茅台2026H1营业收入", "financial-only-stock")
+        self.assertEqual("financial_report_query", report["intent"])
+        self.assertEqual(["financial_rag"], report["required_tools"])
+
+        ambiguous = agent.run("茅台股票相关财务资产", "ambiguous-stock")
+        self.assertNotEqual("market_query", ambiguous["intent"])
+        self.assertNotIn("market_mcp", ambiguous["required_tools"])
 
 
 if __name__ == "__main__":

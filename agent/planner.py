@@ -19,9 +19,15 @@ _DEFINITION_TERMS = ("流动比率", "速动比率", "市盈率", "roe", "归母
 _GREETING_PATTERN = re.compile(r"^(?:hi|hello|你好|您好|嗨)[!！。,.\s]*$", re.I)
 _IDENTITY_PATTERN = re.compile(r"^(?:(?:你好|您好)[，,！!。\s]*)?(?:你是什么|你能做什么)[？?！!。\s]*$")
 _CONTEXTUAL_MARKET_FOLLOW_UP_PATTERN = re.compile(
-    r"(?:它|这家公司|这个票).*?(?:股票|股价|行情|市场表现|涨跌)"
+    r"(?:他|它|这家公司|这个票|那家公司).*?(?:股票|股价|行情|市场表现|涨跌)"
 )
-_COMPANY_PRONOUN_PATTERN = re.compile(r"(?:它(?:的|现在|最近)?|这家公司|该公司|这个票|那家公司)")
+_COMPANY_PRONOUN_PATTERN = re.compile(r"(?:[他它](?:的|现在|最近)?|这家公司|该公司|这个票|那家公司)")
+_STOCK_REQUEST_PATTERN = re.compile(
+    r"(?:股票\s*(?:怎么样|如何|看看|行情)?|今天的股票|当前股票)"
+)
+_AMBIGUOUS_STOCK_FINANCIAL_PATTERN = re.compile(r"股票[^。！？!?，,；;]*财务|财务[^。！？!?，,；;]*股票")
+_CALCULATION_CLAUSE_SPLIT_PATTERN = re.compile(r"[，,；;。]|(?:然后|还有|并且)")
+_REPORT_SUBTASK_PATTERN = re.compile(r"(?:财报|报告|年报|半年报|20\d{2}(?:H1|FY|年))", re.I)
 _SIMPLE_GROWTH_PATTERN = re.compile(
     r"从\s*(?P<previous>-?\d+(?:\.\d+)?)\s*(?:增长(?:到)?|增加(?:到)?|变为|到)\s*"
     r"(?P<current>-?\d+(?:\.\d+)?)(?=[，,。！？?\s]|$)"
@@ -63,27 +69,32 @@ class FinancialPlanner:
                 tools=(),
                 reason="用户正在问候或询问 Agent 能力范围。",
             )
-        has_market = any(term in lowered for term in _MARKET_TERMS) or (
-            has_company_context and bool(_CONTEXTUAL_MARKET_FOLLOW_UP_PATTERN.search(normalized))
-        )
+        has_market = self._is_market_request(normalized, lowered, has_company_context)
         has_news = any(term in lowered for term in _NEWS_TERMS)
         has_report = any(term in lowered for term in _FINANCIAL_REPORT_TERMS)
+        calculation_request = self.simple_calculation_request(normalized)
+        if calculation_request is not None and has_report:
+            has_report = self._has_independent_report_subtask(normalized)
         if any(term in lowered for term in _DEFINITION_TERMS):
             return PlannerDecision(
                 intent="financial_report_query",
                 tools=("financial_rag",),
                 reason="用户询问金融定义，交由 Financial RAG 的 FAQ fast path 处理。",
             )
-        if (has_market or has_news) and has_report:
-            tools = ["financial_rag"]
-            if has_market:
-                tools.append("market_mcp")
-            if has_news:
-                tools.append("news_mcp")
+        requested_tools = []
+        if has_report:
+            requested_tools.append("financial_rag")
+        if has_market:
+            requested_tools.append("market_mcp")
+        if has_news:
+            requested_tools.append("news_mcp")
+        if calculation_request is not None:
+            requested_tools.append("calculator")
+        if len(requested_tools) > 1:
             return PlannerDecision(
                 intent="composite_query",
-                tools=tuple(tools),
-                reason="查询同时包含历史财报与实时市场或新闻需求。",
+                tools=tuple(requested_tools),
+                reason="查询包含多个可独立执行的财报、实时信息或确定性计算子任务。",
             )
         if has_market:
             return PlannerDecision(
@@ -97,7 +108,7 @@ class FinancialPlanner:
                 tools=("news_mcp",),
                 reason="用户请求近期新闻，将调用 News MCP 工具。",
             )
-        if self.simple_calculation_request(normalized) is not None:
+        if calculation_request is not None:
             return PlannerDecision(
                 intent="calculation_query",
                 tools=("calculator",),
@@ -118,6 +129,23 @@ class FinancialPlanner:
     @staticmethod
     def is_market_pronoun_follow_up(query: str) -> bool:
         return bool(_CONTEXTUAL_MARKET_FOLLOW_UP_PATTERN.search(query.strip()))
+
+    @staticmethod
+    def _is_market_request(query: str, lowered: str, has_company_context: bool) -> bool:
+        """Recognize a stock request only when a company is available for bare 股票."""
+        if any(term in lowered for term in _MARKET_TERMS):
+            return True
+        if not has_company_context or not _STOCK_REQUEST_PATTERN.search(query):
+            return False
+        # "股票相关财务资产" is not a quote request.  A bare 股票 token must not
+        # override an otherwise ambiguous financial phrase.
+        return not bool(_AMBIGUOUS_STOCK_FINANCIAL_PATTERN.search(query))
+
+    @staticmethod
+    def _has_independent_report_subtask(query: str) -> bool:
+        """Require an explicit report clause before pairing Calculator with RAG."""
+        clauses = [clause.strip() for clause in _CALCULATION_CLAUSE_SPLIT_PATTERN.split(query) if clause.strip()]
+        return len(clauses) > 1 and any(_REPORT_SUBTASK_PATTERN.search(clause) for clause in clauses)
 
     @staticmethod
     def is_company_pronoun_query(query: str) -> bool:
@@ -156,7 +184,21 @@ class FinancialPlanner:
     def simple_calculation_request(query: str) -> dict | None:
         """Parse only unambiguous, self-contained calculator requests."""
         expression = CalculatorTool.parse_safe_expression(query)
-        if expression and CalculatorTool.is_compound_expression(expression):
+        expression_from_clause = False
+        if expression is None:
+            # Composite requests may contain one complete arithmetic clause plus
+            # another tool request.  Each candidate is still parsed by the
+            # existing AST whitelist; we never evaluate arbitrary substrings.
+            for clause in _CALCULATION_CLAUSE_SPLIT_PATTERN.split(query):
+                expression = CalculatorTool.parse_safe_expression(clause)
+                if expression is not None:
+                    expression_from_clause = True
+                    break
+        if expression and (
+            CalculatorTool.is_compound_expression(expression)
+            or expression_from_clause
+            or "=" in query
+        ):
             return {"operation": "expression", "expression": expression}
         match = _PERCENTAGE_POINT_PATTERN.search(query)
         if match:
