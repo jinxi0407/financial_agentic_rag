@@ -220,6 +220,9 @@ def build_pilot_manifest(
         "source_manifest": manifest_path.name,
         "source_manifest_sha256": _sha256(manifest_path),
         "source_dataset": source_manifest["source_dataset"],
+        # The 100Q manifest already captured this from the frozen 300Q source.
+        # Preserve it verbatim rather than reconstructing it during scoring.
+        "source_dataset_schema_version": source_manifest.get("source_dataset_schema_version"),
         "source_dataset_sha256": source_manifest["source_dataset_sha256"],
         "sample_size": PILOT_SIZE,
         "seed": SEED,
@@ -253,6 +256,15 @@ def audit_pilot_manifest(pilot: dict[str, Any], manifest_path: Path = MANIFEST_P
         errors.append("pilot category counts do not match fixed quotas")
     if pilot.get("source_manifest_sha256") != _sha256(manifest_path):
         errors.append("pilot source manifest fingerprint mismatch")
+    inherited_fields = (
+        "source_dataset",
+        "source_dataset_sha256",
+        "source_dataset_schema_version",
+        "seed",
+    )
+    for field in inherited_fields:
+        if source_manifest.get(field) != pilot.get(field):
+            errors.append(f"pilot did not preserve source manifest metadata: {field}")
     return {"passed": not errors, "errors": errors, "sample_size": len(samples), "category_counts": counts}
 
 
@@ -567,12 +579,32 @@ def _ragas_components():
     }
 
 
+def _manifest_dataset_provenance(manifest: dict[str, Any]) -> dict[str, Any]:
+    """Return manifest-recorded provenance without inventing optional fields."""
+    has_source_schema_version = "source_dataset_schema_version" in manifest
+    return {
+        "source_dataset": manifest.get("source_dataset"),
+        "source_dataset_sha256": manifest.get("source_dataset_sha256"),
+        "source_dataset_schema_version": manifest.get("source_dataset_schema_version"),
+        "source_dataset_schema_version_recorded": has_source_schema_version,
+        "source_manifest": manifest.get("source_manifest"),
+        "source_manifest_sha256": manifest.get("source_manifest_sha256"),
+        "manifest_schema_version": manifest.get("schema_version"),
+        # Retained for existing result consumers. ``None`` means the legacy
+        # manifest did not record an upstream source schema version.
+        "dataset_version": manifest.get("source_dataset_schema_version"),
+    }
+
+
 def _score_capture(
     captured: dict[str, Any],
     manifest: dict[str, Any],
     ragas_deps: str | None,
     manifest_path: Path = MANIFEST_PATH,
 ) -> dict[str, Any]:
+    # Resolve optional provenance before constructing the judge. A malformed
+    # manifest must never spend API calls and then fail only while writing JSON.
+    dataset_provenance = _manifest_dataset_provenance(manifest)
     _ragas_dependencies_path(ragas_deps)
     components = _ragas_components()
     from base.config import config
@@ -648,7 +680,8 @@ def _score_capture(
             "judge_model": config.LLM_MODEL,
             "judge_temperature": 0,
             "embedding_model": config.BGE_M3_MODEL_PATH,
-            "dataset_version": manifest["source_dataset_schema_version"],
+            "dataset_version": dataset_provenance["dataset_version"],
+            "dataset_provenance": dataset_provenance,
             "sample_manifest": manifest_path.name,
             "sample_manifest_sha256": _sha256(manifest_path),
             "context_precision_metric": "LLMContextPrecisionWithoutReference",

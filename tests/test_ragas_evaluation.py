@@ -12,6 +12,7 @@ from evaluations.financial_rag_only import (
 )
 from evaluations.run_ragas_final_evaluation import (
     PILOT_CATEGORY_COUNTS,
+    _manifest_dataset_provenance,
     build_pilot_manifest,
     fairness_dry_run,
     _capture_cases,
@@ -142,6 +143,17 @@ class RagasEvaluationTests(unittest.TestCase):
         self.assertEqual(first, second)
         self.assertEqual(len(first["samples"]), 20)
         self.assertEqual(first["sample_category_counts"], PILOT_CATEGORY_COUNTS)
+        self.assertEqual(first["source_dataset_schema_version"], "financial_holdout_300_v1_1")
+
+    def test_legacy_manifest_without_optional_source_schema_is_safe(self):
+        provenance = _manifest_dataset_provenance({
+            "schema_version": "legacy_pilot",
+            "source_dataset": "frozen.json",
+            "source_dataset_sha256": "fingerprint",
+        })
+        self.assertIsNone(provenance["dataset_version"])
+        self.assertFalse(provenance["source_dataset_schema_version_recorded"])
+        self.assertEqual(provenance["source_dataset_sha256"], "fingerprint")
 
     def test_dry_run_declares_faq_bypass_for_shared_smoke_ids(self):
         manifest = build_pilot_manifest(write=False)

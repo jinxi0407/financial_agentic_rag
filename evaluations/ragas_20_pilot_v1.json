@@ -3,6 +3,7 @@
   "source_manifest": "ragas_100_stratified_v1.json",
   "source_manifest_sha256": "dc44cda9f040d0ecf3d761d5bb2afcd2644273ed7b8bee31e063a1d68f214c17",
   "source_dataset": "financial_holdout_300_v1_1.json",
+  "source_dataset_schema_version": "financial_holdout_300_v1_1",
   "source_dataset_sha256": "ed06f62ce41e257f75d003d0ce20a61dc13dff2e9e37ca23cf31da55f4a90203",
   "sample_size": 20,
   "seed": 42,
