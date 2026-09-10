@@ -1,5 +1,8 @@
 .env
+.env.*
+!.env.example
 config.ini
+node_modules/
 **/__pycache__/
 *.pyc
 .DS_Store
@@ -14,10 +17,6 @@ rag_qa/core/tmp_trainer/
 *.pt
 *.pth
 financial_data/annual_reports/*.pdf
-# Environment variants
-.env.*
-!.env.example
-
 # Runtime / test artifacts
 *.log
 .pytest_cache/
@@ -31,6 +30,13 @@ htmlcov/
 # Frontend build artifacts
 frontend/node_modules/
 frontend/dist/
+
+# Local evaluation outputs and captures; keep scripts and frozen manifests tracked.
+evaluations/*_results.json
+evaluations/*_results_capture.json
+evaluations/*_capture.json
+evaluations/*_smoke*.json
+evaluations/*_pilot*_results*.json
 
 # Old EduRAG datasets / evaluation artifacts
 mysql_qa/data/JP学科知识问答.csv
