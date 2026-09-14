@@ -6,7 +6,7 @@
 
 ## Online Demo
 
-[https://jinxi-ai.com](https://jinxi-ai.com) - Interactive Financial Agent Demo
+[https://jinxi-ai.com](https://jinxi-ai.com) - Interactive Financial Agent Demo（GPU目前处于关闭状态）
 
 ## Why This Project
 
