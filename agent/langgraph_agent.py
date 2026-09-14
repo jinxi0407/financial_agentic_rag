@@ -17,7 +17,9 @@ from langgraph.checkpoint.redis import RedisSaver
 from mcp_servers.providers.market_provider import extract_securities_from_query
 
 from .mcp_client import FinancialMCPClient
+from .numeric_guardrail import unsupported_numeric_claims
 from .planner import FinancialPlanner
+from .planning import create_planner, planning_context, rule_metadata
 from .preferences import RedisPreferenceStore
 from .synthesis import QwenSynthesizer
 from .tools.calculator_tool import CalculatorTool
@@ -72,13 +74,22 @@ class AgentState(TypedDict, total=False):
     final_answer: str
     graph_path: list[str]
     trace: dict[str, Any]
+    planned_calls: list[dict[str, Any]]
+    call_results: list[dict[str, Any]]
+    planning_status: str
+    planner_metadata: dict[str, Any]
+    no_tool_response: str | None
 
 
 class LangGraphFinancialAgent:
     """StateGraph with short-term thread memory; no retrieval logic is duplicated."""
 
-    def __init__(self, qa_system=None, checkpointer=None, planner=None, mcp_client=None, synthesizer=None, preference_store=None):
-        self.planner = planner or FinancialPlanner()
+    def __init__(self, qa_system=None, checkpointer=None, planner=None, mcp_client=None, synthesizer=None, preference_store=None,
+                 *, planner_mode=None, planner_model=None, planner_timeout=None,
+                 planner_fallback_to_rule=None, planner_max_calls=None, planner_client=None):
+        self.planner = planner if planner is not None else create_planner(
+            mode=planner_mode, model=planner_model, timeout=planner_timeout,
+            fallback_to_rule=planner_fallback_to_rule, max_calls=planner_max_calls, client=planner_client)
         self.rag_tool = FinancialRAGTool(qa_system=qa_system) if qa_system else FinancialRAGTool()
         self.calculator = CalculatorTool()
         self.mcp_client = mcp_client or FinancialMCPClient()
@@ -190,12 +201,26 @@ class LangGraphFinancialAgent:
 
     def _plan(self, state: AgentState):
         companies = extract_securities_from_query(state["query"]) or state.get("companies", [])
-        if not companies and self.planner.is_company_pronoun_query(state["query"]):
-            decision = self.planner.missing_company_context_decision()
+        fc_mode = getattr(self.planner, "mode", "rule") == "function_calling"
+        context = planning_context(state["query"], state) if fc_mode else None
+        if fc_mode:
+            preferences, preference_error = self._preferences(state.get("user_id", state["thread_id"]))
+            context["preferences"] = preferences
+        plan_started = perf_counter()
+        if not companies and FinancialPlanner.is_company_pronoun_query(state["query"]):
+            decision = FinancialPlanner.missing_company_context_decision()
+            metadata = {**rule_metadata(), "requested_mode": "function_calling" if fc_mode else "rule",
+                        "effective_mode": "shared_safety", "prehandled": "missing_company_context"}
+        elif fc_mode:
+            decision = self.planner.plan(state["query"], context=context)
+            metadata = decision.planner_metadata
         else:
             decision = self.planner.plan(state["query"], has_company_context=bool(companies))
+            metadata = rule_metadata()
+        metadata.setdefault("planner_latency", perf_counter() - plan_started)
         period = self._period(state["query"])
-        preferences, preference_error = self._preferences(state.get("user_id", state["thread_id"]))
+        if not fc_mode:
+            preferences, preference_error = self._preferences(state.get("user_id", state["thread_id"]))
         preference_written = False
         try:
             saved = self.preference_store.save_explicit(
@@ -207,6 +232,12 @@ class LangGraphFinancialAgent:
         except Exception as exc:
             preference_error = f"preference_store: {type(exc).__name__}"
         response = {"intent": decision.intent, "skill": decision.skill, "required_tools": list(decision.tools), "companies": companies, "tickers": [item["ticker"] for item in companies], "report_periods": [period] if period else state.get("report_periods", []), "previous_query": state.get("last_query", ""), "last_query": state["query"], "last_intent": decision.intent, "long_term_preferences": preferences, "executed_tools": [], "tool_results": [], "financial_result": "", "market_results": [], "news_results": [], "calculation_result": {}, "errors": [], "draft_answer": "", "synthesis_answer": "", "trace": {"plan": decision.to_dict(), "preference_written": preference_written, "preference_error": preference_error}}
+        response.update({"planned_calls": list(decision.planned_calls), "call_results": [],
+                         "planning_status": decision.planning_status, "planner_metadata": metadata,
+                         "no_tool_response": decision.no_tool_response, "period_clarification": "",
+                         "final_answer": "", "guardrail_status": "", "synthesis_latency": 0.0})
+        if fc_mode and metadata.get("effective_mode") == "function_calling":
+            response["report_periods"] = context["explicit_periods"] or context["session_periods"]
         self._emit("plan", intent=decision.intent, required_tools=list(decision.tools), skill=decision.skill)
         return response
 
@@ -228,6 +259,8 @@ class LangGraphFinancialAgent:
                     "2025H1、2025FY 或 2026H1，以避免混合不同财报口径。"
                 )
             }
+        if self._uses_fc_arguments(state):
+            return self._execute_fc(state, "financial_rag")
         self._emit("tool_start", tool="financial_rag")
         result = self.rag_tool.run(self._effective_financial_query(state))
         response = {"financial_result": result.answer, "tool_results": [*state.get("tool_results", []), result.to_dict()], "executed_tools": [*state.get("executed_tools", []), "financial_rag"], "errors": [*state.get("errors", []), *([result.error] if result.error else [])]}
@@ -236,6 +269,8 @@ class LangGraphFinancialAgent:
 
     def _market(self, state: AgentState):
         if "market_mcp" not in state.get("required_tools", []): return {}
+        if self._uses_fc_arguments(state):
+            return self._execute_fc(state, "market_mcp")
         self._emit("tool_start", tool="market_mcp")
         response = self._mcp_many(state, "market", "get_market_snapshot", "market_mcp", "market_results")
         self._emit("tool_end", tool="market_mcp", results=response.get("market_results", []))
@@ -243,6 +278,8 @@ class LangGraphFinancialAgent:
 
     def _news(self, state: AgentState):
         if "news_mcp" not in state.get("required_tools", []): return {}
+        if self._uses_fc_arguments(state):
+            return self._execute_fc(state, "news_mcp")
         self._emit("tool_start", tool="news_mcp")
         response = self._mcp_many(state, "news", "search_financial_news", "news_mcp", "news_results")
         self._emit("tool_end", tool="news_mcp", results=response.get("news_results", []))
@@ -264,8 +301,10 @@ class LangGraphFinancialAgent:
 
     def _calculator(self, state):
         if "calculator" not in state.get("required_tools", []): return {}
+        if self._uses_fc_arguments(state):
+            return self._execute_fc(state, "calculator")
         self._emit("tool_start", tool="calculator")
-        request = self.planner.simple_calculation_request(state["query"])
+        request = FinancialPlanner.simple_calculation_request(state["query"])
         if not request:
             self._emit("tool_end", tool="calculator", results=[])
             return {"errors": ["缺少可验证的计算输入。"]}
@@ -274,7 +313,48 @@ class LangGraphFinancialAgent:
         self._emit("tool_end", tool="calculator", results=[result.to_dict()])
         return response
 
+    @staticmethod
+    def _uses_fc_arguments(state):
+        return state.get("planner_metadata", {}).get("effective_mode") == "function_calling"
+
+    def _execute_fc(self, state, tool_name):
+        calls = [call for call in state.get("planned_calls", []) if call["tool_name"] == tool_name]
+        results, records, errors = [], [], []
+        self._emit("tool_start", tool=tool_name)
+        for call in calls:
+            started = perf_counter()
+            args = call["validated_arguments"]
+            try:
+                if tool_name == "financial_rag":
+                    result = self.rag_tool.run(**args)
+                elif tool_name == "calculator":
+                    result = self.calculator.run(**args)
+                else:
+                    server, function = ("market", "get_market_snapshot") if tool_name == "market_mcp" else ("news", "search_financial_news")
+                    result = self.mcp_client.call_tool(server, function, args)
+                payload = result.to_dict()
+            except Exception as exc:
+                payload = {"tool_name": {"market_mcp": "get_market_snapshot", "news_mcp": "search_financial_news"}.get(tool_name, tool_name),
+                           "success": False, "error": type(exc).__name__, "result": None,
+                           "latency": perf_counter() - started}
+            results.append(payload)
+            records.append({"call_id": call["call_id"], "tool_name": tool_name,
+                            "validated_arguments": args, "status": "success" if payload["success"] else "failed",
+                            "result": payload, "error": payload.get("error"), "latency": payload.get("latency", 0.0)})
+            if payload.get("error"): errors.append(payload["error"])
+        response = {"tool_results": [*state.get("tool_results", []), *results],
+                    "call_results": [*state.get("call_results", []), *records],
+                    "executed_tools": [*state.get("executed_tools", []), *([tool_name] if calls else [])],
+                    "errors": [*state.get("errors", []), *errors]}
+        if tool_name == "financial_rag": response["financial_result"] = results[0].get("answer", "")
+        elif tool_name == "calculator": response["calculation_result"] = results[0]
+        else: response["market_results" if tool_name == "market_mcp" else "news_results"] = results
+        self._emit("tool_end", tool=tool_name, results=results)
+        return response
+
     def _aggregation(self, state):
+        if state.get("no_tool_response") and not state.get("required_tools"):
+            return {"draft_answer": state["no_tool_response"]}
         if state.get("intent") == "greeting":
             return {"draft_answer": self._greeting_answer(state.get("query", ""))}
         if state.get("intent") == "unsupported":
@@ -389,10 +469,11 @@ class LangGraphFinancialAgent:
             if guidance:
                 allowed.update(self._numbers(guidance))
             allowed.update(self._numbers(str(state.get("market_results", []))))
+            allowed.update(self._market_percent_evidence(state.get("market_results", [])))
             allowed.update(self._numbers(str(state.get("news_results", []))))
             allowed.update(self._numbers(str(state.get("calculation_result", {}))))
             allowed.update(self._numbers(state.get("query", "")))
-            if self._numbers(candidate) - allowed:
+            if unsupported_numeric_claims(state, candidate, allowed, self._numbers):
                 violations.append("unsupported_numeric_claim")
         return violations
 
@@ -544,11 +625,23 @@ class LangGraphFinancialAgent:
         }
         if not any(available.values()):
             return candidate
-        markers = ("未提供", "不可用", "无法", "没有", "缺少", "未返回", "未检索")
         terms = {
-            "market": ("行情", "股价", "市场表现"),
-            "news": ("新闻", "近期事件", "消息"),
+            "market": r"(?:行情|股价|市场表现)",
+            "news": r"(?:新闻|近期事件|消息)",
         }
+        # Provider facts are not availability statements, even when a title
+        # contains a negation or a media name contains the word "news".
+        protected_spans = []
+        for result in state.get("news_results", []):
+            if not result.get("success"):
+                continue
+            for item in (result.get("result") or {}).get("results", []):
+                for field in ("title", "source", "url", "published_at"):
+                    value = item.get(field)
+                    if isinstance(value, str) and value:
+                        protected_spans.extend(
+                            match.span() for match in re.finditer(re.escape(value), candidate)
+                        )
         kept = []
         required_external = {
             "market": "market_mcp" in state.get("required_tools", []),
@@ -557,12 +650,22 @@ class LangGraphFinancialAgent:
         all_external_available = any(required_external.values()) and all(
             available[name] for name, required in required_external.items() if required
         )
+        position = 0
         for sentence in re.split(r"(?<=[。！？!?；;])", candidate):
+            end = position + len(sentence)
+            protected = any(start < end and stop > position for start, stop in protected_spans)
+            position = end
+            if protected:
+                kept.append(sentence)
+                continue
             normalized = sentence.strip()
             falsely_unavailable = any(
                 available[name]
-                and any(term in normalized for term in tool_terms)
-                and any(marker in normalized for marker in markers)
+                and re.search(
+                    rf"(?:未提供|没有|缺少|未返回|未检索到)(?:可用的?|可靠的?|当前|实时|近期|最近)*{tool_terms}"
+                    rf"|{tool_terms}(?:数据|信息)?(?:暂时|暂|尚)?(?:不可用|未提供|未返回)",
+                    normalized,
+                )
                 for name, tool_terms in terms.items()
             )
             # Financial RAG may correctly explain that its own corpus excludes
@@ -659,9 +762,26 @@ class LangGraphFinancialAgent:
         return False
 
     @staticmethod
+    def _market_percent_evidence(results):
+        """change_percent is a percent value (0.22 means 0.22%, not 22%)."""
+        allowed = set()
+        for item in results:
+            payload = item.get("result") or {}
+            if not item.get("success") or not isinstance(payload, dict):
+                continue
+            value = payload.get("change_percent")
+            if isinstance(value, bool) or not isinstance(value, (int, float, Decimal)):
+                continue
+            number = Decimal(str(value))
+            if number.is_finite():
+                allowed.add(f"{number.normalize()}%")
+        return allowed
+
+    @staticmethod
     def _numbers(text):
         normalized = set()
-        for match in re.findall(r"(?<![\w.])-?\d[\d,]*(?:\.\d+)?%?", text):
+        # CJK prose can directly precede a number; ASCII identifiers cannot.
+        for match in re.findall(r"(?<![A-Za-z0-9_.])[+-]?\d[\d,]*(?:\.\d+)?%?", text):
             suffix = "%" if match.endswith("%") else ""
             try:
                 normalized.add(f"{Decimal(match.rstrip('%').replace(',', '')).normalize()}{suffix}")

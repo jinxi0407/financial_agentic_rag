@@ -23,10 +23,17 @@ class PlannerDecision:
     reason: str
     status: PlannerStatus = "ready"
     skill: str | None = None
+    planned_calls: tuple[dict, ...] = field(default_factory=tuple)
+    planning_status: str = "ready"
+    planner_metadata: dict = field(default_factory=dict)
+    no_tool_response: str | None = None
 
     def to_dict(self) -> dict:
         payload = asdict(self)
         payload["tools"] = list(self.tools)
+        if not self.planner_metadata and not self.planned_calls and self.no_tool_response is None:
+            for key in ("planned_calls", "planning_status", "planner_metadata", "no_tool_response"):
+                payload.pop(key)
         return payload
 
 

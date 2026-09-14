@@ -113,6 +113,12 @@ class Config:
             'DASHSCOPE_BASE_URL', self.config.get('llm', 'dashscope_base_url', fallback='')
         ).strip()
 
+        self.AGENT_PLANNER_MODE = os.getenv('AGENT_PLANNER_MODE', 'rule').strip()
+        self.AGENT_PLANNER_MODEL = os.getenv('AGENT_PLANNER_MODEL', '').strip() or self.LLM_MODEL
+        self.AGENT_PLANNER_TIMEOUT = float(os.getenv('AGENT_PLANNER_TIMEOUT', '30'))
+        self.AGENT_PLANNER_FALLBACK_TO_RULE = os.getenv('AGENT_PLANNER_FALLBACK_TO_RULE', 'false').lower() == 'true'
+        self.AGENT_PLANNER_MAX_CALLS = int(os.getenv('AGENT_PLANNER_MAX_CALLS', '8'))
+
         self.BGE_M3_MODEL_PATH = self._model_path(
             'BGE_M3_MODEL_PATH', 'bge_m3_model_path', 'bge-m3'
         )
