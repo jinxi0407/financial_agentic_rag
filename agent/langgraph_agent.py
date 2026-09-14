@@ -403,12 +403,7 @@ class LangGraphFinancialAgent:
                 "final_answer": self._safe_summary(state, guardrail_notice=True),
                 "guardrail_status": ",".join(violations),
             }
-            # A synthesis/numeric safeguard is not evidence that a successfully
-            # executed Market or News tool is unavailable.  The public banner is
-            # reserved for actual external-data degradation; the state still
-            # records every guardrail violation for traceability.
-            status = "degraded" if self._availability_violations(violations) else "passed"
-            self._emit("guardrail", status=status)
+            self._emit("guardrail", status=response["guardrail_status"])
             return response
         self._emit("guardrail", status="passed")
         return {"final_answer": candidate, "guardrail_status": "passed"}

@@ -190,7 +190,7 @@ class AgentFinalTests(unittest.TestCase):
         self.assertNotIn("没有当前行情", state["final_answer"])
         self.assertNotIn("当前知识库中缺少足够的可靠信息", state["final_answer"])
         self.assertEqual(
-            "passed",
+            "error",
             next(event["data"]["status"] for event in events if event["type"] == "guardrail"),
         )
 

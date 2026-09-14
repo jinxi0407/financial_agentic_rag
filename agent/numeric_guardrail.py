@@ -1,5 +1,5 @@
 """Bounded answer-representation checks; no retrieval or financial calculation."""
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime
 from decimal import Decimal
 import re
@@ -35,7 +35,18 @@ class NumericEvidence:
     source: str = ""
 
 
-def _amount_type(text, start, default):
+def _amount_type(text, start, end, default):
+    # A directly attached metric may follow the amount ("...亿元的营业收入").
+    following = re.match(r"\s*(?:\*\*)?\s*的?\s*([\u4e00-\u9fff]+)", text[end:])
+    if following:
+        label = following[1]
+        for pattern, kind in (
+            (r"(?:市值|成交额|成交金额)", "market_amount"),
+            (r"(?:营业收入|营收|净利润|现金流|资产总额|总资产|负债)", "financial_amount"),
+            (r"(?:价格|股价|现价|零售价)", "price"),
+        ):
+            if re.match(pattern, label):
+                return kind
     context = re.split(r"[。！？\n；;]", text[:start])[-1][-100:]
     if re.search(r"市值|成交额|成交金额", context):
         return "market_amount"
@@ -50,7 +61,7 @@ def amount_tokens(text, default_type="other_numeric", source=""):
     tokens = []
     for match in _AMOUNT.finditer(text):
         value = Decimal(match["value"].replace(",", "")) * _SCALE[match["unit"]]
-        tokens.append(NumericEvidence(value, "元", _amount_type(text, match.start(), default_type),
+        tokens.append(NumericEvidence(value, "元", _amount_type(text, match.start(), match.end(), default_type),
                                       _OPS[match["op"]], span=match.span(), source=source))
     return tokens
 
@@ -146,6 +157,19 @@ def _amount_supported(claim, evidence):
     return False
 
 
+def _resolve_amount_type(claim, evidence):
+    # Only an explicit, unit-bearing approximation can borrow the type of a
+    # matching exact Financial RAG amount. Prices and bare numbers cannot.
+    if claim.semantic_type == "other_numeric" and claim.operator == "approx":
+        financial = replace(claim, semantic_type="financial_amount")
+        verified = [item for item in evidence
+                    if item.source == "financial_rag.answer"
+                    and item.semantic_type == "financial_amount" and item.operator == "eq"]
+        if _amount_supported(financial, verified):
+            return financial
+    return claim
+
+
 def unsupported_numeric_claims(state, candidate, allowed_numbers, numbers):
     """Return unsupported claims; retain legacy exact checks for other numbers.
 
@@ -155,7 +179,7 @@ def unsupported_numeric_claims(state, candidate, allowed_numbers, numbers):
     evidence. Identifiers retain the existing exact/query-label policy.
     """
     amounts, temporal_values = _evidence(state)
-    claims = amount_tokens(candidate)
+    claims = [_resolve_amount_type(claim, amounts) for claim in amount_tokens(candidate)]
     combined = []
     index = 0
     while index < len(claims):
