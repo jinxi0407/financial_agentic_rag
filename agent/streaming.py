@@ -65,15 +65,16 @@ class AgentStreamingAdapter:
                 yield self._event("synthesis_start", {})
             elif kind == "guardrail":
                 guardrail_seen = True
-                yield self._event("guardrail", {"status": data.get("status", "error")})
             elif kind == "complete":
-                if not guardrail_seen:
+                state = internal.get("state", {})
+                status = state.get("guardrail_status")
+                if not guardrail_seen or not isinstance(status, str) or not status.strip():
                     yield self._event("error", {
                         "code": "AGENT_EXECUTION_ERROR",
                         "message": "Agent request failed.",
                     })
                     return
-                state = internal.get("state", {})
+                yield self._event("guardrail", {"status": self._public_guardrail_status(status)})
                 yield self._event("sources", self._sources(state))
                 yield self._event("trace", self._trace(state))
                 for chunk in self._chunks(str(state.get("final_answer", ""))):
@@ -85,6 +86,16 @@ class AgentStreamingAdapter:
                     "message": "Agent request failed.",
                 })
                 return
+
+    @staticmethod
+    def _public_guardrail_status(status: str) -> str:
+        """Keep the browser enum; only final, explicit PASS means passed."""
+        if status == "passed":
+            return "passed"
+        flags = set(status.split(","))
+        if flags <= {"degraded", "market_unavailable", "news_unavailable", "news_provenance_missing"}:
+            return "degraded"
+        return "error"
 
     async def events(self, payload: Any) -> AsyncIterator[dict[str, Any]]:
         iterator = self.iter_events(payload)
