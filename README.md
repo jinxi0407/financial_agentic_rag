@@ -6,7 +6,7 @@
 
 ## Online Demo
 
-[https://jinxi-ai.com](https://jinxi-ai.com) - Interactive Financial Agent Demo（GPU目前处于关闭状态）
+[https://jinxi-ai.com](https://jinxi-ai.com) - Interactive Financial Agent Demo（GPU 按需运行，演示可用性取决于实例状态）
 
 ## Why This Project
 
@@ -20,66 +20,172 @@
 - **Hybrid RAG**：BGE-M3 dense/sparse hybrid retrieval、Milvus、Parent-Child chunking、Parent dedup 和 `bge-reranker-large`。
 - **结构化财务证据**：仅在公司、期间、指标和单位都明确时提取 verified values；差值、增长率与百分点变化由 deterministic calculator 完成。
 - **Single Agent + multi-tool**：LangGraph 编排 Financial RAG、Market MCP、News MCP 与 Calculator，不是 Multi-Agent 或 A2A 架构。
+- **一次性 Function Calling 规划**：支持 Rule / Qwen Function Calling 两种 Planner；原生 `tool_calls` 经本地参数校验后写入 AgentState，由固定 LangGraph workflow 执行。
 - **多轮上下文**：RedisSaver 保存 thread session context；显式偏好使用隔离的 Redis namespace，普通提问不会隐式写入长期偏好。
 - **安全降级与 Trace**：工具选择、工具执行和最终回答分层记录；外部数据失败时保留已验证结果并说明缺口，不编造价格、新闻或未验证计算。
 
 ## System Architecture
 
+以下按 `agent-fc-v1.1` 的实际源码绘制；顶层图与 [docs/architecture.mmd](docs/architecture.mmd) 完全一致。实线表示请求或固定节点顺序，虚线表示节点内部调用、状态依赖或结果汇集，不是 conditional routing。
+
 ```mermaid
 flowchart TB
-    U[User] --> FE[React / Vite Frontend]
-    FE -->|WebSocket / HTTP| API[FastAPI]
-    API --> AG[LangGraph Agent]
-    AG <--> MEM[Redis: session/context memory]
+    U["User Query"] --> FE["React / Vite Frontend"]
+    FE --> WS["WebSocket /api/agent/stream"]
+    WS --> API["FastAPI: agent_stream_endpoint"]
+    API --> AD["AgentStreamingAdapter"]
+    AD --> AG["LangGraphFinancialAgent"]
+    AG <--> MEM["RedisSaver / Redis Stack<br/>thread_id Session State"]
+    MEM -. "restore checkpoint context" .-> P
 
-    AG --> FR[Financial RAG]
-    AG --> MT[Market Tool via MCP]
-    AG --> NT[News Tool via MCP]
-    AG --> CT[Calculator]
+    subgraph FLOW["Fixed LangGraph workflow: no autonomous ReAct loop"]
+        S["START"] --> P["plan"]
+        subgraph TOOLS["Tool nodes: execute or skip by required_tools / planned_calls"]
+            FR["financial_rag"] --> MT["market"] --> NT["news"] --> CT["calculator"]
+        end
+        P --> FR
+        CT --> AGG["aggregation"]
+        AGG --> SYN["synthesis<br/>Composite: Qwen synthesis<br/>Single tool: pass-through, no extra LLM"]
+        SYN --> GR["guardrail<br/>Evidence consistency / Tool-result safety<br/>Numeric validation / Safe degradation"]
+        GR --> E["END"]
+    end
+    AG --> S
+    P <--> PREF["RedisPreferenceStore<br/>user_id / explicit preferences only<br/>separate namespace"]
 
-    FR --> FAQ[FAQ / BM25]
-    FAQ <--> MYSQL[(MySQL)]
-    FR --> META[Company / Period / Metric Planning]
-    META --> RET[BGE-M3 Hybrid Retrieval]
-    RET <--> MILVUS[(Milvus)]
-    RET --> PD[Parent Dedup]
-    PD --> RR[bge-reranker-large]
-    RR --> EV[Evidence Validation]
+    subgraph PLAN["Plan node detail: one planning request, not a tool-observation loop"]
+        MODE["Planner Mode"] --> RULE["Rule-based FinancialPlanner"]
+        MODE --> FC["Qwen Function Calling Planner"]
+        SCHEMA["Tool Schemas"] --> FC
+        FC --> CALLS["native tool_calls<br/>tool name + arguments"]
+        CALLS --> VALID["Local argument validation<br/>names / fields / targets / safe operands"]
+        VALID --> DEC["planned_calls / required_tools / intent"]
+        RULE --> DEC
+        DEC --> STATE["AgentState"]
+    end
+    P -. "configured planner" .-> MODE
+    STATE -. "execution inputs" .-> TOOLS
 
-    MT --> AGG[Aggregation]
-    NT --> AGG
-    CT --> AGG
-    EV --> AGG
-    AGG --> SYN[Answer Synthesis]
-    SYN --> GR[Deterministic Guardrail]
-    GR --> OUT[Answer, Sources, Trace]
+    FR -. "execute" .-> FRT["FinancialRAGTool.run(query)<br/>Financial RAG / FAQ / ReportCatalog"]
+    MT -. "execute" .-> MC["FinancialMCPClient: market"]
+    MC -. "stdio: get_market_snapshot" .-> MS["Market MCP Server"]
+    MS -.-> MP["MarketProvider"]
+    MP -.-> MD["Eastmoney quotes / Tencent fallback"]
+    NT -. "execute" .-> NC["FinancialMCPClient: news"]
+    NC -. "stdio: search_financial_news" .-> NS["News MCP Server"]
+    NS -.-> NP["NewsProvider"]
+    NP -.-> ND["Eastmoney / Sina Finance fallback<br/>Google News: optional fallback"]
+    CT -. "execute" .-> CALC["CalculatorTool<br/>deterministic operations / safe AST"]
+    TOOLS -.-> RESULTS["All executed Tool Results"]
+    RESULTS -.-> AGG
+    E --> OUT["Final Answer + Sources + Trace"]
+    OUT --> RETURN["AgentStreamingAdapter<br/>final guardrail status + answer chunks<br/>WebSocket response to Frontend"]
 ```
 
-MCP 是 Market/News 外部能力的协议抽象；Redis、MySQL 和 Milvus 分别承担 session memory、FAQ 与向量检索职责。
+**React != ReAct**：React / Vite 是前端技术。Function Calling 用于一次规划式 Tool Selection；后续 Tool Execution 由固定 LangGraph workflow 负责。不存在 `LLM → Tool → Observation → LLM → Tool` 的自主 ReAct 循环，也不是 Multi-Agent。
+
+- `AGENT_PLANNER_MODE=rule` 使用规则 Planner；`function_calling` 使用 Qwen 原生工具调用。源码默认仍是 `rule`，v1.1 严格验收配置为 `function_calling`、`qwen3.8-max`、`AGENT_PLANNER_FALLBACK_TO_RULE=false`。
+- FC 每轮规划最多一次模型请求，SDK 自动重试关闭；整份计划先校验再执行。Market/News 的同名多目标调用保存在 `planned_calls`，由对应节点逐条消费，而不是改变 Graph 边。无工具计划或校验失败会返回说明/澄清；Rule fallback 仅在显式配置启用时使用。
+- Agent 只有四类工具：Financial RAG、Market MCP、News MCP、Calculator。FAQ / BM25 / MySQL 是 Financial RAG 内部 fast path，不是第五个 Agent Tool。MCP 通过本地子进程的 **stdio** 通信，Provider 再访问外部行情/新闻来源。
 
 ## RAG Pipeline
 
-```text
-Query
-  -> company / period / metric extraction
-  -> company × period target planning
-  -> target-scoped hybrid retrieval
-  -> Parent dedup + rerank
-  -> structured financial evidence
-  -> verified calculation when applicable
-  -> answer with provenance boundaries
+实际入口为 `FinancialRAGTool.run()` → `IntegratedQASystem.query()` → `rag_qa/core/new_rag_system.py` 中的 `RAGSystem.generate_answer()`；目录中保留的旧 `rag_system.py` 不是这条线上请求链的入口。
+
+```mermaid
+flowchart TB
+    FRT["FinancialRAGTool.run(query)"] --> IQ["IntegratedQASystem.query()"]
+    IQ --> QM["extract_query_metadata<br/>company / period / metric extraction<br/>build candidate SubQueryTargets"]
+    QM --> FAQ["FAQ gate / BM25 / MySQL fast path<br/>FAQ Redis cache; company/report queries bypass matching"]
+    FAQ -->|"FAQ hit"| DIRECT["Direct tool answer"]
+    FAQ -->|"miss or bypass"| LOOKUP{"REPORT_LOOKUP?"}
+    LOOKUP -->|"yes"| CATALOG["ReportCatalog<br/>available reports / period clarification"]
+    CATALOG --> DIRECT
+    LOOKUP -->|"no: need_rag"| CHOOSE{"Deterministic subqueries required?"}
+
+    subgraph TARGET["Inside Financial RAG: Company x Period Target Planning"]
+        CHOOSE -->|"yes"| PLAN["QueryMetadata.subquery_plan()<br/>Target 1 / Target 2 / ...<br/>query + company/period metadata filter"]
+        PLAN --> PIN["Pass explicit subquery strategy + targets<br/>bypass StrategySelector and LLM subquery generation"]
+    end
+    CHOOSE -->|"no"| UNSET["No preset strategy<br/>single/global metadata filter"]
+    PIN --> RAG["RAGSystem.generate_answer()"]
+    UNSET --> RAG
+    RAG --> ROUTER["FinancialQueryRouter"]
+    ROUTER -->|"OUT_OF_SCOPE"| SAFE["Safe no-context response"]
+    ROUTER -->|"RAG or conservative fallback"| PRESET{"Explicit strategy + targets?"}
+    PRESET -->|"yes"| TARGETS["_retrieve_with_subqueries<br/>consume deterministic targets"]
+    PRESET -->|"no"| SS["StrategySelector: LLM retrieval strategy"]
+    SS --> STRATEGY["Direct / HyDE / Subquery / Backtracking"]
+    STRATEGY --> GENERIC["Original or LLM-rewritten query/subqueries<br/>retain applicable metadata filters"]
+    TARGETS --> FILTER["Per-target metadata filter<br/>company_code / report_period<br/>only extracted constraints"]
+
+    subgraph RETRIEVAL["Shared retrieval pipeline; repeated per target when applicable"]
+        FILTER --> EMB["BGE-M3 query embedding<br/>batch embedding for subqueries"]
+        GENERIC --> EMB
+        EMB --> VEC["Dense + Sparse vectors"]
+        VEC --> HYBRID["Milvus Hybrid Search<br/>metadata filters on both ANN requests"]
+        HYBRID --> WEIGHT["WeightedRanker fusion<br/>dense 0.7 / sparse 1.0"]
+        WEIGHT --> CHILD["Top-K Child Candidates"]
+        CHILD --> PARENT["Parent Recovery"]
+        PARENT --> DEDUP["Parent Dedup"]
+        DEDUP --> RERANK["bge-reranker-large / CrossEncoder<br/>per-query parent rerank when needed"]
+        RERANK --> MERGE["Merge ranked Parent pools<br/>coverage-first merge for subqueries"]
+        MERGE --> COVER["target x metric coverage-aware selection<br/>M=3 base evidence budget"]
+    end
+
+    COVER -->|"no context"| SAFE
+    COVER -->|"selected Parents"| STRUCT["Structured Financial Evidence<br/>company + period + metric + unit + source_parent"]
+    STRUCT --> VERIFIED["Verified Evidence<br/>reject conflicting values; normalize units"]
+    VERIFIED --> CALC["Deterministic Financial Calculation<br/>only for requested, verified comparable inputs"]
+    CALC --> PROMPT["Answer Prompt<br/>Parent texts + verified evidence/provenance<br/>calculation note + missing-evidence constraints"]
+    COVER -. "selected Parent texts" .-> PROMPT
+    PROMPT --> QWEN["Qwen Financial Answer"]
+    DIRECT --> RESULT["FinancialRAGToolResult.answer"]
+    SAFE --> RESULT
+    QWEN --> RESULT
 ```
 
-简单问题保持简洁的 Top3 context；多公司、多期间或多指标问题在既有 reranked Parent pool 中优先覆盖每个明确 target 的证据，而不是全局提高 TopK。若某项基础证据不存在，系统不会用相邻期间或相似公司数字补全。
+**多目标拆分在 Financial RAG 内部，不在外层 FC Planner。** `extract_query_metadata()` 构造候选 targets，`IntegratedQASystem.query()` 根据 `requires_deterministic_subqueries()` 决定是否传入 `subquery_plan()` 和显式子查询策略。进入 RAG 后仍先经过 `FinancialQueryRouter`；只有允许检索才执行 targets。该分支不调用 `StrategySelector`，也不让 LLM 重新生成公司/期间子查询。未提供显式策略的分支才选择 Direct、HyDE、LLM Subquery 或 Backtracking。
+
+多公司、单一明确期间且未指定指标的 broad comparison，会在 metadata 层按公司展开营业收入、归母净利润、经营活动现金流量净额。精确指标查询不做这种 broad expansion；所有 target 的检索保留各自 metadata filter。多目标路径批量编码 query，但仍逐 target 执行过滤后的 hybrid search 和 Parent rerank。
+
+冻结 benchmark 使用 **K=30、M=3 base evidence budget**，不是理论最优参数，也不是所有请求只能有三个 Parent。`_select_context_docs()` 在既有 reranked pool 内优先满足 target × metric 覆盖，并按查询规模使用有上限的 context budget；缺失证据不能靠增加预算自动补齐。
+
+Structured/Verified Evidence 绑定公司、期间、指标、单位与 `source_parent`，冲突数值不进入 verified block。RAG 内部 deterministic calculator 仅对满足条件的同一公司、两个同类型期间及已验证输入计算差值/增长率/百分点；与外层处理用户已给数字的 `CalculatorTool` 是两层不同能力。Parent 原文、verified block、计算结果或缺证据约束共同进入财报回答 Prompt。
 
 ## Agent Workflow
 
 ```text
-plan -> financial_rag -> market -> news -> calculator
-     -> aggregation -> synthesis -> guardrail
+START -> plan -> financial_rag -> market -> news -> calculator
+      -> aggregation -> synthesis -> guardrail -> END
 ```
 
-Planner 选择实际需要的工具。单工具请求直接使用可信 Tool result；Composite query 才进行综合表达。Guardrail 以工具真实执行结果和可追溯 evidence 为准：当行情、新闻或计算没有 verified result 时，不允许最终回答自行补写。
+每次调用都沿上述固定边前进；不在 `required_tools` 中的工具节点直接跳过工作，不存在 Planner 用 conditional edge 跳到某个 Tool 的路径。
+
+- **Aggregation**：汇集本轮 Tool Results；单工具结果使用原回答或确定性格式化，Composite 先形成安全摘要。
+- **Single tool**：仍经过 `synthesis` 节点，但只透传 `draft_answer`，不额外调用 Agent-level Qwen synthesis，然后进入 Guardrail。Financial RAG 内部自己的 LLM 调用不属于这次省略的 synthesis。
+- **Composite**：将 normalized Financial result、行情、新闻、计算结果、可用性、错误与 session context 交给 `QwenSynthesizer`；失败时保留安全摘要。
+- **Guardrail**：确定性检查 evidence consistency、tool-result safety、numeric validation，并在必要时改用安全摘要。金额按语义类型/单位比较，显式近似金额使用受限容差；不支持的数字仍会被拒绝。规则有适用范围，不保证零幻觉；当前跨工具数值支持检查以成功的 Financial RAG result 为入口。
+- **Streaming**：React 的 `useAgentStream` 使用 `new WebSocket(...)` 连接 `/api/agent/stream`。执行期间发送 `start / plan / tool_start / tool_end / synthesis_start`，完成后按最终 State 发送 `guardrail / sources / trace / token / end`，异常发送 `error`。`guardrail` 的公开状态来自最终结果，映射为 `passed / degraded / error`，不是“节点执行成功”。
+
+**最终答案不是 Qwen 原生 token 直传。** `FinancialRAGTool` 先收集内部 RAG 输出，Agent-level synthesis 使用 `stream=False`；Guardrail 完成后，`AgentStreamingAdapter` 才将最终答案分块发送为 `token` 事件。原有 HTTP `/api/query` 和旧 WebSocket `/api/stream` 仍存在，但不是 React Agent Demo 的主链路。
+
+### Memory boundaries
+
+`thread_id` 作为 LangGraph checkpoint key，由 **RedisSaver / Redis Stack** 恢复 AgentState；恢复后的公司、期间和上一轮问题交给 Planner，用于本轮规划，而不是“Qwen 自己记住了上一轮”。Web 入口显式注入 RedisSaver；`InMemorySaver` 保留为未注入 checkpointer 时的本地/测试默认。
+
+长期偏好由 **RedisPreferenceStore** 按 `user_id` 单独存储，只写入显式 `preferred_companies / preferred_metrics`，与 session checkpoint 使用不同 prefix。FAQ Redis cache 也不是 Agent session memory。当前输入中的显式目标优先于 session 目标；偏好不是擅自增加公司目标的授权。
+
+### Source map
+
+| 层级 | 实际入口与实现 |
+|---|---|
+| WebSocket / final events | [app.py](app.py) `agent_stream_endpoint` / `get_agent_stream_adapter`；[agent/streaming.py](agent/streaming.py) `AgentStreamingAdapter.iter_events` |
+| Fixed Graph / Aggregation / Guardrail | [agent/langgraph_agent.py](agent/langgraph_agent.py) `LangGraphFinancialAgent._build_graph` / `_aggregation` / `_guardrail` |
+| Tool Selection / validated calls | [agent/function_calling_planner.py](agent/function_calling_planner.py) `FunctionCallingPlanner.plan`；[agent/planning.py](agent/planning.py) `tool_schemas` / `validate_arguments`；[agent/planner.py](agent/planner.py) `FinancialPlanner` |
+| Financial RAG integration | [agent/tools/financial_rag_tool.py](agent/tools/financial_rag_tool.py) `FinancialRAGTool.run`；[new_main.py](new_main.py) `IntegratedQASystem.query` |
+| Target planning / retrieval orchestration | [rag_qa/core/query_metadata.py](rag_qa/core/query_metadata.py) `extract_query_metadata` / `QueryMetadata.subquery_plan`；[rag_qa/core/new_rag_system.py](rag_qa/core/new_rag_system.py) `RAGSystem` |
+| Hybrid / evidence / calculations | [rag_qa/core/vector_store.py](rag_qa/core/vector_store.py) `VectorStore`；[rag_qa/core/financial_evidence.py](rag_qa/core/financial_evidence.py) `extract_verified_evidence`；[rag_qa/core/financial_calculator.py](rag_qa/core/financial_calculator.py) `build_calculation_note` |
+| MCP / session-independent preferences | [agent/mcp_client.py](agent/mcp_client.py) `FinancialMCPClient`；[mcp_servers/](mcp_servers/)；[agent/preferences.py](agent/preferences.py) `RedisPreferenceStore` |
 
 ## Supported Companies & Periods
 
@@ -124,6 +230,8 @@ Planner 选择实际需要的工具。单工具请求直接使用可信 Tool res
 RAGAS 的 Context Precision 衡量返回 context 的相关性，不等价于多目标 Document Recall 或 coverage。
 
 ### 150-turn Agent benchmark
+
+以下保留的是 Function Calling 引入前、Rule Planner + Domestic News 的已冻结端到端结果，不是 v1.1 Function Calling Planner 的新一轮 E2E 分数。
 
 | Metric | Result |
 |---|---:|
@@ -182,6 +290,8 @@ cp config.example.ini config.ini
 
 Set local MySQL, Redis, Redis Stack, Milvus, BGE-M3/reranker model paths and LLM settings in untracked configuration files. The frozen evaluation runtime uses `RETRIEVAL_K=30` and `CANDIDATE_M=3`.
 
+To use the v1.1 strict Function Calling path, set `AGENT_PLANNER_MODE=function_calling`, `AGENT_PLANNER_MODEL=qwen3.8-max`, `LLM_MODEL=qwen3.8-max` and `AGENT_PLANNER_FALLBACK_TO_RULE=false` in your local environment. The shipped example defaults to Rule mode; copying it alone does not enable Function Calling. Supply your own DashScope credentials without committing them.
+
 ```bash
 uvicorn app:app --host 0.0.0.0 --port 8001
 ```
@@ -190,7 +300,7 @@ The React demo connects to `WS /api/agent/stream`. See [DEPLOYMENT.md](DEPLOYMEN
 
 ## Deployment
 
-The deployment boundary is intentionally explicit: frontend traffic reaches FastAPI through HTTPS, while RAG inference connects to separately managed MySQL, Redis/Redis Stack and Milvus services. `docker-compose.yml` provides an optional application container definition; it does not provision or publish real service credentials.
+The deployment boundary is intentionally explicit: the React/Vite Agent Demo uses WSS through the existing public proxy/tunnel to FastAPI `WS /api/agent/stream`, then `AgentStreamingAdapter` and `LangGraphFinancialAgent`. HTTP endpoints remain available separately. RAG inference connects to separately managed MySQL, Redis/Redis Stack and Milvus services; Market/News MCP servers are local stdio subprocesses, not separately deployed MCP HTTP services. `docker-compose.yml` provides an optional application container definition; it does not provision or publish real service credentials.
 
 ## Evaluation Reproducibility
 

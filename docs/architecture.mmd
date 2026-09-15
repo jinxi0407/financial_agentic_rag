@@ -1,35 +1,50 @@
 flowchart TB
-    U[User Query] --> P[Planner]
-    P --> G[LangGraph StateGraph]
-    G <--> RS[RedisSaver / Redis Stack]
+    U["User Query"] --> FE["React / Vite Frontend"]
+    FE --> WS["WebSocket /api/agent/stream"]
+    WS --> API["FastAPI: agent_stream_endpoint"]
+    API --> AD["AgentStreamingAdapter"]
+    AD --> AG["LangGraphFinancialAgent"]
+    AG <--> MEM["RedisSaver / Redis Stack<br/>thread_id Session State"]
+    MEM -. "restore checkpoint context" .-> P
 
-    G --> FR[FinancialRAGTool]
-    G --> MT[Market MCP]
-    G --> NT[News MCP]
-    G --> CT[CalculatorTool]
-    FR --> AG[Aggregation]
-    MT --> AG
-    NT --> AG
-    CT --> AG
-    AG --> SY[Qwen Synthesis<br/>Composite only]
-    SY --> GR[Deterministic Guardrail]
-    GR --> A[Final Answer + Trace]
-
-    subgraph RAG[Financial RAG]
-        FAQ[MySQL FAQ + BM25 cache] --> QM[Query Metadata]
-        QM --> TP[Company × Period Planning]
-        TP --> EM[BGE-M3]
-        EM --> MV[Milvus Hybrid Retrieval]
-        MV --> PD[Parent Dedup]
-        PD --> RR[Cross-Encoder Reranker]
-        RR --> FE[Structured Financial Evidence]
-        FE --> FA[Financial Answer]
+    subgraph FLOW["Fixed LangGraph workflow: no autonomous ReAct loop"]
+        S["START"] --> P["plan"]
+        subgraph TOOLS["Tool nodes: execute or skip by required_tools / planned_calls"]
+            FR["financial_rag"] --> MT["market"] --> NT["news"] --> CT["calculator"]
+        end
+        P --> FR
+        CT --> AGG["aggregation"]
+        AGG --> SYN["synthesis<br/>Composite: Qwen synthesis<br/>Single tool: pass-through, no extra LLM"]
+        SYN --> GR["guardrail<br/>Evidence consistency / Tool-result safety<br/>Numeric validation / Safe degradation"]
+        GR --> E["END"]
     end
-    FR --> FAQ
+    AG --> S
+    P <--> PREF["RedisPreferenceStore<br/>user_id / explicit preferences only<br/>separate namespace"]
 
-    subgraph NEWS[News MCP Provider Chain]
-        NT --> NS[News MCP Server]
-        NS --> EMN[Eastmoney]
-        EMN -. no reliable result .-> SN[Sina Finance]
-        SN -. optional .-> GN[Google News]
+    subgraph PLAN["Plan node detail: one planning request, not a tool-observation loop"]
+        MODE["Planner Mode"] --> RULE["Rule-based FinancialPlanner"]
+        MODE --> FC["Qwen Function Calling Planner"]
+        SCHEMA["Tool Schemas"] --> FC
+        FC --> CALLS["native tool_calls<br/>tool name + arguments"]
+        CALLS --> VALID["Local argument validation<br/>names / fields / targets / safe operands"]
+        VALID --> DEC["planned_calls / required_tools / intent"]
+        RULE --> DEC
+        DEC --> STATE["AgentState"]
     end
+    P -. "configured planner" .-> MODE
+    STATE -. "execution inputs" .-> TOOLS
+
+    FR -. "execute" .-> FRT["FinancialRAGTool.run(query)<br/>Financial RAG / FAQ / ReportCatalog"]
+    MT -. "execute" .-> MC["FinancialMCPClient: market"]
+    MC -. "stdio: get_market_snapshot" .-> MS["Market MCP Server"]
+    MS -.-> MP["MarketProvider"]
+    MP -.-> MD["Eastmoney quotes / Tencent fallback"]
+    NT -. "execute" .-> NC["FinancialMCPClient: news"]
+    NC -. "stdio: search_financial_news" .-> NS["News MCP Server"]
+    NS -.-> NP["NewsProvider"]
+    NP -.-> ND["Eastmoney / Sina Finance fallback<br/>Google News: optional fallback"]
+    CT -. "execute" .-> CALC["CalculatorTool<br/>deterministic operations / safe AST"]
+    TOOLS -.-> RESULTS["All executed Tool Results"]
+    RESULTS -.-> AGG
+    E --> OUT["Final Answer + Sources + Trace"]
+    OUT --> RETURN["AgentStreamingAdapter<br/>final guardrail status + answer chunks<br/>WebSocket response to Frontend"]
