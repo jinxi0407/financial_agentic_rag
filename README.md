@@ -204,7 +204,7 @@ React 的 `useAgentStream` 通过 `new WebSocket(...)` 连接 `/api/agent/stream
 
 </details>
 
-## Supported Companies & Periods
+## 支持的公司与报告期
 
 当前数据范围为 **8 家 A 股公司、24 份冻结财报、3 个报告期**，并包含 150 条金融定义 FAQ：
 
@@ -221,44 +221,44 @@ React 的 `useAgentStream` 通过 `new WebSocket(...)` 连接 `/api/agent/stream
 
 报告期：`2025H1`、`2025FY`、`2026H1`。项目不宣称覆盖全部 A 股或任意历史报告。
 
-## Evaluation
+## 评测结果
 
-### 300-query frozen unseen-query holdout
+### 300Q 冻结留出集：未见过的问题
 
-300Q 是同一冻结财报语料上的 unseen-query holdout，不是 unseen-document benchmark。Baseline 与 Final 均使用相同 BGE-M3、Milvus、reranker 和 `RETRIEVAL_K=30` / `CANDIDATE_M=3`；Final 的差异是 company × period 多目标编排。
+300Q 在同一冻结财报语料上评估未见过的问题，而不是未见过的文档。基线版本与最终版本均使用相同的 BGE-M3、Milvus、重排模型和 `RETRIEVAL_K=30` / `CANDIDATE_M=3`；最终版本的差异在于按公司 × 期间进行多目标编排。
 
-| Metric | Baseline | Final |
+| 指标 | 基线版本 | 最终版本 |
 |---|---:|---:|
-| Document Recall@3 | 83.4% | **94.6%** |
-| Period Target Accuracy | 89.6% | **100%** |
-| Wrong Period Rate | 25.4% | **0%** |
+| Document Recall@3（文档召回率） | 83.4% | **94.6%** |
+| Period Target Accuracy（报告期目标准确率） | 89.6% | **100%** |
+| Wrong Period Rate（错误报告期率） | 25.4% | **0%** |
 
-`Document Recall@3` 描述 required documents 的召回，不是通用 relevance score。
+`Document Recall@3` 描述问题所需文档的召回情况，不是通用的相关性评分。
 
-### 100-query RAGAS evaluation
+### 100Q RAGAS 评测
 
-相同分层 query、相同 `K=30/M=3`、FAQ bypass 的 Financial RAG-only 评测：
+使用同一批分层抽样问题和相同的 `K=30/M=3`，统一绕过 FAQ，仅评估 Financial RAG 路径：
 
-| Metric | Paired Baseline | Final |
+| 指标 | 基线版本（配对样本） | 最终版本 |
 |---|---:|---:|
-| Faithfulness | 0.864 | **0.892** |
-| Context Precision | - | **0.851** |
+| Faithfulness（忠实度） | 0.864 | **0.892** |
+| Context Precision（上下文精确率） | - | **0.851** |
 
-RAGAS 的 Context Precision 衡量返回 context 的相关性，不等价于多目标 Document Recall 或 coverage。
+RAGAS 的 Context Precision 衡量返回上下文的相关性，不等价于多目标文档召回率或覆盖率。
 
-### 150-turn Agent benchmark
+### 150 轮 Agent 评测
 
-以下保留的是 Function Calling 引入前、Rule Planner + Domestic News 的已冻结端到端结果，不是 v1.1 Function Calling Planner 的新一轮 E2E 分数。
+以下保留的是引入 Function Calling 之前，规则 Planner 搭配国内新闻源的已冻结端到端评测结果，不是 v1.1 Function Calling Planner 的新一轮端到端分数。
 
-| Metric | Result |
+| 指标 | 结果 |
 |---|---:|
-| Tool Selection Accuracy | 91.33% |
-| Context Recovery | 97.44% |
-| Tool Execution Success Rate | 100% |
+| Tool Selection Accuracy（工具选择准确率） | 91.33% |
+| Context Recovery（上下文恢复准确率） | 97.44% |
+| Tool Execution Success Rate（工具执行成功率） | 100% |
 
-Tool Execution Success Rate 指 **已调用工具** 的执行成功率，不表示 Agent 的总体准确率。评测将 Planner 选择、外部 Provider 执行、session memory 和最终安全降级分别统计。完整协议与分母见 [docs/EVALUATION.md](docs/EVALUATION.md)。
+工具执行成功率指 **已调用工具** 的执行成功率，不表示 Agent 的总体准确率。评测分别统计 Planner 的工具选择、外部数据源调用、会话记忆和最终安全降级。完整协议与各指标分母见 [docs/EVALUATION.md](docs/EVALUATION.md)。
 
-## Example Queries
+## 示例问题
 
 ```text
 贵州茅台 2026H1 营业收入是多少？
@@ -272,9 +272,9 @@ Tool Execution Success Rate 指 **已调用工具** 的执行成功率，不表�
 3+4=多少，还有茅台的股票看看
 ```
 
-支持财报问答、实时行情、财经新闻、确定性计算、composite query 与基于 thread 的多轮上下文恢复。
+支持财报问答、实时行情、财经新闻、确定性计算、综合查询，以及同一会话线程内的多轮上下文恢复。
 
-## Project Structure
+## 项目结构
 
 ```text
 financial_agentic_rag/
@@ -291,9 +291,9 @@ financial_agentic_rag/
 └── tests/                 # Focused unit and integration-style tests
 ```
 
-## Quick Start
+## 快速开始
 
-Python 3.10 is the baseline environment. Configure your own model, service endpoints and credentials locally.
+项目以 Python 3.10 为基准环境。请在本地配置所需模型、服务地址和访问凭据。
 
 ```bash
 git clone <YOUR_REPOSITORY_URL>
@@ -305,31 +305,33 @@ cp .env.example .env
 cp config.example.ini config.ini
 ```
 
-Set local MySQL, Redis, Redis Stack, Milvus, BGE-M3/reranker model paths and LLM settings in untracked configuration files. The frozen evaluation runtime uses `RETRIEVAL_K=30` and `CANDIDATE_M=3`.
+在不纳入版本控制的本地配置文件中设置 MySQL、Redis、Redis Stack、Milvus 的连接信息，BGE-M3 与重排模型的路径，以及 LLM 配置。冻结评测环境使用 `RETRIEVAL_K=30` 和 `CANDIDATE_M=3`。
 
-To use the v1.1 strict Function Calling path, set `AGENT_PLANNER_MODE=function_calling`, `AGENT_PLANNER_MODEL=qwen3.8-max`, `LLM_MODEL=qwen3.8-max` and `AGENT_PLANNER_FALLBACK_TO_RULE=false` in your local environment. The shipped example defaults to Rule mode; copying it alone does not enable Function Calling. Supply your own DashScope credentials without committing them.
+使用 v1.1 的严格 Function Calling 模式时，请在本地环境中设置 `AGENT_PLANNER_MODE=function_calling`、`AGENT_PLANNER_MODEL=qwen3.8-max`、`LLM_MODEL=qwen3.8-max` 和 `AGENT_PLANNER_FALLBACK_TO_RULE=false`。示例配置默认采用规则模式，仅复制示例文件不会启用 Function Calling。请配置自己的 DashScope 凭据，切勿将真实凭据提交到仓库。
 
 ```bash
 uvicorn app:app --host 0.0.0.0 --port 8001
 ```
 
-The React demo connects to `WS /api/agent/stream`. See [DEPLOYMENT.md](DEPLOYMENT.md) for a topology and placeholder-based deployment checklist.
+React 演示界面连接 `WS /api/agent/stream`。部署拓扑和使用占位符的配置检查清单见 [DEPLOYMENT.md](DEPLOYMENT.md)。
 
-## Deployment
+## 部署说明
 
-The deployment boundary is intentionally explicit: the React/Vite Agent Demo uses WSS through the existing public proxy/tunnel to FastAPI `WS /api/agent/stream`, then `AgentStreamingAdapter` and `LangGraphFinancialAgent`. HTTP endpoints remain available separately. RAG inference connects to separately managed MySQL, Redis/Redis Stack and Milvus services; Market/News MCP servers are local stdio subprocesses, not separately deployed MCP HTTP services. `docker-compose.yml` provides an optional application container definition; it does not provision or publish real service credentials.
+各组件的部署边界如下：React/Vite Agent 演示界面通过 WSS，经现有公网代理与隧道连接 FastAPI 的 `WS /api/agent/stream`，再由 `AgentStreamingAdapter` 调用 `LangGraphFinancialAgent`。HTTP 接口仍独立保留。
 
-## Evaluation Reproducibility
+RAG 推理依赖单独管理的 MySQL、Redis/Redis Stack 和 Milvus 服务；Market / News MCP 服务以本地 stdio 子进程运行，并非独立部署的 MCP HTTP 服务。`docker-compose.yml` 仅提供可选的应用容器定义，不负责配置或公开真实服务凭据。
 
-- Frozen query manifests and deterministic evaluators are kept in `evaluations/`.
-- 300Q evaluates retrieval/orchestration only; it does not invoke Market/News MCP.
-- 100Q RAGAS uses Financial RAG-only capture, bypassing FAQ/MySQL to keep Baseline vs Final comparable.
-- 150-turn Agent evaluation isolates benchmark Redis session and preference namespaces by run ID.
-- Raw captures and local result files are intentionally ignored; publish summaries and reproducible scripts instead of credentials or large transient outputs.
+## 评测可复现性
 
-## Notes & Limitations
+- 冻结的问题清单与确定性评测脚本保存在 `evaluations/`。
+- 300Q 仅评估检索及其编排，不调用 Market / News MCP。
+- 100Q RAGAS 仅采集 Financial RAG 路径的回答与证据，绕过 FAQ/MySQL，确保基线版本与最终版本采用相同的评测入口。
+- 150 轮 Agent 评测按运行 ID 隔离 Redis 中的会话检查点和用户偏好命名空间，避免不同评测运行之间的数据干扰。
+- 原始采集数据与本地结果文件不纳入版本控制；对外发布评测摘要和可复现脚本，不提交凭据或大量临时输出。
 
-- The corpus is intentionally limited to the eight listed companies and three report periods.
-- Public Market/News providers can change availability or response formats; the Agent records failures and degrades safely.
-- Multi-target coverage improves period correctness but adds retrieval and reranking latency.
-- The system is a research-assistance tool, not investment advice.
+## 使用说明与限制
+
+- 财报语料仅覆盖前述 8 家公司和 3 个报告期。
+- 公共行情和新闻源的可用性、响应格式可能变化；Agent 会记录调用失败并进行安全降级。
+- 多目标覆盖有助于减少报告期错配，但也会增加检索和重排耗时。
+- 本项目用于辅助研究，输出不构成投资建议。
